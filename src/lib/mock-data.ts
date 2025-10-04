@@ -1,5 +1,12 @@
 import { Event, Server, LogEntry } from '@/types';
 
+export const SERVERS = [
+    { id: 'vest', name: 'Vest Basestasjon' },
+    { id: 'ost', name: 'Øst Basestasjon' },
+    { id: 'nord', name: 'Nord Basestasjon' },
+    { id: 'nodnett', name: 'Nødnett Basestasjon' },
+] as const;
+
 export const MOCK_EVENTS: Event[] = [
     {
         id: '1',
@@ -30,56 +37,33 @@ export const MOCK_EVENTS: Event[] = [
         read: true,
         from: '@concerned_user',
     },
-    {
-        id: '4',
-        type: 'alert',
-        title: 'High CPU Usage - WEB-SERVER-03',
-        content: 'CPU usage has exceeded 85% threshold for the past 10 minutes',
-        severity: 'medium',
-        timestamp: new Date(Date.now() - 35 * 60000),
-        read: true,
-    },
 ];
 
 export const MOCK_SERVERS: Server[] = [
     {
-        id: 'web-01',
-        name: 'WEB-SERVER-01',
+        id: 'vest',
+        name: 'Vest Basestasjon',
         status: 'online',
         load: 45,
         alerts: 0,
     },
     {
-        id: 'web-02',
-        name: 'WEB-SERVER-02',
-        status: 'online',
-        load: 52,
-        alerts: 0,
-    },
-    {
-        id: 'web-03',
-        name: 'WEB-SERVER-03',
-        status: 'warning',
-        load: 87,
-        alerts: 1,
-    },
-    {
-        id: 'db-01',
-        name: 'DB-PROD-01',
+        id: 'ost',
+        name: 'Øst Basestasjon',
         status: 'critical',
         load: 92,
         alerts: 3,
     },
     {
-        id: 'api-01',
-        name: 'API-SERVER-01',
-        status: 'online',
-        load: 38,
-        alerts: 0,
+        id: 'nord',
+        name: 'Nord Basestasjon',
+        status: 'warning',
+        load: 78,
+        alerts: 1,
     },
     {
-        id: 'cache-01',
-        name: 'CACHE-SERVER-01',
+        id: 'nodnett',
+        name: 'Nødnett Basestasjon',
         status: 'offline',
         load: 0,
         alerts: 5,
@@ -90,43 +74,22 @@ export const MOCK_LOGS: LogEntry[] = [
     {
         id: '1',
         timestamp: new Date(Date.now() - 2 * 60000),
-        level: 'error',
-        source: 'DB-PROD-01',
-        message: 'Authentication failed for user "admin" from 192.168.45.22',
+        level: 'critical',
+        source: 'ost',
+        message: 'Basestasjon Øst - Connection timeout, server not responding',
     },
     {
         id: '2',
-        timestamp: new Date(Date.now() - 4 * 60000),
+        timestamp: new Date(Date.now() - 5 * 60000),
         level: 'warning',
-        source: 'WEB-SERVER-03',
-        message: 'High memory usage detected: 87% of available RAM in use',
+        source: 'nord',
+        message: 'Basestasjon Nord - High memory usage: 78% of available RAM',
     },
     {
         id: '3',
-        timestamp: new Date(Date.now() - 6 * 60000),
-        level: 'critical',
-        source: 'CACHE-SERVER-01',
-        message: 'Connection timeout - server not responding',
-    },
-    {
-        id: '4',
         timestamp: new Date(Date.now() - 8 * 60000),
-        level: 'info',
-        source: 'API-SERVER-01',
-        message: 'Request processed successfully - 200 OK',
-    },
-    {
-        id: '5',
-        timestamp: new Date(Date.now() - 10 * 60000),
         level: 'error',
-        source: 'DB-PROD-01',
-        message: 'Multiple failed login attempts detected',
-    },
-    {
-        id: '6',
-        timestamp: new Date(Date.now() - 12 * 60000),
-        level: 'warning',
-        source: 'WEB-SERVER-02',
-        message: 'SSL certificate expires in 7 days',
+        source: 'nodnett',
+        message: 'Nødnett - Multiple failed authentication attempts detected',
     },
 ];

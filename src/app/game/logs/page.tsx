@@ -1,10 +1,14 @@
-'use client';
-
-import { LogViewer } from '@/components/game/LogViewer';
-import { MOCK_LOGS } from '@/lib/mock-data';
+// src/app/game/logs/page.tsx
+import { getLogs } from '@/lib/db';
+import { getSession } from '@/lib/session';
+import { SERVERS } from '@/lib/mock-data';
 import { FileText } from 'lucide-react';
+import { LogsClient } from './logs-client';
 
-export default function LogsPage() {
+export default async function LogsPage() {
+    const session = await getSession();
+    const logs = await getLogs(session!.companyId);
+
     return (
         <div className="space-y-6">
             <div>
@@ -12,10 +16,10 @@ export default function LogsPage() {
                     <FileText className="w-6 h-6" />
                     System Logs
                 </h2>
-                <p className="text-slate-400">Monitor system activity and security events</p>
+                <p className="text-slate-400">Monitor basestasjon activity and security events</p>
             </div>
 
-            <LogViewer logs={MOCK_LOGS} />
+            <LogsClient logs={logs} servers={SERVERS} />
         </div>
     );
 }
