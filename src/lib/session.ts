@@ -1,3 +1,4 @@
+// src/lib/session.ts
 import { cookies } from 'next/headers';
 
 const SESSION_COOKIE_NAME = 'cyber-game-session';
@@ -5,6 +6,7 @@ const SESSION_COOKIE_NAME = 'cyber-game-session';
 export interface Session {
     companyId: number;
     companyName: string;
+    division: string;  // 'tech', 'non-tech', 'management'
     isAdmin: boolean;
 }
 

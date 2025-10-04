@@ -1,3 +1,4 @@
+// src/app/game/inbox/page.tsx
 import { InboxItem } from '@/components/game/InboxItem';
 import { getEvents } from '@/lib/db';
 import { getSession } from '@/lib/session';
@@ -6,7 +7,7 @@ import { Inbox } from 'lucide-react';
 
 export default async function InboxPage() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId);
+    const events = await getEvents(session!.companyId, session!.division);
     const unreadCount = events.filter((e) => !e.read).length;
 
     return (

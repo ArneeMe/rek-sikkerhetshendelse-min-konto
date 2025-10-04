@@ -1,3 +1,4 @@
+// src/app/game/page.tsx
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Inbox, FileText, Server } from 'lucide-react';
@@ -7,9 +8,9 @@ import Link from 'next/link';
 
 export default async function GameDashboard() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId);
+    const events = await getEvents(session!.companyId, session!.division);
     const servers = await getServers();
-    const logs = await getLogs(session!.companyId);
+    const logs = await getLogs(session!.companyId, session!.division);
 
     const unreadCount = events.filter((e) => !e.read).length;
     const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
@@ -22,10 +23,10 @@ export default async function GameDashboard() {
                 <p className="text-slate-400">Monitor your systems and respond to incidents</p>
                 <div className="flex gap-2 mt-3">
                     <Badge variant="outline" className="text-slate-300">
-                        Company ID: {session?.companyId}
-                    </Badge>
-                    <Badge variant="outline" className="text-slate-300">
                         {session?.companyName}
+                    </Badge>
+                    <Badge variant="outline" className="text-slate-300 capitalize">
+                        {session?.division} Division
                     </Badge>
                 </div>
             </div>

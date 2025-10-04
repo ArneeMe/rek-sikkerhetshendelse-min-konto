@@ -15,6 +15,7 @@ CREATE TABLE servers (
 CREATE TABLE events (
                         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                         company_id INT,  -- null = broadcast to all companies
+                        division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),  -- null = visible to all divisions
                         type TEXT NOT NULL CHECK (type IN ('email', 'tweet', 'alert', 'server-status')),
                         title TEXT NOT NULL,
                         content TEXT NOT NULL,
@@ -28,6 +29,7 @@ CREATE TABLE events (
 CREATE TABLE logs (
                       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                       company_id INT,  -- null = visible to all companies
+                      division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),  -- null = visible to all divisions
                       timestamp TIMESTAMPTZ DEFAULT NOW(),
                       level TEXT NOT NULL CHECK (level IN ('info', 'warning', 'error', 'critical')),
                       source TEXT NOT NULL,  -- server id reference
@@ -37,7 +39,9 @@ CREATE TABLE logs (
 -- Indexes for performance
 CREATE INDEX idx_servers_status ON servers(status);
 CREATE INDEX idx_events_company ON events(company_id);
+CREATE INDEX idx_events_division ON events(division);
 CREATE INDEX idx_events_created ON events(created_at DESC);
 CREATE INDEX idx_logs_company ON logs(company_id);
+CREATE INDEX idx_logs_division ON logs(division);
 CREATE INDEX idx_logs_source ON logs(source);
 CREATE INDEX idx_logs_timestamp ON logs(timestamp DESC);

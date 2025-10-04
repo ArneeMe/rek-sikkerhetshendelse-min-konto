@@ -17,12 +17,13 @@ export async function getServers() {
     return (data || []) as Server[];
 }
 
-// Fetch events for a specific company (or all if companyId is null)
-export async function getEvents(companyId: number) {
+// Fetch events for a specific company and division
+export async function getEvents(companyId: number, division: string) {
     const { data, error } = await supabase
         .from('events')
         .select('*')
         .or(`company_id.eq.${companyId},company_id.is.null`)
+        .or(`division.eq.${division},division.is.null`)
         .order('created_at', { ascending: false });
 
     if (error) {
@@ -42,12 +43,13 @@ export async function getEvents(companyId: number) {
     })) as Event[];
 }
 
-// Fetch logs for a specific company (or all if companyId is null)
-export async function getLogs(companyId: number, source?: string) {
+// Fetch logs for a specific company and division
+export async function getLogs(companyId: number, division: string, source?: string) {
     let query = supabase
         .from('logs')
         .select('*')
         .or(`company_id.eq.${companyId},company_id.is.null`)
+        .or(`division.eq.${division},division.is.null`)
         .order('timestamp', { ascending: false });
 
     // Filter by server source if provided
@@ -97,6 +99,7 @@ export async function updateServer(serverId: string, updates: {
 // Admin: Create new event
 export async function createEvent(event: {
     companyId: number | null;
+    division: string | null;
     type: string;
     title: string;
     content: string;
@@ -105,6 +108,7 @@ export async function createEvent(event: {
 }) {
     const { data, error } = await supabase.from('events').insert({
         company_id: event.companyId,
+        division: event.division,
         type: event.type,
         title: event.title,
         content: event.content,
@@ -123,12 +127,14 @@ export async function createEvent(event: {
 // Admin: Create new log
 export async function createLog(log: {
     companyId: number | null;
+    division: string | null;
     level: string;
     source: string;
     message: string;
 }) {
     const { data, error } = await supabase.from('logs').insert({
         company_id: log.companyId,
+        division: log.division,
         level: log.level,
         source: log.source,
         message: log.message,
