@@ -1,15 +1,19 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Inbox, FileText, Server } from 'lucide-react';
-import { MOCK_EVENTS, MOCK_SERVERS, MOCK_LOGS } from '@/lib/mock-data';
+import { getEvents, getServers, getLogs } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import Link from 'next/link';
 
 export default async function GameDashboard() {
     const session = await getSession();
-    const unreadCount = MOCK_EVENTS.filter((e) => !e.read).length;
-    const criticalServers = MOCK_SERVERS.filter((s) => s.status === 'critical' || s.status === 'offline').length;
-    const criticalLogs = MOCK_LOGS.filter((l) => l.level === 'critical' || l.level === 'error').length;
+    const events = await getEvents(session!.companyId);
+    const servers = await getServers();
+    const logs = await getLogs(session!.companyId);
+
+    const unreadCount = events.filter((e) => !e.read).length;
+    const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
+    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
 
     return (
         <div className="space-y-6">
@@ -88,7 +92,7 @@ export default async function GameDashboard() {
                 <CardContent className="p-6">
                     <h3 className="text-lg font-semibold text-slate-100 mb-4">Recent Incidents</h3>
                     <div className="space-y-3">
-                        {MOCK_EVENTS.slice(0, 3).map((event) => (
+                        {events.slice(0, 3).map((event) => (
                             <div key={event.id} className="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
                                 <div className="flex items-center gap-3">
                                     <AlertTriangle className={`w-5 h-5 ${

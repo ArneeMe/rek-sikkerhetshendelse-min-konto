@@ -1,6 +1,21 @@
 // src/lib/db.ts
 import { supabase } from './supabase';
-import { Event, LogEntry } from '@/types';
+import { Event, LogEntry, Server } from '@/types';
+
+// Fetch servers (basestations)
+export async function getServers() {
+    const { data, error } = await supabase
+        .from('servers')
+        .select('*')
+        .order('id', { ascending: true });
+
+    if (error) {
+        console.error('Error fetching servers:', error);
+        return [];
+    }
+
+    return (data || []) as Server[];
+}
 
 // Fetch events for a specific company (or all if companyId is null)
 export async function getEvents(companyId: number) {
@@ -54,6 +69,29 @@ export async function getLogs(companyId: number, source?: string) {
         source: log.source,
         message: log.message,
     })) as LogEntry[];
+}
+
+// Admin: Update server status
+export async function updateServer(serverId: string, updates: {
+    status?: string;
+    load?: number;
+    alerts?: number;
+}) {
+    const { data, error } = await supabase
+        .from('servers')
+        .update({
+            ...updates,
+            updated_at: new Date().toISOString(),
+        })
+        .eq('id', serverId)
+        .select();
+
+    if (error) {
+        console.error('Error updating server:', error);
+        return null;
+    }
+
+    return data?.[0];
 }
 
 // Admin: Create new event

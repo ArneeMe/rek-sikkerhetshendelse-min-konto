@@ -1,5 +1,15 @@
--- supabase/migrations/001_init.sql
--- Initial database schema for cyber security game
+-- supabase/migrations/001_schema.sql
+-- Core database schema for cyber security game
+
+-- Servers/Basestations table
+CREATE TABLE servers (
+                         id TEXT PRIMARY KEY,
+                         name TEXT NOT NULL,
+                         status TEXT NOT NULL CHECK (status IN ('online', 'warning', 'critical', 'offline')),
+                         load INT DEFAULT 0 CHECK (load >= 0 AND load <= 100),
+                         alerts INT DEFAULT 0,
+                         updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 
 -- Events table (inbox items, alerts, emails, tweets)
 CREATE TABLE events (
@@ -20,11 +30,12 @@ CREATE TABLE logs (
                       company_id INT,  -- null = visible to all companies
                       timestamp TIMESTAMPTZ DEFAULT NOW(),
                       level TEXT NOT NULL CHECK (level IN ('info', 'warning', 'error', 'critical')),
-                      source TEXT NOT NULL,  -- server id: vest, ost, nord, nodnett
+                      source TEXT NOT NULL,  -- server id reference
                       message TEXT NOT NULL
 );
 
 -- Indexes for performance
+CREATE INDEX idx_servers_status ON servers(status);
 CREATE INDEX idx_events_company ON events(company_id);
 CREATE INDEX idx_events_created ON events(created_at DESC);
 CREATE INDEX idx_logs_company ON logs(company_id);

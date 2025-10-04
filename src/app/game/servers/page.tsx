@@ -1,10 +1,10 @@
-'use client';
-
 import { ServerStatus } from '@/components/game/ServerStatus';
-import { MOCK_SERVERS } from '@/lib/mock-data';
+import { getServers } from '@/lib/db';
 import { Server } from 'lucide-react';
 
-export default function ServersPage() {
+export default async function ServersPage() {
+    const servers = await getServers();
+
     return (
         <div className="space-y-6">
             <div>
@@ -15,7 +15,7 @@ export default function ServersPage() {
                 <p className="text-slate-400">Real-time monitoring of your infrastructure</p>
             </div>
 
-            <ServerStatus servers={MOCK_SERVERS} />
+            <ServerStatus servers={servers} />
         </div>
     );
 }

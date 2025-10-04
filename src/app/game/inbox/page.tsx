@@ -1,12 +1,13 @@
-'use client';
-
 import { InboxItem } from '@/components/game/InboxItem';
-import { MOCK_EVENTS } from '@/lib/mock-data';
+import { getEvents } from '@/lib/db';
+import { getSession } from '@/lib/session';
 import { Badge } from '@/components/ui/badge';
 import { Inbox } from 'lucide-react';
 
-export default function InboxPage() {
-    const unreadCount = MOCK_EVENTS.filter((e) => !e.read).length;
+export default async function InboxPage() {
+    const session = await getSession();
+    const events = await getEvents(session!.companyId);
+    const unreadCount = events.filter((e) => !e.read).length;
 
     return (
         <div className="space-y-6">
@@ -26,12 +27,12 @@ export default function InboxPage() {
             </div>
 
             <div className="space-y-3">
-                {MOCK_EVENTS.map((event) => (
+                {events.map((event) => (
                     <InboxItem key={event.id} event={event} />
                 ))}
             </div>
 
-            {MOCK_EVENTS.length === 0 && (
+            {events.length === 0 && (
                 <div className="text-center py-12 text-slate-400">
                     <Inbox className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No events yet</p>
