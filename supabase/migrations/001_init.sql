@@ -35,8 +35,34 @@ CREATE TABLE logs (
                       source TEXT NOT NULL,  -- server id reference
                       message TEXT NOT NULL
 );
+-- supabase/migrations/005_game_sessions.sql
+-- Tables for timed event system
 
--- Indexes for performance
+-- Game sessions table (tracks when games start/end)
+CREATE TABLE game_sessions (
+                               id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                               started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                               duration_minutes INT DEFAULT 120,
+                               status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'ended')),
+                               created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Scheduled events table (template events with relative timing)
+CREATE TABLE scheduled_events (
+                                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                  trigger_at_minutes INT NOT NULL,  -- Minutes after game start
+                                  division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                                  type TEXT NOT NULL CHECK (type IN ('email', 'tweet', 'alert', 'server-status')),
+                                  title TEXT NOT NULL,
+                                  content TEXT NOT NULL,
+                                  severity TEXT NOT NULL CHECK (severity IN ('low', 'medium', 'high', 'critical')),
+                                  from_sender TEXT,
+                                  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_game_sessions_status ON game_sessions(status);
+CREATE INDEX idx_scheduled_events_trigger ON scheduled_events(trigger_at_minutes);
 CREATE INDEX idx_servers_status ON servers(status);
 CREATE INDEX idx_events_company ON events(company_id);
 CREATE INDEX idx_events_division ON events(division);

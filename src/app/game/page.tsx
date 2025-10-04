@@ -25,9 +25,11 @@ export default async function GameDashboard() {
                     <Badge variant="outline" className="text-slate-300">
                         {session?.companyName}
                     </Badge>
-                    <Badge variant="outline" className="text-slate-300 capitalize">
-                        {session?.division} Division
-                    </Badge>
+                    {session?.division && (
+                        <Badge variant="outline" className="text-slate-300 capitalize">
+                            {session.division} Division
+                        </Badge>
+                    )}
                 </div>
             </div>
 

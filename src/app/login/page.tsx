@@ -8,26 +8,56 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Shield, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { DIVISIONS } from '@/lib/constants';
+import { DIVISIONS, validateCompanyCode } from '@/lib/constants';
 
 export default function LoginPage() {
     const [step, setStep] = useState<'code' | 'division'>('code');
     const [code, setCode] = useState('');
-    const [division, setDivision] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const handleCodeSubmit = (e: React.FormEvent) => {
+    const handleCodeSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!code) return;
+
+        // Check if admin - skip division selection
+        const company = validateCompanyCode(code);
+        if (company?.isAdmin) {
+            setLoading(true);
+            setError('');
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, division: 'admin' }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    setError(data.error || 'Invalid credentials');
+                    setLoading(false);
+                    return;
+                }
+
+                // Redirect admin to /admin
+                router.push('/admin');
+            } catch {
+                setError('Something went wrong. Please try again.');
+                setLoading(false);
+            }
+            return;
+        }
+
+        // Regular user - proceed to division selection
         setStep('division');
     };
 
     const handleDivisionSubmit = async (selectedDivision: string) => {
         setError('');
         setLoading(true);
-        setDivision(selectedDivision);
 
         try {
             const response = await fetch('/api/auth/login', {
@@ -46,7 +76,7 @@ export default function LoginPage() {
 
             // Redirect to game dashboard
             router.push('/game');
-        } catch (err) {
+        } catch {
             setError('Something went wrong. Please try again.');
             setLoading(false);
         }
@@ -79,12 +109,19 @@ export default function LoginPage() {
                                 />
                             </div>
 
+                            {error && (
+                                <Alert variant="destructive" className="bg-red-900/20 border-red-800">
+                                    <AlertCircle className="h-4 w-4" />
+                                    <AlertDescription>{error}</AlertDescription>
+                                </Alert>
+                            )}
+
                             <Button
                                 type="submit"
                                 className="w-full bg-blue-600 hover:bg-blue-700"
                                 disabled={loading || !code}
                             >
-                                Continue
+                                {loading ? 'Authenticating...' : 'Continue'}
                             </Button>
 
                             <div className="text-xs text-slate-500 text-center mt-4">

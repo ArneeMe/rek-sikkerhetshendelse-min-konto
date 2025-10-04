@@ -38,3 +38,29 @@ INSERT INTO servers (id, name, status, load, alerts) VALUES
                                                          ('ost', 'Øst Basestasjon', 'critical', 92, 3),
                                                          ('nord', 'Nord Basestasjon', 'warning', 78, 1),
                                                          ('nodnett', 'Nødnett Basestasjon', 'offline', 0, 5);
+
+-- supabase/migrations/006_seed_scheduled_events.sql
+-- Seed template events that release at different times
+
+
+
+-- Immediate events (0 minutes)
+INSERT INTO scheduled_events (trigger_at_minutes, division, type, title, content, severity, from_sender) VALUES (0, 'tech', 'alert', 'System Started', 'Security monitoring system initialized. All basestations online.', 'low', NULL),
+                                                                                                             (0, 'non-tech', 'email', 'Daily Report', 'Good morning team. Please review yesterday''s access logs.', 'low', 'security@company.com'),
+                                                                                                             (0, 'management', 'alert', 'Game Session Started', 'Incident response exercise has begun. Monitor your teams.', 'low', 'CISO');
+
+-- 5 minute events
+INSERT INTO scheduled_events (trigger_at_minutes, division, type, title, content, severity) VALUES
+                                                                                                (5, 'tech', 'alert', 'Unusual Network Traffic', 'Multiple failed login attempts detected from IP 192.168.45.22 at 23:00', 'high'),
+                                                                                                (5, 'non-tech', 'email', 'Phishing Report', 'Email logs show User ID 47291 clicked suspicious link yesterday at 19:47', 'critical');
+
+-- 15 minute events
+INSERT INTO scheduled_events (trigger_at_minutes, division, type, title, content, severity) VALUES
+                                                                                                (15, 'tech', 'alert', 'Basestasjon Øst Critical', 'Connection timeout, server not responding. Load: 92%', 'critical'),
+                                                                                                (15, 'management', 'alert', 'CISO Briefing Required', 'Security incident detected. NSM notification may be required.', 'high');
+
+-- 30 minute events
+INSERT INTO scheduled_events (trigger_at_minutes, division, type, title, content, severity, from_sender) VALUES
+                                                                                                             (30, NULL, 'tweet', '@Telesør Network Issues', '@Telesor your network is down in Oslo. Multiple users reporting outages. #NetworkDown', 'medium', '@concerned_user'),
+                                                                                                             (30, 'management', 'alert', 'Ransom Note Received', 'Threat actors have made contact via secure channel. Demands received.', 'critical');
+

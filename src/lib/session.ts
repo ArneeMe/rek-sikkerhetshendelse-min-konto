@@ -6,7 +6,7 @@ const SESSION_COOKIE_NAME = 'cyber-game-session';
 export interface Session {
     companyId: number;
     companyName: string;
-    division: string;  // 'tech', 'non-tech', 'management'
+    division?: string;  // Optional - admins don't need division
     isAdmin: boolean;
 }
 

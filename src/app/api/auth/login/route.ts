@@ -14,13 +14,6 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (!division) {
-            return NextResponse.json(
-                { error: 'Division is required' },
-                { status: 400 }
-            );
-        }
-
         const company = validateCompanyCode(code);
 
         if (!company) {
@@ -30,12 +23,31 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Admin doesn't need division
+        if (company.isAdmin) {
+            await setSession({
+                companyId: company.id,
+                companyName: company.name,
+                isAdmin: true,
+            });
+
+            return NextResponse.json({ success: true, company });
+        }
+
+        // Regular users need division
+        if (!division) {
+            return NextResponse.json(
+                { error: 'Division is required' },
+                { status: 400 }
+            );
+        }
+
         // Set session cookie with division
         await setSession({
             companyId: company.id,
             companyName: company.name,
             division: division,
-            isAdmin: company.isAdmin || false,
+            isAdmin: false,
         });
 
         return NextResponse.json({ success: true, company, division });
