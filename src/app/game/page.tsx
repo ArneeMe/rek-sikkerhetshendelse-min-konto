@@ -207,3 +207,4 @@ function ManagementDashboard() {
         </>
     );
 }
+export const runtime = 'edge';

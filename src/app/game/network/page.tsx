@@ -85,3 +85,4 @@ export default function NetworkPage() {
         </DivisionGuard>
     );
 }
+export const runtime = 'edge';

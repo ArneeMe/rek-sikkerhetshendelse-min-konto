@@ -57,3 +57,4 @@ export default function EmailsPage() {
         </DivisionGuard>
     );
 }
+export const runtime = 'edge';
