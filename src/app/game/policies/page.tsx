@@ -154,4 +154,3 @@ export default function PoliciesPage() {
         </DivisionGuard>
     );
 }
-export const runtime = 'edge';

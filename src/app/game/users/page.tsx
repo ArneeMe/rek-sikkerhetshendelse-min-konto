@@ -55,4 +55,3 @@ export default function UsersPage() {
         </DivisionGuard>
     );
 }
-export const runtime = 'edge';

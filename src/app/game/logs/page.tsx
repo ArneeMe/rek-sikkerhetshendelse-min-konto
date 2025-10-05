@@ -25,4 +25,3 @@ export default async function LogsPage() {
         </DivisionGuard>
     );
 }
-export const runtime = 'edge';
