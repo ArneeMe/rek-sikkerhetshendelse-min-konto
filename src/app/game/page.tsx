@@ -1,7 +1,7 @@
 // src/app/game/page.tsx
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, Inbox, FileText, Server } from 'lucide-react';
+import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone, Shield } from 'lucide-react';
 import { getEvents, getServers, getLogs } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import Link from 'next/link';
@@ -9,12 +9,7 @@ import Link from 'next/link';
 export default async function GameDashboard() {
     const session = await getSession();
     const events = await getEvents(session!.companyId, session!.division);
-    const servers = await getServers();
-    const logs = await getLogs(session!.companyId, session!.division);
-
     const unreadCount = events.filter((e) => !e.read).length;
-    const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
-    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
 
     return (
         <div className="space-y-6">
@@ -33,7 +28,7 @@ export default async function GameDashboard() {
                 </div>
             </div>
 
-            {/* Stats Grid */}
+            {/* Common: Inbox */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link href="/game/inbox">
                     <Card className="bg-slate-900 border-slate-700 hover:border-blue-500 transition-colors cursor-pointer">
@@ -53,41 +48,26 @@ export default async function GameDashboard() {
                     </Card>
                 </Link>
 
-                <Link href="/game/servers">
-                    <Card className="bg-slate-900 border-slate-700 hover:border-orange-500 transition-colors cursor-pointer">
-                        <CardContent className="p-6">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-slate-400">Critical Servers</p>
-                                    <p className="text-3xl font-bold text-orange-400 mt-2">{criticalServers}</p>
-                                    <p className="text-xs text-slate-500 mt-1">Click to view servers</p>
-                                </div>
-                                <Server className="w-8 h-8 text-orange-400" />
-                            </div>
-                            {criticalServers > 0 && (
-                                <Badge className="bg-orange-600 mt-4">Investigate Now</Badge>
-                            )}
-                        </CardContent>
-                    </Card>
-                </Link>
+                {/* Tech Division */}
+                {session?.division === 'tech' && (
+                    <>
+                        <TechDashboard />
+                    </>
+                )}
 
-                <Link href="/game/logs">
-                    <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
-                        <CardContent className="p-6">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-slate-400">Critical Logs</p>
-                                    <p className="text-3xl font-bold text-red-400 mt-2">{criticalLogs}</p>
-                                    <p className="text-xs text-slate-500 mt-1">Click to view logs</p>
-                                </div>
-                                <FileText className="w-8 h-8 text-red-400" />
-                            </div>
-                            {criticalLogs > 0 && (
-                                <Badge className="bg-red-600 mt-4">Review Required</Badge>
-                            )}
-                        </CardContent>
-                    </Card>
-                </Link>
+                {/* Non-Tech Division */}
+                {session?.division === 'non-tech' && (
+                    <>
+                        <NonTechDashboard />
+                    </>
+                )}
+
+                {/* Management Division */}
+                {session?.division === 'management' && (
+                    <>
+                        <ManagementDashboard />
+                    </>
+                )}
             </div>
 
             {/* Recent Activity */}
@@ -123,5 +103,133 @@ export default async function GameDashboard() {
                 </CardContent>
             </Card>
         </div>
+    );
+}
+
+// Tech Division Dashboard
+async function TechDashboard() {
+    const session = await getSession();
+    const servers = await getServers();
+    const logs = await getLogs(session!.companyId, session!.division);
+
+    const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
+    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
+
+    return (
+        <>
+            <Link href="/game/servers">
+                <Card className="bg-slate-900 border-slate-700 hover:border-orange-500 transition-colors cursor-pointer">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-slate-400">Critical Servers</p>
+                                <p className="text-3xl font-bold text-orange-400 mt-2">{criticalServers}</p>
+                                <p className="text-xs text-slate-500 mt-1">Click to view servers</p>
+                            </div>
+                            <Server className="w-8 h-8 text-orange-400" />
+                        </div>
+                        {criticalServers > 0 && (
+                            <Badge className="bg-orange-600 mt-4">Investigate Now</Badge>
+                        )}
+                    </CardContent>
+                </Card>
+            </Link>
+
+            <Link href="/game/logs">
+                <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-slate-400">Critical Logs</p>
+                                <p className="text-3xl font-bold text-red-400 mt-2">{criticalLogs}</p>
+                                <p className="text-xs text-slate-500 mt-1">Click to view logs</p>
+                            </div>
+                            <FileText className="w-8 h-8 text-red-400" />
+                        </div>
+                        {criticalLogs > 0 && (
+                            <Badge className="bg-red-600 mt-4">Review Required</Badge>
+                        )}
+                    </CardContent>
+                </Card>
+            </Link>
+        </>
+    );
+}
+
+// Non-Tech Division Dashboard
+function NonTechDashboard() {
+    return (
+        <>
+            <Link href="/game/users">
+                <Card className="bg-slate-900 border-slate-700 hover:border-purple-500 transition-colors cursor-pointer">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-slate-400">Suspicious Users</p>
+                                <p className="text-3xl font-bold text-purple-400 mt-2">2</p>
+                                <p className="text-xs text-slate-500 mt-1">Click to view activity</p>
+                            </div>
+                            <Users className="w-8 h-8 text-purple-400" />
+                        </div>
+                        <Badge className="bg-purple-600 mt-4">Action Required</Badge>
+                    </CardContent>
+                </Card>
+            </Link>
+
+            <Link href="/game/emails">
+                <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-slate-400">Phishing Emails</p>
+                                <p className="text-3xl font-bold text-red-400 mt-2">1</p>
+                                <p className="text-xs text-slate-500 mt-1">Click to view emails</p>
+                            </div>
+                            <Mail className="w-8 h-8 text-red-400" />
+                        </div>
+                        <Badge className="bg-red-600 mt-4">Investigate</Badge>
+                    </CardContent>
+                </Card>
+            </Link>
+        </>
+    );
+}
+
+// Management Division Dashboard
+function ManagementDashboard() {
+    return (
+        <>
+            <Link href="/game/comms">
+                <Card className="bg-slate-900 border-slate-700 hover:border-orange-500 transition-colors cursor-pointer">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-slate-400">Pending Comms</p>
+                                <p className="text-3xl font-bold text-orange-400 mt-2">4</p>
+                                <p className="text-xs text-slate-500 mt-1">Click to view</p>
+                            </div>
+                            <Phone className="w-8 h-8 text-orange-400" />
+                        </div>
+                        <Badge className="bg-orange-600 mt-4">Response Needed</Badge>
+                    </CardContent>
+                </Card>
+            </Link>
+
+            <Link href="/game/policies">
+                <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
+                    <CardContent className="p-6">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <p className="text-sm text-slate-400">Policy Violations</p>
+                                <p className="text-3xl font-bold text-red-400 mt-2">3</p>
+                                <p className="text-xs text-slate-500 mt-1">Click to review</p>
+                            </div>
+                            <Shield className="w-8 h-8 text-red-400" />
+                        </div>
+                        <Badge className="bg-red-600 mt-4">Critical</Badge>
+                    </CardContent>
+                </Card>
+            </Link>
+        </>
     );
 }
