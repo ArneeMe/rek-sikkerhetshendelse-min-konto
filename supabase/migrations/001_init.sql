@@ -60,6 +60,56 @@ CREATE TABLE scheduled_events (
                                   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+CREATE TABLE email_logs (
+                            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                            company_id INT,
+                            division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                            timestamp TIMESTAMPTZ DEFAULT NOW(),
+                            sender TEXT NOT NULL,
+                            recipient TEXT NOT NULL,
+                            subject TEXT NOT NULL,
+                            status TEXT NOT NULL CHECK (status IN ('legitimate', 'phishing', 'suspicious')),
+                            opened INT DEFAULT 0,
+                            clicked INT DEFAULT 0
+);
+
+-- User activity table (for Non-Tech division)
+CREATE TABLE user_activity (
+                               id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                               company_id INT,
+                               division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                               user_id TEXT NOT NULL,
+                               name TEXT NOT NULL,
+                               role TEXT NOT NULL,
+                               last_login TIMESTAMPTZ,
+                               location TEXT,
+                               status TEXT NOT NULL CHECK (status IN ('normal', 'suspicious', 'clicked-phishing', 'compromised'))
+);
+
+-- Network connections table (for Tech division)
+CREATE TABLE network_connections (
+                                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                     company_id INT,
+                                     division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                                     timestamp TIMESTAMPTZ DEFAULT NOW(),
+                                     source TEXT NOT NULL,
+                                     destination TEXT NOT NULL,
+                                     port INT NOT NULL,
+                                     protocol TEXT NOT NULL,
+                                     status TEXT NOT NULL CHECK (status IN ('active', 'suspicious', 'blocked')),
+                                     traffic TEXT NOT NULL
+);
+
+-- Indexes for new tables
+CREATE INDEX idx_email_logs_company ON email_logs(company_id);
+CREATE INDEX idx_email_logs_division ON email_logs(division);
+CREATE INDEX idx_user_activity_company ON user_activity(company_id);
+CREATE INDEX idx_user_activity_division ON user_activity(division);
+CREATE INDEX idx_network_connections_company ON network_connections(company_id);
+CREATE INDEX idx_network_connections_division ON network_connections(division);
+
+
+
 -- Indexes
 CREATE INDEX idx_game_sessions_status ON game_sessions(status);
 CREATE INDEX idx_scheduled_events_trigger ON scheduled_events(trigger_at_minutes);
