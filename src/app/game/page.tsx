@@ -1,9 +1,12 @@
 // src/app/game/page.tsx
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { StatCard } from '@/components/ui/stat-card';
+import { ListItem } from '@/components/ui/list-item';
 import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone, Shield } from 'lucide-react';
 import { getEvents, getServers, getLogs } from '@/lib/db';
 import { getSession } from '@/lib/session';
+import { getSeverityColor } from '@/lib/ui-helpers';
 import Link from 'next/link';
 
 export default async function GameDashboard() {
@@ -30,23 +33,19 @@ export default async function GameDashboard() {
 
             {/* Common: Inbox */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Link href="/game/inbox">
-                    <Card className="bg-slate-900 border-slate-700 hover:border-blue-500 transition-colors cursor-pointer">
-                        <CardContent className="p-6">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <p className="text-sm text-slate-400">Unread Events</p>
-                                    <p className="text-3xl font-bold text-blue-400 mt-2">{unreadCount}</p>
-                                    <p className="text-xs text-slate-500 mt-1">Click to view inbox</p>
-                                </div>
-                                <Inbox className="w-8 h-8 text-blue-400" />
-                            </div>
-                            {unreadCount > 0 && (
-                                <Badge className="bg-blue-600 mt-4">Action Required</Badge>
-                            )}
-                        </CardContent>
-                    </Card>
-                </Link>
+                <StatCard
+                    title="Unread Events"
+                    value={unreadCount}
+                    description="Click to view inbox"
+                    icon={Inbox}
+                    iconColor="text-blue-400"
+                    badge={unreadCount > 0 ? {
+                        text: 'Action Required',
+                        className: 'bg-blue-600'
+                    } : undefined}
+                    href="/game/inbox"
+                    borderColor="hover:border-blue-500"
+                />
 
                 {/* Tech Division */}
                 {session?.division === 'tech' && (
@@ -76,23 +75,14 @@ export default async function GameDashboard() {
                     <h3 className="text-lg font-semibold text-slate-100 mb-4">Recent Incidents</h3>
                     <div className="space-y-3">
                         {events.slice(0, 3).map((event) => (
-                            <div key={event.id} className="flex items-center justify-between p-3 bg-slate-800 rounded-lg">
-                                <div className="flex items-center gap-3">
-                                    <AlertTriangle className={`w-5 h-5 ${
-                                        event.severity === 'critical' ? 'text-red-500' :
-                                            event.severity === 'high' ? 'text-orange-500' :
-                                                event.severity === 'medium' ? 'text-yellow-500' :
-                                                    'text-blue-500'
-                                    }`} />
-                                    <div>
-                                        <p className="text-sm font-medium text-slate-200">{event.title}</p>
-                                        <p className="text-xs text-slate-400">{event.type}</p>
-                                    </div>
-                                </div>
-                                {!event.read && (
-                                    <Badge variant="outline" className="text-xs">New</Badge>
-                                )}
-                            </div>
+                            <ListItem
+                                key={event.id}
+                                icon={AlertTriangle}
+                                iconColor={getSeverityColor(event.severity)}
+                                title={event.title}
+                                subtitle={event.type}
+                                badge={!event.read ? { text: 'New', variant: 'outline' } : undefined}
+                            />
                         ))}
                     </div>
                     <Link href="/game/inbox">
@@ -117,41 +107,33 @@ async function TechDashboard() {
 
     return (
         <>
-            <Link href="/game/servers">
-                <Card className="bg-slate-900 border-slate-700 hover:border-orange-500 transition-colors cursor-pointer">
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-400">Critical Servers</p>
-                                <p className="text-3xl font-bold text-orange-400 mt-2">{criticalServers}</p>
-                                <p className="text-xs text-slate-500 mt-1">Click to view servers</p>
-                            </div>
-                            <Server className="w-8 h-8 text-orange-400" />
-                        </div>
-                        {criticalServers > 0 && (
-                            <Badge className="bg-orange-600 mt-4">Investigate Now</Badge>
-                        )}
-                    </CardContent>
-                </Card>
-            </Link>
+            <StatCard
+                title="Critical Servers"
+                value={criticalServers}
+                description="Click to view servers"
+                icon={Server}
+                iconColor="text-orange-400"
+                badge={criticalServers > 0 ? {
+                    text: 'Investigate Now',
+                    className: 'bg-orange-600'
+                } : undefined}
+                href="/game/servers"
+                borderColor="hover:border-orange-500"
+            />
 
-            <Link href="/game/logs">
-                <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-400">Critical Logs</p>
-                                <p className="text-3xl font-bold text-red-400 mt-2">{criticalLogs}</p>
-                                <p className="text-xs text-slate-500 mt-1">Click to view logs</p>
-                            </div>
-                            <FileText className="w-8 h-8 text-red-400" />
-                        </div>
-                        {criticalLogs > 0 && (
-                            <Badge className="bg-red-600 mt-4">Review Required</Badge>
-                        )}
-                    </CardContent>
-                </Card>
-            </Link>
+            <StatCard
+                title="Critical Logs"
+                value={criticalLogs}
+                description="Click to view logs"
+                icon={FileText}
+                iconColor="text-red-400"
+                badge={criticalLogs > 0 ? {
+                    text: 'Review Required',
+                    className: 'bg-red-600'
+                } : undefined}
+                href="/game/logs"
+                borderColor="hover:border-red-500"
+            />
         </>
     );
 }
@@ -160,37 +142,33 @@ async function TechDashboard() {
 function NonTechDashboard() {
     return (
         <>
-            <Link href="/game/users">
-                <Card className="bg-slate-900 border-slate-700 hover:border-purple-500 transition-colors cursor-pointer">
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-400">Suspicious Users</p>
-                                <p className="text-3xl font-bold text-purple-400 mt-2">2</p>
-                                <p className="text-xs text-slate-500 mt-1">Click to view activity</p>
-                            </div>
-                            <Users className="w-8 h-8 text-purple-400" />
-                        </div>
-                        <Badge className="bg-purple-600 mt-4">Action Required</Badge>
-                    </CardContent>
-                </Card>
-            </Link>
+            <StatCard
+                title="Suspicious Users"
+                value={2}
+                description="Click to view activity"
+                icon={Users}
+                iconColor="text-purple-400"
+                badge={{
+                    text: 'Action Required',
+                    className: 'bg-purple-600'
+                }}
+                href="/game/users"
+                borderColor="hover:border-purple-500"
+            />
 
-            <Link href="/game/emails">
-                <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-400">Phishing Emails</p>
-                                <p className="text-3xl font-bold text-red-400 mt-2">1</p>
-                                <p className="text-xs text-slate-500 mt-1">Click to view emails</p>
-                            </div>
-                            <Mail className="w-8 h-8 text-red-400" />
-                        </div>
-                        <Badge className="bg-red-600 mt-4">Investigate</Badge>
-                    </CardContent>
-                </Card>
-            </Link>
+            <StatCard
+                title="Phishing Emails"
+                value={1}
+                description="Click to view emails"
+                icon={Mail}
+                iconColor="text-red-400"
+                badge={{
+                    text: 'Investigate',
+                    className: 'bg-red-600'
+                }}
+                href="/game/emails"
+                borderColor="hover:border-red-500"
+            />
         </>
     );
 }
@@ -199,37 +177,33 @@ function NonTechDashboard() {
 function ManagementDashboard() {
     return (
         <>
-            <Link href="/game/comms">
-                <Card className="bg-slate-900 border-slate-700 hover:border-orange-500 transition-colors cursor-pointer">
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-400">Pending Comms</p>
-                                <p className="text-3xl font-bold text-orange-400 mt-2">4</p>
-                                <p className="text-xs text-slate-500 mt-1">Click to view</p>
-                            </div>
-                            <Phone className="w-8 h-8 text-orange-400" />
-                        </div>
-                        <Badge className="bg-orange-600 mt-4">Response Needed</Badge>
-                    </CardContent>
-                </Card>
-            </Link>
+            <StatCard
+                title="Pending Comms"
+                value={4}
+                description="Click to view"
+                icon={Phone}
+                iconColor="text-orange-400"
+                badge={{
+                    text: 'Response Needed',
+                    className: 'bg-orange-600'
+                }}
+                href="/game/comms"
+                borderColor="hover:border-orange-500"
+            />
 
-            <Link href="/game/policies">
-                <Card className="bg-slate-900 border-slate-700 hover:border-red-500 transition-colors cursor-pointer">
-                    <CardContent className="p-6">
-                        <div className="flex items-center justify-between">
-                            <div>
-                                <p className="text-sm text-slate-400">Policy Violations</p>
-                                <p className="text-3xl font-bold text-red-400 mt-2">3</p>
-                                <p className="text-xs text-slate-500 mt-1">Click to review</p>
-                            </div>
-                            <Shield className="w-8 h-8 text-red-400" />
-                        </div>
-                        <Badge className="bg-red-600 mt-4">Critical</Badge>
-                    </CardContent>
-                </Card>
-            </Link>
+            <StatCard
+                title="Policy Violations"
+                value={3}
+                description="Click to review"
+                icon={Shield}
+                iconColor="text-red-400"
+                badge={{
+                    text: 'Critical',
+                    className: 'bg-red-600'
+                }}
+                href="/game/policies"
+                borderColor="hover:border-red-500"
+            />
         </>
     );
 }
