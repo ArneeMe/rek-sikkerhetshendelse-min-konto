@@ -22,3 +22,4 @@ export default async function ServersPage() {
         </DivisionGuard>
     );
 }
+export const runtime = 'edge';

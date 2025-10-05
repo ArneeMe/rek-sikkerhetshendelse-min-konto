@@ -1,10 +1,20 @@
 // src/lib/db.ts
 import { supabase } from './supabase';
 import { Event, LogEntry, Server } from '@/types';
+import { applyStandardFilters } from './db-helpers';
+import type {
+    DatabaseEvent,
+    DatabaseLog,
+    DatabaseServer,
+    DatabaseEmailLog,
+    DatabaseUserActivity,
+    DatabaseNetworkConnection,
+    DatabaseScheduledEvent,
+    DatabaseGameSession,
+} from '@/types/database';
 
 // ===== GAME SESSION MANAGEMENT =====
 
-// Start a new game session (for all companies)
 export async function startGameSession() {
     const { data, error } = await supabase
         .from('game_sessions')
@@ -21,10 +31,9 @@ export async function startGameSession() {
         return null;
     }
 
-    return data;
+    return data as DatabaseGameSession;
 }
 
-// Get current active game session
 export async function getActiveGameSession() {
     const { data, error } = await supabase
         .from('game_sessions')
@@ -34,15 +43,14 @@ export async function getActiveGameSession() {
         .limit(1)
         .single();
 
-    if (error && error.code !== 'PGRST116') { // PGRST116 = no rows
+    if (error && error.code !== 'PGRST116') {
         console.error('Error fetching game session:', error);
         return null;
     }
 
-    return data;
+    return data as DatabaseGameSession | null;
 }
 
-// End current game session
 export async function endGameSession() {
     const activeSession = await getActiveGameSession();
     if (!activeSession) return null;
@@ -59,10 +67,9 @@ export async function endGameSession() {
         return null;
     }
 
-    return data;
+    return data as DatabaseGameSession;
 }
 
-// Get scheduled events that should be visible based on elapsed time
 export async function getScheduledEventsForTime(minutesElapsed: number) {
     const { data, error } = await supabase
         .from('scheduled_events')
@@ -75,12 +82,11 @@ export async function getScheduledEventsForTime(minutesElapsed: number) {
         return [];
     }
 
-    return data || [];
+    return (data || []) as DatabaseScheduledEvent[];
 }
 
 // ===== SERVERS =====
 
-// Fetch servers (basestations)
 export async function getServers(): Promise<Server[]> {
     const { data, error } = await supabase
         .from('servers')
@@ -97,58 +103,50 @@ export async function getServers(): Promise<Server[]> {
 
 // ===== EVENTS =====
 
-// Fetch events for a specific company and division
-// Now combines static events + scheduled events based on game time
 export async function getEvents(companyId: number, division?: string): Promise<Event[]> {
-    // Get static events
-    let staticQuery = supabase
+    const staticQuery = supabase
         .from('events')
         .select('*')
-        .or(`company_id.eq.${companyId},company_id.is.null`)
         .order('created_at', { ascending: false });
 
-    // Filter by division if provided (not for admins)
-    if (division) {
-        staticQuery = staticQuery.or(`division.eq.${division},division.is.null`);
-    }
-
-    const { data: staticEvents, error: staticError } = await staticQuery;
+    const { data: staticEvents, error: staticError } = await applyStandardFilters(
+        staticQuery,
+        companyId,
+        division
+    );
 
     if (staticError) {
         console.error('Error fetching events:', staticError);
         return [];
     }
 
-    // Get active game session
     const session = await getActiveGameSession();
-
     let scheduledEvents: Event[] = [];
+
     if (session) {
-        // Calculate minutes elapsed
         const minutesElapsed = Math.floor(
             (Date.now() - new Date(session.started_at).getTime()) / 60000
         );
 
-        // Get scheduled events that should be visible
-        let scheduledQuery = supabase
+        const scheduledQuery = supabase
             .from('scheduled_events')
             .select('*')
             .lte('trigger_at_minutes', minutesElapsed);
 
-        // Filter by division if provided (not for admins)
-        if (division) {
-            scheduledQuery = scheduledQuery.or(`division.eq.${division},division.is.null`);
-        }
-
-        const { data: scheduled, error: scheduledError } = await scheduledQuery;
+        const { data: scheduled, error: scheduledError } = await applyStandardFilters(
+            scheduledQuery,
+            companyId,
+            division
+        );
 
         if (!scheduledError && scheduled) {
-            scheduledEvents = scheduled.map((event) => ({
+            const typedScheduled = scheduled as DatabaseScheduledEvent[];
+            scheduledEvents = typedScheduled.map((event) => ({
                 id: `scheduled-${event.id}`,
-                type: event.type as Event['type'],
+                type: event.type,
                 title: event.title,
                 content: event.content,
-                severity: event.severity as Event['severity'],
+                severity: event.severity,
                 from: event.from_sender || undefined,
                 read: false,
                 timestamp: new Date(
@@ -159,40 +157,33 @@ export async function getEvents(companyId: number, division?: string): Promise<E
         }
     }
 
-    // Combine and map static events
-    const mappedStaticEvents = (staticEvents || []).map((event) => ({
+    const typedStaticEvents = (staticEvents || []) as DatabaseEvent[];
+    const mappedStaticEvents: Event[] = typedStaticEvents.map((event) => ({
         id: event.id,
-        type: event.type as Event['type'],
+        type: event.type,
         title: event.title,
         content: event.content,
-        severity: event.severity as Event['severity'],
+        severity: event.severity,
         from: event.from_sender || undefined,
         read: event.read,
         timestamp: new Date(event.created_at),
     }));
 
-    // Merge and sort by timestamp
     return [...mappedStaticEvents, ...scheduledEvents].sort(
         (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-    ) as Event[];
+    );
 }
 
 // ===== LOGS =====
 
-// Fetch logs for a specific company and division
 export async function getLogs(companyId: number, division?: string, source?: string): Promise<LogEntry[]> {
     let query = supabase
         .from('logs')
         .select('*')
-        .or(`company_id.eq.${companyId},company_id.is.null`)
         .order('timestamp', { ascending: false });
 
-    // Filter by division if provided (not for admins)
-    if (division) {
-        query = query.or(`division.eq.${division},division.is.null`);
-    }
+    query = applyStandardFilters(query, companyId, division);
 
-    // Filter by server source if provided
     if (source) {
         query = query.eq('source', source);
     }
@@ -204,18 +195,72 @@ export async function getLogs(companyId: number, division?: string, source?: str
         return [];
     }
 
-    return (data || []).map((log) => ({
+    const typedLogs = (data || []) as DatabaseLog[];
+    return typedLogs.map((log) => ({
         id: log.id,
         timestamp: new Date(log.timestamp),
         level: log.level,
         source: log.source,
         message: log.message,
-    })) as LogEntry[];
+    }));
+}
+
+// ===== EMAIL LOGS =====
+
+export async function getEmailLogs(companyId: number, division?: string) {
+    const query = supabase
+        .from('email_logs')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+    const { data, error } = await applyStandardFilters(query, companyId, division);
+
+    if (error) {
+        console.error('Error fetching email logs:', error);
+        return [];
+    }
+
+    return (data || []) as DatabaseEmailLog[];
+}
+
+// ===== USER ACTIVITY =====
+
+export async function getUserActivity(companyId: number, division?: string) {
+    const query = supabase
+        .from('user_activity')
+        .select('*')
+        .order('last_login', { ascending: false });
+
+    const { data, error } = await applyStandardFilters(query, companyId, division);
+
+    if (error) {
+        console.error('Error fetching user activity:', error);
+        return [];
+    }
+
+    return (data || []) as DatabaseUserActivity[];
+}
+
+// ===== NETWORK CONNECTIONS =====
+
+export async function getNetworkConnections(companyId: number, division?: string) {
+    const query = supabase
+        .from('network_connections')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+    const { data, error } = await applyStandardFilters(query, companyId, division);
+
+    if (error) {
+        console.error('Error fetching network connections:', error);
+        return [];
+    }
+
+    return (data || []) as DatabaseNetworkConnection[];
 }
 
 // ===== ADMIN FUNCTIONS =====
 
-// Admin: Update server status
 export async function updateServer(serverId: string, updates: {
     status?: string;
     load?: number;
@@ -235,10 +280,9 @@ export async function updateServer(serverId: string, updates: {
         return null;
     }
 
-    return data?.[0];
+    return data?.[0] as DatabaseServer | undefined;
 }
 
-// Admin: Create new event
 export async function createEvent(event: {
     companyId: number | null;
     division: string | null;
@@ -263,10 +307,9 @@ export async function createEvent(event: {
         return null;
     }
 
-    return data?.[0];
+    return data?.[0] as DatabaseEvent | undefined;
 }
 
-// Admin: Create new log
 export async function createLog(log: {
     companyId: number | null;
     division: string | null;
@@ -287,10 +330,9 @@ export async function createLog(log: {
         return null;
     }
 
-    return data?.[0];
+    return data?.[0] as DatabaseLog | undefined;
 }
 
-// Admin: Create scheduled event
 export async function createScheduledEvent(event: {
     triggerAtMinutes: number;
     division: string | null;
@@ -315,5 +357,5 @@ export async function createScheduledEvent(event: {
         return null;
     }
 
-    return data?.[0];
+    return data?.[0] as DatabaseScheduledEvent | undefined;
 }

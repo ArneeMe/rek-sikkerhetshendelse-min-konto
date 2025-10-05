@@ -128,3 +128,4 @@ export default function CommunicationsPage() {
         </DivisionGuard>
     );
 }
+export const runtime = 'edge';

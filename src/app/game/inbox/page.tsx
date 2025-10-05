@@ -43,3 +43,4 @@ export default async function InboxPage() {
         </div>
     );
 }
+export const runtime = 'edge';
