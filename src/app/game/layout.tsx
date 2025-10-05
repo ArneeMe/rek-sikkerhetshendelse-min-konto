@@ -1,9 +1,10 @@
 import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { Shield, Inbox, FileText, Server, LogOut } from 'lucide-react';
+import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
+import { getDivisionNavItems, getDivisionDisplayName } from '@/lib/division-utils';
 
 export default async function GameLayout({
                                              children,
@@ -15,6 +16,9 @@ export default async function GameLayout({
     if (!session) {
         redirect('/login');
     }
+
+    const navItems = getDivisionNavItems(session.division);
+    const divisionName = getDivisionDisplayName(session.division);
 
     return (
         <div className="min-h-screen bg-slate-950">
@@ -29,36 +33,23 @@ export default async function GameLayout({
                                 <Shield className="w-6 h-6 text-blue-500" />
                                 <div>
                                     <h1 className="text-xl font-bold text-slate-100">SOC Dashboard</h1>
-                                    <p className="text-xs text-slate-400">{session.companyName}</p>
+                                    <p className="text-xs text-slate-400">{session.companyName} - {divisionName}</p>
                                 </div>
                             </Link>
 
-                            {/* Navigation */}
+                            {/* Dynamic Navigation */}
                             <nav className="hidden md:flex items-center gap-2">
-                                <Link href="/game">
-                                    <Button variant="ghost" className="text-slate-300 hover:text-slate-100">
-                                        <Shield className="w-4 h-4 mr-2" />
-                                        Overview
-                                    </Button>
-                                </Link>
-                                <Link href="/game/inbox">
-                                    <Button variant="ghost" className="text-slate-300 hover:text-slate-100">
-                                        <Inbox className="w-4 h-4 mr-2" />
-                                        Inbox
-                                    </Button>
-                                </Link>
-                                <Link href="/game/logs">
-                                    <Button variant="ghost" className="text-slate-300 hover:text-slate-100">
-                                        <FileText className="w-4 h-4 mr-2" />
-                                        Logs
-                                    </Button>
-                                </Link>
-                                <Link href="/game/servers">
-                                    <Button variant="ghost" className="text-slate-300 hover:text-slate-100">
-                                        <Server className="w-4 h-4 mr-2" />
-                                        Servers
-                                    </Button>
-                                </Link>
+                                {navItems.map((item) => {
+                                    const Icon = item.icon;
+                                    return (
+                                        <Link key={item.href} href={item.href}>
+                                            <Button variant="ghost" className="text-slate-300 hover:text-slate-100">
+                                                <Icon className="w-4 h-4 mr-2" />
+                                                {item.label}
+                                            </Button>
+                                        </Link>
+                                    );
+                                })}
                             </nav>
                         </div>
 
