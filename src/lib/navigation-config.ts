@@ -20,23 +20,23 @@ export interface NavItem {
 
 export const DIVISION_NAV: Record<string, NavItem[]> = {
     tech: [
-        { icon: Home, label: 'Overview', href: '/game' },
-        { icon: Inbox, label: 'Inbox', href: '/game/inbox' },
-        { icon: Server, label: 'Servers', href: '/game/servers' },
-        { icon: FileText, label: 'System Logs', href: '/game/logs' },
-        { icon: Network, label: 'Network', href: '/game/network' },
+        { icon: Home, label: 'Oversikt', href: '/game' },
+        { icon: Inbox, label: 'Innboks', href: '/game/inbox' },
+        { icon: Server, label: 'Servere', href: '/game/servers' },
+        { icon: FileText, label: 'Systemlogger', href: '/game/logs' },
+        { icon: Network, label: 'Nettverk', href: '/game/network' },
     ],
     'non-tech': [
-        { icon: Home, label: 'Overview', href: '/game' },
-        { icon: Inbox, label: 'Inbox', href: '/game/inbox' },
-        { icon: Users, label: 'User Activity', href: '/game/users' },
-        { icon: Mail, label: 'Email Logs', href: '/game/emails' },
+        { icon: Home, label: 'Oversikt', href: '/game' },
+        { icon: Inbox, label: 'Innboks', href: '/game/inbox' },
+        { icon: Users, label: 'Brukeraktivitet', href: '/game/users' },
+        { icon: Mail, label: 'E-postlogger', href: '/game/emails' },
     ],
     management: [
-        { icon: Home, label: 'Overview', href: '/game' },
-        { icon: Inbox, label: 'Inbox', href: '/game/inbox' },
-        { icon: Phone, label: 'Communications', href: '/game/comms' },
-        { icon: Shield, label: 'Policies', href: '/game/policies' },
+        { icon: Home, label: 'Oversikt', href: '/game' },
+        { icon: Inbox, label: 'Innboks', href: '/game/inbox' },
+        { icon: Phone, label: 'Kommunikasjon', href: '/game/comms' },
+        { icon: Shield, label: 'Retningslinjer', href: '/game/policies' },
     ],
 };
 

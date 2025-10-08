@@ -22,7 +22,7 @@ export function LogsClient({ logs, servers }: LogsClientProps) {
         <Tabs value={selectedServer} onValueChange={setSelectedServer} className="w-full">
             <TabsList className="bg-slate-800 border border-slate-700">
                 <TabsTrigger value="all" className="data-[state=active]:bg-slate-700">
-                    All Logs
+                    Alle logger
                 </TabsTrigger>
                 {servers.map((server) => (
                     <TabsTrigger

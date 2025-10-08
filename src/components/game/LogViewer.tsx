@@ -13,18 +13,18 @@ export function LogViewer({ logs }: LogViewerProps) {
             case 'info':
                 return <Badge className="bg-blue-600 text-xs">INFO</Badge>;
             case 'warning':
-                return <Badge className="bg-yellow-600 text-xs">WARN</Badge>;
+                return <Badge className="bg-yellow-600 text-xs">ADVARSEL</Badge>;
             case 'error':
-                return <Badge className="bg-orange-600 text-xs">ERROR</Badge>;
+                return <Badge className="bg-orange-600 text-xs">FEIL</Badge>;
             case 'critical':
-                return <Badge className="bg-red-600 text-xs">CRIT</Badge>;
+                return <Badge className="bg-red-600 text-xs">KRITISK</Badge>;
         }
     };
 
     return (
         <Card className="bg-slate-900 border-slate-700">
             <CardHeader>
-                <CardTitle className="text-slate-100">System Logs</CardTitle>
+                <CardTitle className="text-slate-100">Systemlogger</CardTitle>
             </CardHeader>
             <CardContent>
                 <div className="space-y-2 max-h-96 overflow-y-auto">

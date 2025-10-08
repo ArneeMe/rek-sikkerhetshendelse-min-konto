@@ -28,12 +28,12 @@ export function getDivisionNavItems(division: string | undefined): NavItem[] {
  * Get division display name
  */
 export function getDivisionDisplayName(division: string | undefined): string {
-    if (!division) return 'Unknown';
+    if (!division) return 'Ukjent';
 
     const names: Record<string, string> = {
-        'tech': 'Tech Division',
-        'non-tech': 'Non-Tech Division',
-        'management': 'Management',
+        'tech': 'Drift',
+        'non-tech': 'Organisasjon',
+        'management': 'Ledelse og Kommunikasjon',
     };
 
     return names[division] || division;

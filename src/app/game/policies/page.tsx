@@ -11,8 +11,8 @@ export default function PoliciesPage() {
             <div className="space-y-6">
                 <PageHeader
                     icon={Shield}
-                    title="Policies & Compliance"
-                    description="Security policies and compliance status"
+                    title="Retningslinjer og etterlevelse"
+                    description="Sikkerhetsretningslinjer og etterlevingsstatus"
                 />
 
                 {/* Compliance Overview */}
@@ -21,7 +21,7 @@ export default function PoliciesPage() {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-sm text-slate-400">Policies Compliant</div>
+                                    <div className="text-sm text-slate-400">Retningslinjer etterlevd</div>
                                     <div className="text-2xl font-bold text-green-400 mt-1">12/15</div>
                                 </div>
                                 <CheckCircle className="w-8 h-8 text-green-400" />
@@ -32,7 +32,7 @@ export default function PoliciesPage() {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-sm text-slate-400">Violations</div>
+                                    <div className="text-sm text-slate-400">Brudd</div>
                                     <div className="text-2xl font-bold text-red-400 mt-1">3</div>
                                 </div>
                                 <XCircle className="w-8 h-8 text-red-400" />
@@ -43,7 +43,7 @@ export default function PoliciesPage() {
                         <CardContent className="p-4">
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <div className="text-sm text-slate-400">Pending Review</div>
+                                    <div className="text-sm text-slate-400">Venter på gjennomgang</div>
                                     <div className="text-2xl font-bold text-orange-400 mt-1">2</div>
                                 </div>
                                 <AlertCircle className="w-8 h-8 text-orange-400" />
@@ -57,61 +57,61 @@ export default function PoliciesPage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <XCircle className="w-5 h-5 text-red-400" />
-                            Policy Violations Detected
+                            Regelbrudd oppdaget
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         {/* Violation 1 */}
                         <div className="border-l-4 border-red-600 pl-4 py-2">
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-semibold text-slate-100">Two-Person Approval Bypass</h4>
-                                <Badge className="bg-red-600">Critical</Badge>
+                                <h4 className="font-semibold text-slate-100">Omgåelse av to-persons godkjenning</h4>
+                                <Badge className="bg-red-600">Kritisk</Badge>
                             </div>
                             <p className="text-sm text-slate-400 mb-2">
-                                Production deployment at 07:45 violated two-person approval policy.
-                                CTO override was used without documented justification.
+                                Produksjonsdistribusjon kl 07:45 brøt med to-persons godkjenningspolicy.
+                                CTO-override ble brukt uten dokumentert begrunnelse.
                             </p>
                             <div className="text-xs text-slate-500">
-                                <span>Policy: SEC-004 (Change Management)</span>
+                                <span>Retningslinje: SEC-004 (Endringshåndtering)</span>
                                 <span className="mx-2">•</span>
-                                <span>Occurred: 6 months ago</span>
+                                <span>Skjedde: for 6 måneder siden</span>
                                 <span className="mx-2">•</span>
-                                <span>Approved by: CTO (unauthorized override)</span>
+                                <span>Godkjent av: CTO (uautorisert override)</span>
                             </div>
                         </div>
 
                         {/* Violation 2 */}
                         <div className="border-l-4 border-red-600 pl-4 py-2">
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-semibold text-slate-100">Excessive Admin Privileges</h4>
-                                <Badge className="bg-red-600">Critical</Badge>
+                                <h4 className="font-semibold text-slate-100">Overdrevne administratorrettigheter</h4>
+                                <Badge className="bg-red-600">Kritisk</Badge>
                             </div>
                             <p className="text-sm text-slate-400 mb-2">
-                                Database Administrator role has access to production, backups, AND network infrastructure.
-                                Violates principle of least privilege.
+                                Databaseadministrator-rollen har tilgang til produksjon, backuper OG nettverksinfrastruktur.
+                                Bryter med prinsippet om minste privilegium.
                             </p>
                             <div className="text-xs text-slate-500">
-                                <span>Policy: SEC-002 (Access Control)</span>
+                                <span>Retningslinje: SEC-002 (Tilgangskontroll)</span>
                                 <span className="mx-2">•</span>
-                                <span>User: Ola Hansen (ID 47291)</span>
+                                <span>Bruker: Ola Hansen (ID 47291)</span>
                                 <span className="mx-2">•</span>
-                                <span>Duration: 6 months</span>
+                                <span>Varighet: 6 måneder</span>
                             </div>
                         </div>
 
                         {/* Violation 3 */}
                         <div className="border-l-4 border-orange-600 pl-4 py-2">
                             <div className="flex items-center justify-between mb-2">
-                                <h4 className="font-semibold text-slate-100">Outdated Backup Policy</h4>
-                                <Badge className="bg-orange-600">High</Badge>
+                                <h4 className="font-semibold text-slate-100">Utdatert backup-policy</h4>
+                                <Badge className="bg-orange-600">Høy</Badge>
                             </div>
                             <p className="text-sm text-slate-400 mb-2">
-                                Last backup is 4 days old. Policy requires daily backups with 24-hour retention verification.
+                                Siste backup er 4 dager gammel. Policy krever daglige backuper med 24-timers bekreftelse.
                             </p>
                             <div className="text-xs text-slate-500">
-                                <span>Policy: SEC-007 (Backup & Recovery)</span>
+                                <span>Retningslinje: SEC-007 (Backup & Gjenoppretting)</span>
                                 <span className="mx-2">•</span>
-                                <span>Last backup: 4 days ago</span>
+                                <span>Siste backup: for 4 dager siden</span>
                             </div>
                         </div>
                     </CardContent>
@@ -122,30 +122,30 @@ export default function PoliciesPage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Shield className="w-5 h-5 text-blue-400" />
-                            Recommended Actions
+                            Anbefalte handlinger
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
                         <ul className="space-y-3 text-sm text-slate-300">
                             <li className="flex items-start gap-2">
                                 <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                                <span>Immediately revoke unauthorized CTO override privileges</span>
+                                <span>Tilbakekall umiddelbart uautoriserte CTO-override-privilegier</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                                <span>Implement role separation for database administrators</span>
+                                <span>Implementer rolleseparasjon for databaseadministratorer</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                                <span>Enforce mandatory two-person approval for all production changes</span>
+                                <span>Håndhev obligatorisk to-persons godkjenning for alle produksjonsendringer</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                                <span>Review and update access control matrix quarterly</span>
+                                <span>Gjennomgå og oppdater tilgangskontrollmatrise kvartalsvis</span>
                             </li>
                             <li className="flex items-start gap-2">
                                 <CheckCircle className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
-                                <span>Conduct immediate security audit of all privileged accounts</span>
+                                <span>Utfør umiddelbar sikkerhetsrevisjon av alle privilegerte kontoer</span>
                             </li>
                         </ul>
                     </CardContent>

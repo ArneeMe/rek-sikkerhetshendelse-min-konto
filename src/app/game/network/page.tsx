@@ -15,10 +15,10 @@ const networkConnections = [
 ];
 
 const columns: Column<typeof networkConnections[0]>[] = [
-    { key: 'source', header: 'Source IP' },
-    { key: 'destination', header: 'Destination' },
+    { key: 'source', header: 'Kilde-IP' },
+    { key: 'destination', header: 'Destinasjon' },
     { key: 'port', header: 'Port' },
-    { key: 'protocol', header: 'Protocol' },
+    { key: 'protocol', header: 'Protokoll' },
     {
         key: 'status',
         header: 'Status',
@@ -30,11 +30,13 @@ const columns: Column<typeof networkConnections[0]>[] = [
                             'bg-red-600'
                 }
             >
-                {item.status}
+                {item.status === 'active' ? 'Aktiv' :
+                    item.status === 'suspicious' ? 'Mistenkelig' :
+                        'Blokkert'}
             </Badge>
         ),
     },
-    { key: 'traffic', header: 'Traffic' },
+    { key: 'traffic', header: 'Trafikk' },
 ];
 
 export default function NetworkPage() {
@@ -43,33 +45,33 @@ export default function NetworkPage() {
             <div className="space-y-6">
                 <PageHeader
                     icon={Network}
-                    title="Network Monitor"
-                    description="Real-time network connection analysis"
+                    title="Nettverksmonitor"
+                    description="Sanntidsanalyse av nettverkstilkoblinger"
                 />
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card className="bg-slate-900 border-slate-700">
                         <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Active Connections</div>
+                            <div className="text-sm text-slate-400">Aktive tilkoblinger</div>
                             <div className="text-2xl font-bold text-slate-100 mt-1">127</div>
                         </CardContent>
                     </Card>
                     <Card className="bg-slate-900 border-slate-700">
                         <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Suspicious</div>
+                            <div className="text-sm text-slate-400">Mistenkelige</div>
                             <div className="text-2xl font-bold text-orange-400 mt-1">3</div>
                         </CardContent>
                     </Card>
                     <Card className="bg-slate-900 border-slate-700">
                         <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Blocked</div>
+                            <div className="text-sm text-slate-400">Blokkerte</div>
                             <div className="text-2xl font-bold text-red-400 mt-1">12</div>
                         </CardContent>
                     </Card>
                     <Card className="bg-slate-900 border-slate-700">
                         <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Total Traffic</div>
+                            <div className="text-sm text-slate-400">Total trafikk</div>
                             <div className="text-2xl font-bold text-blue-400 mt-1">45.2 GB</div>
                         </CardContent>
                     </Card>
@@ -79,7 +81,7 @@ export default function NetworkPage() {
                 <DataTable
                     columns={columns}
                     data={networkConnections}
-                    emptyMessage="No network connections detected"
+                    emptyMessage="Ingen nettverkstilkoblinger oppdaget"
                 />
             </div>
         </DivisionGuard>

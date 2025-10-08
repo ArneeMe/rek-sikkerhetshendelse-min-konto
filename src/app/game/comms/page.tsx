@@ -11,8 +11,8 @@ export default function CommunicationsPage() {
             <div className="space-y-6">
                 <PageHeader
                     icon={Phone}
-                    title="Communications"
-                    description="External communications and stakeholder updates"
+                    title="Kommunikasjon"
+                    description="Ekstern kommunikasjon og oppdateringer til interessenter"
                 />
 
                 {/* NSM Communication */}
@@ -23,21 +23,21 @@ export default function CommunicationsPage() {
                                 <Shield className="w-5 h-5 text-blue-400" />
                                 NSM (Nasjonal Sikkerhetsmyndighet)
                             </CardTitle>
-                            <Badge className="bg-orange-600">Action Required</Badge>
+                            <Badge className="bg-orange-600">Handling påkrevd</Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="text-sm text-slate-300">
-                            <p className="font-semibold mb-2">Status: Incident Reported</p>
+                            <p className="font-semibold mb-2">Status: Hendelse rapportert</p>
                             <p className="text-slate-400">
-                                NSM has been notified of the security incident. They are requesting a detailed timeline
-                                of events and an assessment of compromised systems within 24 hours.
+                                NSM er varslet om sikkerhetshendelsen. De ber om en detaljert tidslinje
+                                av hendelser og en vurdering av kompromitterte systemer innen 24 timer.
                             </p>
                         </div>
                         <div className="flex gap-2 text-xs text-slate-500">
-                            <span>Last contact: 2 hours ago</span>
+                            <span>Siste kontakt: for 2 timer siden</span>
                             <span>•</span>
-                            <span>Priority: High</span>
+                            <span>Prioritet: Høy</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -50,21 +50,21 @@ export default function CommunicationsPage() {
                                 <Building2 className="w-5 h-5 text-purple-400" />
                                 Datatilsynet
                             </CardTitle>
-                            <Badge variant="outline">72 Hours Remaining</Badge>
+                            <Badge variant="outline">72 timer gjenstår</Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="text-sm text-slate-300">
-                            <p className="font-semibold mb-2">GDPR Breach Notification</p>
+                            <p className="font-semibold mb-2">GDPR bruddvarsel</p>
                             <p className="text-slate-400">
-                                Personal data breach notification deadline: 72 hours from discovery.
-                                Must include: nature of breach, affected individuals, likely consequences, and mitigation measures.
+                                Frist for varsel om personopplysningsbrudd: 72 timer fra oppdagelse.
+                                Må inkludere: type brudd, berørte individer, sannsynlige konsekvenser og mottiltak.
                             </p>
                         </div>
                         <div className="flex gap-2 text-xs text-slate-500">
-                            <span>Deadline: Tomorrow 14:00</span>
+                            <span>Frist: I morgen 14:00</span>
                             <span>•</span>
-                            <span>Status: Pending</span>
+                            <span>Status: Venter</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -75,23 +75,23 @@ export default function CommunicationsPage() {
                         <div className="flex items-center justify-between">
                             <CardTitle className="flex items-center gap-2">
                                 <AlertTriangle className="w-5 h-5 text-yellow-400" />
-                                Board of Directors
+                                Styret
                             </CardTitle>
-                            <Badge className="bg-red-600">Urgent</Badge>
+                            <Badge className="bg-red-600">Haster</Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="text-sm text-slate-300">
-                            <p className="font-semibold mb-2">Emergency Board Meeting Scheduled</p>
+                            <p className="font-semibold mb-2">Hastemøte i styret planlagt</p>
                             <p className="text-slate-400">
-                                Board requires immediate briefing on: incident scope, financial impact,
-                                customer communication strategy, and recovery timeline. Meeting in 4 hours.
+                                Styret krever umiddelbar briefing om: omfang av hendelsen, økonomisk påvirkning,
+                                kundekommunikasjonsstrategi og gjenopprettingstidslinje. Møte om 4 timer.
                             </p>
                         </div>
                         <div className="flex gap-2 text-xs text-slate-500">
-                            <span>Meeting: Today 16:00</span>
+                            <span>Møte: I dag 16:00</span>
                             <span>•</span>
-                            <span>Attendees: All board members + CISO</span>
+                            <span>Deltakere: Alle styremedlemmer + CISO</span>
                         </div>
                     </CardContent>
                 </Card>
@@ -102,25 +102,25 @@ export default function CommunicationsPage() {
                         <div className="flex items-center justify-between">
                             <CardTitle className="flex items-center gap-2 text-red-400">
                                 <AlertTriangle className="w-5 h-5" />
-                                Threat Actor Communication
+                                Trusselsaktør-kommunikasjon
                             </CardTitle>
-                            <Badge className="bg-red-600">Critical</Badge>
+                            <Badge className="bg-red-600">Kritisk</Badge>
                         </div>
                     </CardHeader>
                     <CardContent className="space-y-3">
                         <div className="text-sm text-slate-300">
-                            <p className="font-semibold mb-2">Ransom Demand Received</p>
+                            <p className="font-semibold mb-2">Løsepengeforespørsel mottatt</p>
                             <div className="bg-slate-950 p-4 rounded border border-red-900 font-mono text-xs text-red-300">
-                                <p>We have access to your systems and backups.</p>
-                                <p className="mt-2">This is not about money. This is about your company support for [REDACTED POLITICAL ISSUE].</p>
-                                <p className="mt-2">We will continue disrupting your operations until you publicly retract your position.</p>
+                                <p>Vi har tilgang til deres systemer og backuper.</p>
+                                <p className="mt-2">Dette handler ikke om penger. Dette handler om deres selskapsstøtte til [SLADDET POLITISK SAK].</p>
+                                <p className="mt-2">Vi vil fortsette å forstyrre deres drift til dere offentlig trekker tilbake deres posisjon.</p>
                                 <p className="mt-2">- NordStorm APT</p>
                             </div>
                         </div>
                         <div className="flex gap-2 text-xs text-slate-500">
-                            <span>Received: 6 hours ago</span>
+                            <span>Mottatt: for 6 timer siden</span>
                             <span>•</span>
-                            <span>Type: Hacktivism</span>
+                            <span>Type: Hacktivisme</span>
                         </div>
                     </CardContent>
                 </Card>

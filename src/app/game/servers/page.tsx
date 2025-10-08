@@ -13,8 +13,8 @@ export default async function ServersPage() {
             <div className="space-y-6">
                 <PageHeader
                     icon={Server}
-                    title="Server Status"
-                    description="Real-time monitoring of your infrastructure"
+                    title="Serverstatus"
+                    description="Sanntidsovervåking av infrastrukturen din"
                 />
 
                 <ServerStatus servers={servers} />

@@ -18,7 +18,7 @@ interface DataTableProps<T> {
 export function DataTable<T extends { id: string | number }>({
                                                                  columns,
                                                                  data,
-                                                                 emptyMessage = 'No data available'
+                                                                 emptyMessage = 'Ingen data tilgjengelig'
                                                              }: DataTableProps<T>) {
     if (data.length === 0) {
         return (

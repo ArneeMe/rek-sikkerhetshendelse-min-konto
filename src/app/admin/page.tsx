@@ -45,8 +45,8 @@ export default async function AdminPage() {
 
             <div className="max-w-6xl mx-auto space-y-6">
                 <div>
-                    <h1 className="text-3xl font-bold mb-2">Admin Control Panel</h1>
-                    <p className="text-slate-400">Manage game sessions and timed events</p>
+                    <h1 className="text-3xl font-bold mb-2">Administrasjonspanel</h1>
+                    <p className="text-slate-400">Administrer spilløkter og tidsbaserte hendelser</p>
                 </div>
 
                 {/* Game Status */}
@@ -54,7 +54,7 @@ export default async function AdminPage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Clock className="w-5 h-5" />
-                            Game Session Status
+                            Status for spilløkt
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
@@ -62,18 +62,18 @@ export default async function AdminPage() {
                             <>
                                 <div className="flex items-center gap-4">
                                     <Badge className="bg-green-600 text-lg px-4 py-2">
-                                        ACTIVE
+                                        AKTIV
                                     </Badge>
                                     <div className="text-slate-300">
-                                        <div className="text-sm text-slate-400">Started at</div>
+                                        <div className="text-sm text-slate-400">Startet kl</div>
                                         <div className="font-mono">
-                                            {new Date(gameSession.started_at).toLocaleString()}
+                                            {new Date(gameSession.started_at).toLocaleString('nb-NO')}
                                         </div>
                                     </div>
                                     <div className="text-slate-300">
-                                        <div className="text-sm text-slate-400">Elapsed time</div>
+                                        <div className="text-sm text-slate-400">Tid brukt</div>
                                         <div className="font-mono text-xl">
-                                            {minutesElapsed} / {gameSession.duration_minutes} minutes
+                                            {minutesElapsed} / {gameSession.duration_minutes} minutter
                                         </div>
                                     </div>
                                 </div>
@@ -94,11 +94,11 @@ export default async function AdminPage() {
                         ) : (
                             <div className="flex items-center gap-4">
                                 <Badge variant="outline" className="text-lg px-4 py-2">
-                                    NOT STARTED
+                                    IKKE STARTET
                                 </Badge>
                                 <div className="text-slate-400 flex items-center gap-2">
                                     <Play className="w-4 h-4" />
-                                    <span>Click &quot;Start Game&quot; to begin</span>
+                                    <span>Klikk &quot;Start spill&quot; for å begynne</span>
                                 </div>
                             </div>
                         )}
@@ -115,7 +115,7 @@ export default async function AdminPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 <AlertCircle className="w-5 h-5" />
-                                Upcoming Scheduled Events
+                                Kommende planlagte hendelser
                             </CardTitle>
                         </CardHeader>
                         <CardContent>
@@ -130,11 +130,13 @@ export default async function AdminPage() {
                                             <div className="text-sm text-slate-400">
                                                 {event.division ? (
                                                     <Badge variant="outline" className="text-xs mt-1 capitalize">
-                                                        {event.division}
+                                                        {event.division === 'tech' ? 'Teknisk' :
+                                                            event.division === 'non-tech' ? 'Ikke-teknisk' :
+                                                                'Ledelse'}
                                                     </Badge>
                                                 ) : (
                                                     <Badge variant="outline" className="text-xs mt-1">
-                                                        All Divisions
+                                                        Alle avdelinger
                                                     </Badge>
                                                 )}
                                             </div>
@@ -144,7 +146,7 @@ export default async function AdminPage() {
                                                 {event.trigger_at_minutes - minutesElapsed} min
                                             </div>
                                             <div className="text-xs text-slate-500">
-                                                at {event.trigger_at_minutes} min
+                                                ved {event.trigger_at_minutes} min
                                             </div>
                                         </div>
                                     </div>
@@ -157,4 +159,3 @@ export default async function AdminPage() {
         </div>
     );
 }
-export const runtime = 'edge';

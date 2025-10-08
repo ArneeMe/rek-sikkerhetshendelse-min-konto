@@ -1,14 +1,14 @@
 export const COMPANY_CODES = {
-    'ALPHA': { id: 1, name: 'Company A' },
-    'BRAVO': { id: 2, name: 'Company B' },
-    'CHARLIE': { id: 3, name: 'Company C' },
-    'ADMIN-2024': { id: 0, name: 'Admin', isAdmin: true },
+    'ALPHA': { id: 1, name: 'Telesør Alpha' },
+    'BRAVO': { id: 2, name: 'Telesør Bravo' },
+    'CHARLIE': { id: 3, name: 'Telesør Charlie' },
+    'ADMIN-2024': { id: 0, name: 'Administrator', isAdmin: true },
 } as const;
 
 export const DIVISIONS = [
-    { id: 'tech', name: 'Tech Division', description: 'Technical team - servers, logs, network' },
-    { id: 'non-tech', name: 'Non-Tech Division', description: 'User tracking, emails, roles' },
-    { id: 'management', name: 'Management', description: 'Strategic decisions, CISO, policies' },
+    { id: 'tech', name: 'Drift', description: 'Drift og infrastruktur - servere, logger, nettverk' },
+    { id: 'non-tech', name: 'Organisasjon', description: 'HR og organisasjon - brukersporing, e-post, roller' },
+    { id: 'management', name: 'Ledelse og Kommunikasjon', description: 'Strategiske beslutninger, CISO, retningslinjer' },
 ] as const;
 
 export type CompanyCode = keyof typeof COMPANY_CODES;

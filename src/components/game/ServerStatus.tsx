@@ -23,20 +23,20 @@ export function ServerStatus({ servers }: ServerStatusProps) {
     const getStatusBadge = (status: Server['status']) => {
         switch (status) {
             case 'online':
-                return <Badge className="bg-green-600">Online</Badge>;
+                return <Badge className="bg-green-600">Tilkoblet</Badge>;
             case 'warning':
-                return <Badge className="bg-yellow-600">Warning</Badge>;
+                return <Badge className="bg-yellow-600">Advarsel</Badge>;
             case 'critical':
-                return <Badge className="bg-orange-600">Critical</Badge>;
+                return <Badge className="bg-orange-600">Kritisk</Badge>;
             case 'offline':
-                return <Badge className="bg-red-600">Offline</Badge>;
+                return <Badge className="bg-red-600">Frakoblet</Badge>;
         }
     };
 
     return (
         <Card className="bg-slate-900 border-slate-700">
             <CardHeader>
-                <CardTitle className="text-slate-100">Server Status</CardTitle>
+                <CardTitle className="text-slate-100">Serverstatus</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
                 {servers.map((server) => (
@@ -48,13 +48,13 @@ export function ServerStatus({ servers }: ServerStatusProps) {
                             <div className={`w-3 h-3 rounded-full ${getStatusColor(server.status)} animate-pulse`} />
                             <div>
                                 <div className="font-mono text-sm text-slate-100">{server.name}</div>
-                                <div className="text-xs text-slate-400">Load: {server.load}%</div>
+                                <div className="text-xs text-slate-400">Last: {server.load}%</div>
                             </div>
                         </div>
                         <div className="flex items-center gap-2">
                             {server.alerts > 0 && (
                                 <Badge variant="destructive" className="text-xs">
-                                    {server.alerts} alert{server.alerts > 1 ? 's' : ''}
+                                    {server.alerts} {server.alerts > 1 ? 'varsler' : 'varsel'}
                                 </Badge>
                             )}
                             {getStatusBadge(server.status)}

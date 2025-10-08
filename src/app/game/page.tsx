@@ -17,15 +17,17 @@ export default async function GameDashboard() {
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-2xl font-bold text-slate-100 mb-2">Security Overview</h2>
-                <p className="text-slate-400">Monitor your systems and respond to incidents</p>
+                <h2 className="text-2xl font-bold text-slate-100 mb-2">Sikkerhetsoversikt</h2>
+                <p className="text-slate-400">Overvåk systemene dine og håndter hendelser</p>
                 <div className="flex gap-2 mt-3">
                     <Badge variant="outline" className="text-slate-300">
                         {session?.companyName}
                     </Badge>
                     {session?.division && (
                         <Badge variant="outline" className="text-slate-300 capitalize">
-                            {session.division} Division
+                            {session.division === 'tech' ? 'Teknisk Avdeling' :
+                                session.division === 'non-tech' ? 'Ikke-Teknisk Avdeling' :
+                                    'Ledelse'}
                         </Badge>
                     )}
                 </div>
@@ -34,13 +36,13 @@ export default async function GameDashboard() {
             {/* Common: Inbox */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <StatCard
-                    title="Unread Events"
+                    title="Uleste hendelser"
                     value={unreadCount}
-                    description="Click to view inbox"
+                    description="Klikk for å se innboks"
                     icon={Inbox}
                     iconColor="text-blue-400"
                     badge={unreadCount > 0 ? {
-                        text: 'Action Required',
+                        text: 'Handling Påkrevd',
                         className: 'bg-blue-600'
                     } : undefined}
                     href="/game/inbox"
@@ -72,7 +74,7 @@ export default async function GameDashboard() {
             {/* Recent Activity */}
             <Card className="bg-slate-900 border-slate-700">
                 <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold text-slate-100 mb-4">Recent Incidents</h3>
+                    <h3 className="text-lg font-semibold text-slate-100 mb-4">Nylige hendelser</h3>
                     <div className="space-y-3">
                         {events.slice(0, 3).map((event) => (
                             <ListItem
@@ -81,13 +83,13 @@ export default async function GameDashboard() {
                                 iconColor={getSeverityColor(event.severity)}
                                 title={event.title}
                                 subtitle={event.type}
-                                badge={!event.read ? { text: 'New', variant: 'outline' } : undefined}
+                                badge={!event.read ? { text: 'Ny', variant: 'outline' } : undefined}
                             />
                         ))}
                     </div>
                     <Link href="/game/inbox">
                         <p className="text-sm text-blue-400 hover:text-blue-300 mt-4 cursor-pointer">
-                            View all incidents →
+                            Se alle hendelser →
                         </p>
                     </Link>
                 </CardContent>
@@ -108,13 +110,13 @@ async function TechDashboard() {
     return (
         <>
             <StatCard
-                title="Critical Servers"
+                title="Kritiske servere"
                 value={criticalServers}
-                description="Click to view servers"
+                description="Klikk for å se servere"
                 icon={Server}
                 iconColor="text-orange-400"
                 badge={criticalServers > 0 ? {
-                    text: 'Investigate Now',
+                    text: 'Undersøk Nå',
                     className: 'bg-orange-600'
                 } : undefined}
                 href="/game/servers"
@@ -122,13 +124,13 @@ async function TechDashboard() {
             />
 
             <StatCard
-                title="Critical Logs"
+                title="Kritiske logger"
                 value={criticalLogs}
-                description="Click to view logs"
+                description="Klikk for å se logger"
                 icon={FileText}
                 iconColor="text-red-400"
                 badge={criticalLogs > 0 ? {
-                    text: 'Review Required',
+                    text: 'Gjennomgang Påkrevd',
                     className: 'bg-red-600'
                 } : undefined}
                 href="/game/logs"
@@ -143,13 +145,13 @@ function NonTechDashboard() {
     return (
         <>
             <StatCard
-                title="Suspicious Users"
+                title="Mistenkelige brukere"
                 value={2}
-                description="Click to view activity"
+                description="Klikk for å se aktivitet"
                 icon={Users}
                 iconColor="text-purple-400"
                 badge={{
-                    text: 'Action Required',
+                    text: 'Handling Påkrevd',
                     className: 'bg-purple-600'
                 }}
                 href="/game/users"
@@ -157,13 +159,13 @@ function NonTechDashboard() {
             />
 
             <StatCard
-                title="Phishing Emails"
+                title="Phishing e-poster"
                 value={1}
-                description="Click to view emails"
+                description="Klikk for å se e-poster"
                 icon={Mail}
                 iconColor="text-red-400"
                 badge={{
-                    text: 'Investigate',
+                    text: 'Undersøk',
                     className: 'bg-red-600'
                 }}
                 href="/game/emails"
@@ -178,13 +180,13 @@ function ManagementDashboard() {
     return (
         <>
             <StatCard
-                title="Pending Comms"
+                title="Ventende kommunikasjon"
                 value={4}
-                description="Click to view"
+                description="Klikk for å se"
                 icon={Phone}
                 iconColor="text-orange-400"
                 badge={{
-                    text: 'Response Needed',
+                    text: 'Respons Nødvendig',
                     className: 'bg-orange-600'
                 }}
                 href="/game/comms"
@@ -192,13 +194,13 @@ function ManagementDashboard() {
             />
 
             <StatCard
-                title="Policy Violations"
+                title="Regelbrudd"
                 value={3}
-                description="Click to review"
+                description="Klikk for å gjennomgå"
                 icon={Shield}
                 iconColor="text-red-400"
                 badge={{
-                    text: 'Critical',
+                    text: 'Kritisk',
                     className: 'bg-red-600'
                 }}
                 href="/game/policies"

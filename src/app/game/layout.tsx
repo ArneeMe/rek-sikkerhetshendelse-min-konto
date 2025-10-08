@@ -32,7 +32,7 @@ export default async function GameLayout({
                             <Link href="/game" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                 <Shield className="w-6 h-6 text-blue-500" />
                                 <div>
-                                    <h1 className="text-xl font-bold text-slate-100">SOC Dashboard</h1>
+                                    <h1 className="text-xl font-bold text-slate-100">Telesør Sikkerhetssenter</h1>
                                     <p className="text-xs text-slate-400">{session.companyName} - {divisionName}</p>
                                 </div>
                             </Link>
@@ -56,7 +56,7 @@ export default async function GameLayout({
                         <form action="/api/auth/logout" method="POST">
                             <Button variant="outline" size="sm" className="border-slate-700 text-slate-300 hover:text-slate-100">
                                 <LogOut className="w-4 h-4 mr-2" />
-                                Logout
+                                Logg ut
                             </Button>
                         </form>
                     </div>

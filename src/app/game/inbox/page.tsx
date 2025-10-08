@@ -16,12 +16,12 @@ export default async function InboxPage() {
         <div className="space-y-6">
             <PageHeader
                 icon={Inbox}
-                title="Inbox"
-                description="Security events, alerts, and communications"
+                title="Innboks"
+                description="Sikkerhetshendelser, varsler og kommunikasjon"
                 actions={
                     unreadCount > 0 ? (
                         <Badge className="bg-blue-600 text-base px-4 py-2">
-                            {unreadCount} unread
+                            {unreadCount} ulest
                         </Badge>
                     ) : undefined
                 }
@@ -36,8 +36,8 @@ export default async function InboxPage() {
             ) : (
                 <EmptyState
                     icon={Inbox}
-                    message="No events yet"
-                    submessage="New alerts will appear here"
+                    message="Ingen hendelser ennå"
+                    submessage="Nye varsler vil vises her"
                 />
             )}
         </div>

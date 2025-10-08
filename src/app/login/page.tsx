@@ -37,7 +37,7 @@ export default function LoginPage() {
                 const data = await response.json();
 
                 if (!response.ok) {
-                    setError(data.error || 'Invalid credentials');
+                    setError(data.error || 'Ugyldige innloggingsopplysninger');
                     setLoading(false);
                     return;
                 }
@@ -45,7 +45,7 @@ export default function LoginPage() {
                 // Redirect admin to /admin
                 router.push('/admin');
             } catch {
-                setError('Something went wrong. Please try again.');
+                setError('Noe gikk galt. Vennligst prøv igjen.');
                 setLoading(false);
             }
             return;
@@ -69,7 +69,7 @@ export default function LoginPage() {
             const data = await response.json();
 
             if (!response.ok) {
-                setError(data.error || 'Invalid credentials');
+                setError(data.error || 'Ugyldige innloggingsopplysninger');
                 setLoading(false);
                 return;
             }
@@ -77,7 +77,7 @@ export default function LoginPage() {
             // Redirect to game dashboard
             router.push('/game');
         } catch {
-            setError('Something went wrong. Please try again.');
+            setError('Noe gikk galt. Vennligst prøv igjen.');
             setLoading(false);
         }
     };
@@ -89,9 +89,9 @@ export default function LoginPage() {
                     <div className="flex justify-center mb-4">
                         <Shield className="w-16 h-16 text-blue-500" />
                     </div>
-                    <CardTitle className="text-2xl text-slate-100">Security Operations Center</CardTitle>
+                    <CardTitle className="text-2xl text-slate-100">Telesør Sikkerhetssenter</CardTitle>
                     <CardDescription className="text-slate-400">
-                        {step === 'code' ? 'Enter your company access code' : 'Select your division'}
+                        {step === 'code' ? 'Skriv inn tilgangskode' : 'Velg din avdeling'}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -100,7 +100,7 @@ export default function LoginPage() {
                             <div>
                                 <Input
                                     type="text"
-                                    placeholder="Enter company code (e.g., ALPHA)"
+                                    placeholder="Skriv inn tilgangskode (f.eks. ALPHA)"
                                     value={code}
                                     onChange={(e) => setCode(e.target.value.toUpperCase())}
                                     className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500"
@@ -121,12 +121,12 @@ export default function LoginPage() {
                                 className="w-full bg-blue-600 hover:bg-blue-700"
                                 disabled={loading || !code}
                             >
-                                {loading ? 'Authenticating...' : 'Continue'}
+                                {loading ? 'Autentiserer...' : 'Fortsett'}
                             </Button>
 
                             <div className="text-xs text-slate-500 text-center mt-4">
-                                <p>Available codes: ALPHA, BRAVO, CHARLIE</p>
-                                <p className="mt-1">Admin: ADMIN-2024</p>
+                                <p>Tilgjengelige koder: ALPHA, BRAVO, CHARLIE</p>
+                                <p className="mt-1">Administrator: ADMIN-2024</p>
                             </div>
                         </form>
                     ) : (
@@ -157,7 +157,7 @@ export default function LoginPage() {
                                 className="w-full text-slate-400 hover:text-slate-100"
                                 disabled={loading}
                             >
-                                ← Back to company code
+                                ← Tilbake til tilgangskode
                             </Button>
                         </div>
                     )}

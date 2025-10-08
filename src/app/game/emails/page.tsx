@@ -7,29 +7,29 @@ import { Mail } from 'lucide-react';
 
 // Mock email data - replace with real data later
 const emailLogs = [
-    { id: '1', timestamp: '2024-10-03 19:00', sender: 'admin@techsupport-verify.com', recipient: '15 users', subject: 'Urgent: Verify Your Account', status: 'phishing', opened: 3, clicked: 1 },
-    { id: '2', timestamp: '2024-10-04 08:00', sender: 'security@company.com', recipient: 'all@company.com', subject: 'Security Alert: Phishing Detected', status: 'legitimate', opened: 45, clicked: 0 },
-    { id: '3', timestamp: '2024-10-04 09:15', sender: 'it-support@company.com', recipient: 'developers@company.com', subject: 'System Maintenance Tonight', status: 'legitimate', opened: 12, clicked: 0 },
+    { id: '1', timestamp: '2024-10-03 19:00', sender: 'admin@techsupport-verify.com', recipient: '15 brukere', subject: 'Haster: Bekreft kontoen din', status: 'phishing', opened: 3, clicked: 1 },
+    { id: '2', timestamp: '2024-10-04 08:00', sender: 'security@company.com', recipient: 'all@company.com', subject: 'Sikkerhetsvarsel: Phishing oppdaget', status: 'legitimate', opened: 45, clicked: 0 },
+    { id: '3', timestamp: '2024-10-04 09:15', sender: 'it-support@company.com', recipient: 'developers@company.com', subject: 'Systemvedlikehold i kveld', status: 'legitimate', opened: 12, clicked: 0 },
 ];
 
 const columns: Column<typeof emailLogs[0]>[] = [
-    { key: 'timestamp', header: 'Time' },
-    { key: 'sender', header: 'From' },
-    { key: 'recipient', header: 'To' },
-    { key: 'subject', header: 'Subject' },
+    { key: 'timestamp', header: 'Tid' },
+    { key: 'sender', header: 'Fra' },
+    { key: 'recipient', header: 'Til' },
+    { key: 'subject', header: 'Emne' },
     {
         key: 'status',
         header: 'Status',
         render: (item) => (
             <Badge className={item.status === 'phishing' ? 'bg-red-600' : 'bg-green-600'}>
-                {item.status}
+                {item.status === 'phishing' ? 'Phishing' : 'Legitim'}
             </Badge>
         ),
     },
-    { key: 'opened', header: 'Opened' },
+    { key: 'opened', header: 'Åpnet' },
     {
         key: 'clicked',
-        header: 'Links Clicked',
+        header: 'Lenker klikket',
         render: (item) => (
             <span className={item.clicked > 0 ? 'text-red-400 font-bold' : ''}>
         {item.clicked}
@@ -44,14 +44,14 @@ export default function EmailsPage() {
             <div className="space-y-6">
                 <PageHeader
                     icon={Mail}
-                    title="Email Logs"
-                    description="Track email activity and phishing attempts"
+                    title="E-postlogger"
+                    description="Spor e-postaktivitet og phishing-forsøk"
                 />
 
                 <DataTable
                     columns={columns}
                     data={emailLogs}
-                    emptyMessage="No email logs available"
+                    emptyMessage="Ingen e-postlogger tilgjengelige"
                 />
             </div>
         </DivisionGuard>

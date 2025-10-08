@@ -16,8 +16,8 @@ export default async function LogsPage() {
             <div className="space-y-6">
                 <PageHeader
                     icon={FileText}
-                    title="System Logs"
-                    description="Monitor basestasjon activity and security events"
+                    title="Systemlogger"
+                    description="Overvåk basestasjonaktivitet og sikkerhetshendelser"
                 />
 
                 <LogsClient logs={logs} servers={SERVERS} />
