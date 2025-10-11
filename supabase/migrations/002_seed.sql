@@ -64,3 +64,155 @@ INSERT INTO scheduled_events (trigger_at_minutes, division, type, title, content
                                                                                                              (30, NULL, 'tweet', '@Telesør Network Issues', '@Telesor your network is down in Oslo. Multiple users reporting outages. #NetworkDown', 'medium', '@concerned_user'),
                                                                                                              (30, 'management', 'alert', 'Ransom Note Received', 'Threat actors have made contact via secure channel. Demands received.', 'critical');
 
+
+-- Sample emails for testing
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'admin@microsoft-support-verify.com', 'ola.hansen@telesor.no', 'URGENT: Microsoft 365 License Expiring Today!',
+     'Dear User,
+
+     Your Microsoft 365 license will expire in 24 hours. To avoid service interruption, please verify your account immediately.
+
+     Click here to verify: http://microsoft-verify-account.com/renew
+
+     Failure to verify will result in:
+     - Loss of email access
+     - Deletion of all files in OneDrive
+     - Suspension of Teams access
+
+     This is an automated message from Microsoft Support.
+
+     Best regards,
+     Microsoft 365 Support Team',
+     '2024-10-03 19:00:00', 'external');
+
+-- 2. HR email about Ola's vacation
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'hr@telesor.no', 'everyone@telesor.no', 'Ferieoversikt - Oktober',
+     'Hei alle,
+
+     Her er ferieoversikten for oktober:
+
+     - Ola Hansen (DB Administrator): 3. oktober - 10. oktober
+     - Kari Nordmann (Utvikler): 15. oktober - 22. oktober
+     - Per Jensen (Systemadministrator): Ingen ferie
+
+     Husk å koordinere med teamet deres før dere tar fri.
+
+     Hilsen,
+     HR-avdelingen',
+     '2024-10-01 09:00:00', 'internal');
+
+-- 3. IT Security warning about phishing
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'security@telesor.no', 'everyone@telesor.no', 'ADVARSEL: Phishing-kampanje oppdaget',
+     'Kjære kolleger,
+
+     Vi har oppdaget en aktiv phishing-kampanje som utgir seg for å være fra Microsoft Support.
+
+     IKKE klikk på lenker i e-poster som:
+     - Hevder at kontoen din utløper
+     - Ber om umiddelbar handling
+     - Kommer fra ukjente domener
+
+     Hvis du har klikket på en slik lenke, kontakt IT-support umiddelbart.
+
+     Med vennlig hilsen,
+     IT-Sikkerhet',
+     '2024-10-04 08:30:00', 'internal');
+
+-- 4. System alert about unusual login
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'azure-alerts@system.telesor.no', 'it-admin@telesor.no', 'Azure AD Alert: Conditional Access Policy Modified',
+     'ALERT: Conditional Access Policy Change Detected
+
+     Policy Name: MFA_Required_Policy
+     Modified By: ola.hansen@telesor.no
+     Timestamp: 2024-10-04 23:15:47 UTC
+     IP Address: 185.220.101.47 (Location: Unknown)
+     Change: Policy disabled
+
+     This is an automated alert from Azure Active Directory.',
+     '2024-10-04 23:16:00', 'system');
+
+-- 5. Email about database backup
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'ola.hansen@telesor.no', 'per.jensen@telesor.no', 'RE: Backup-rutiner',
+     'Hei Per,
+
+     Takk for oppdateringen. Jeg har lagt merke til at siste backup er fra mandag. Skal vi ikke ha daglige backuper?
+
+     Kan du sjekke om backup-scriptet kjører som det skal?
+
+     Mvh,
+     Ola',
+     '2024-10-02 14:30:00', 'internal');
+
+-- 6. Response about backup (before incident)
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'per.jensen@telesor.no', 'ola.hansen@telesor.no', 'RE: RE: Backup-rutiner',
+     'Hei Ola,
+
+     Jeg sjekket nettopp. Backup-scriptet feilet i går kveld pga disk space issues. Jeg har ryddet opp og kjører manuell backup nå.
+
+     Skal fikse automatikken i morgen tidlig.
+
+     Per',
+     '2024-10-02 15:45:00', 'internal');
+
+-- 7. Customer email (normal business)
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'kunde@eksempel.no', 'support@telesor.no', 'Spørsmål om tjenesten',
+     'Hei,
+
+     Vi har opplevd noen problemer med nettverksforbindelsen den siste uken. Spesielt i Oslo-området.
+
+     Kan dere sjekke om det er noen kjente problemer?
+
+     Med vennlig hilsen,
+     Anne Larsen
+     Eksempel AS',
+     '2024-10-04 10:15:00', 'external');
+
+-- 8. IT discussing server access
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'kari.nordmann@telesor.no', 'it-admin@telesor.no', 'Trenger tilgang til Prod-server',
+     'Hei,
+
+     Jeg trenger midlertidig tilgang til prod-serveren for å debugge en kritisk bug i produksjon.
+
+     Kan jeg få SSH-tilgang til server Øst?
+
+     Takk,
+     Kari',
+     '2024-10-03 11:20:00', 'internal');
+
+-- 9. System alert about file upload
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'monitoring@system.telesor.no', 'it-admin@telesor.no', 'Alert: Unusual File Activity Detected',
+     'WARNING: Unusual File Upload Detected
+
+     Server: Øst Basestasjon
+     File: system_update.exe (2.4 MB)
+     Uploaded By: Remote session from IP 185.220.101.47
+     Timestamp: 2024-10-04 23:47:22 UTC
+     Location: /tmp/
+
+     This file was not digitally signed and does not match any known system updates.
+
+     Automated Security Monitor',
+     '2024-10-04 23:48:00', 'system');
+
+-- 10. CEO email about company statement (to show what the ransom note references)
+INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
+    (NULL, 'ceo@telesor.no', 'everyone@telesor.no', 'Selskapets posisjon på bærekraft',
+     'Kjære alle,
+
+     Som dere kanskje har sett i mediene, har vi tatt en klar posisjon på bærekraft og grønn energi.
+
+     Vi er stolte av vårt samarbeid med regjeringen om utfasing av fossile brensler i telekom-sektoren.
+
+     Dette er riktig for miljøet og riktig for fremtiden.
+
+     Med vennlig hilsen,
+     Direktøren',
+     '2024-09-15 12:00:00', 'internal');

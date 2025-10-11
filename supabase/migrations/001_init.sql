@@ -100,17 +100,31 @@ CREATE TABLE network_connections (
                                      traffic TEXT NOT NULL
 );
 
--- Indexes for new tables
+
+CREATE TABLE emails (
+                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        company_id INT,  -- null = visible to all companies
+                        sender TEXT NOT NULL,
+                        recipient TEXT NOT NULL,
+                        subject TEXT NOT NULL,
+                        body TEXT NOT NULL,
+                        timestamp TIMESTAMPTZ DEFAULT NOW(),
+                        type TEXT NOT NULL CHECK (type IN ('internal', 'external', 'system')),
+                        created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+
+CREATE INDEX idx_emails_company ON emails(company_id);
+CREATE INDEX idx_emails_timestamp ON emails(timestamp DESC);
+CREATE INDEX idx_emails_sender ON emails(sender);
+CREATE INDEX idx_emails_recipient ON emails(recipient);
+CREATE INDEX idx_emails_type ON emails(type);
 CREATE INDEX idx_email_logs_company ON email_logs(company_id);
 CREATE INDEX idx_email_logs_division ON email_logs(division);
 CREATE INDEX idx_user_activity_company ON user_activity(company_id);
 CREATE INDEX idx_user_activity_division ON user_activity(division);
 CREATE INDEX idx_network_connections_company ON network_connections(company_id);
 CREATE INDEX idx_network_connections_division ON network_connections(division);
-
-
-
--- Indexes
 CREATE INDEX idx_game_sessions_status ON game_sessions(status);
 CREATE INDEX idx_scheduled_events_trigger ON scheduled_events(trigger_at_minutes);
 CREATE INDEX idx_servers_status ON servers(status);

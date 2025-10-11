@@ -31,6 +31,18 @@ export interface DatabaseLog {
     message: string;
 }
 
+export interface DatabaseEmail {
+    id: string;
+    company_id: number | null;
+    sender: string;
+    recipient: string;
+    subject: string;
+    body: string;
+    timestamp: string;
+    type: 'internal' | 'external' | 'system';
+    created_at: string;
+}
+
 export interface DatabaseEmailLog {
     id: string;
     company_id: number | null;
