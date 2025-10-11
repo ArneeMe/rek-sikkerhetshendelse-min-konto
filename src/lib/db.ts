@@ -5,7 +5,6 @@ import type {
     DatabaseEvent,
     DatabaseLog,
     DatabaseServer,
-    DatabaseEmailLog,
     DatabaseUserActivity,
     DatabaseNetworkConnection,
     DatabaseScheduledEvent,
@@ -14,8 +13,10 @@ import type {
 
 // Helper to apply company filter only
 function applyCompanyFilter<T>(query: T, companyId: number): T {
-    return (query as any).or(`company_id.eq.${companyId},company_id.is.null`) as T;
+    return (query as unknown as { or: (filter: string) => T }).or(`company_id.eq.${companyId},company_id.is.null`);
 }
+
+
 
 // ===== GAME SESSION MANAGEMENT =====
 
@@ -207,23 +208,6 @@ export async function getLogs(companyId: number, source?: string): Promise<LogEn
     }));
 }
 
-// ===== EMAIL LOGS =====
-
-export async function getEmailLogs(companyId: number) {
-    const query = supabase
-        .from('email_logs')
-        .select('*')
-        .order('timestamp', { ascending: false });
-
-    const { data, error } = await applyCompanyFilter(query, companyId);
-
-    if (error) {
-        console.error('Error fetching email logs:', error);
-        return [];
-    }
-
-    return (data || []) as DatabaseEmailLog[];
-}
 
 // ===== USER ACTIVITY =====
 

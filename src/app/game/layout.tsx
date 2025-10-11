@@ -31,7 +31,7 @@ export default async function GameLayout({
                             <Link href="/game" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                 <Shield className="w-6 h-6 text-blue-500" />
                                 <div>
-                                    <h1 className="text-xl font-bold text-slate-100">Telesør Sikkerhetssenter</h1>
+                                    <h1 className="text-xl font-bold text-slate-100">Nordavind Sikkerhetssenter</h1>
                                     <p className="text-xs text-slate-400">{session.companyName}</p>
                                 </div>
                             </Link>

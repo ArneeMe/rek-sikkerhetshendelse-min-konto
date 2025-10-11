@@ -1,7 +1,7 @@
 import {supabase} from "@/lib/supabase";
 import type {DatabaseEmail} from "@/types/database";
+import {COMPANY_CODES} from "@/lib/constants";
 import {applyCompanyFilter} from "@/lib/db-helpers";
-
 
 export interface EmailFilters {
     search?: string;
@@ -51,7 +51,19 @@ export async function getEmails(companyId: number, filters?: EmailFilters) {
 
     let emails = (data || []) as DatabaseEmail[];
 
-    // Apply search filter (client-side for simplicity)
+    // Get company name for substitution
+    const companyName = Object.entries(COMPANY_CODES)
+        .find(([_, value]) => value.id === companyId)?.[1]?.name?.toLowerCase() || 'company';
+
+    // Apply dynamic substitution for {COMPANY} placeholder
+    emails = emails.map(email => ({
+        ...email,
+        sender: email.sender.replace(/{COMPANY}/g, companyName),
+        recipient: email.recipient.replace(/{COMPANY}/g, companyName),
+        body: email.body.replace(/{COMPANY}/g, companyName),
+    }));
+
+    // Apply search filter (client-side, after substitution)
     if (filters?.search) {
         const searchLower = filters.search.toLowerCase();
         emails = emails.filter(email =>
@@ -81,7 +93,14 @@ export async function getEmailSenders(companyId: number) {
         return [];
     }
 
-    return  [...new Set((data || []).map(d => d.sender))];
+    // Get company name for substitution
+    const companyName = Object.entries(COMPANY_CODES)
+        .find(([_, value]) => value.id === companyId)?.[1]?.name?.toLowerCase() || 'company';
+
+    // Apply substitution and get unique senders
+    return [...new Set(
+        (data || []).map(d => d.sender.replace(/{COMPANY}/g, companyName))
+    )];
 }
 
 // Get unique recipients for filter dropdown
@@ -100,8 +119,12 @@ export async function getEmailRecipients(companyId: number) {
         return [];
     }
 
-    // Get unique recipients
-    return [...new Set((data || []).map(d => d.recipient))];
-}
+    // Get company name for substitution
+    const companyName = Object.entries(COMPANY_CODES)
+        .find(([_, value]) => value.id === companyId)?.[1]?.name?.toLowerCase() || 'company';
 
-// ===== EMAIL LOGS (kept for backwards compatibility) =====
+    // Apply substitution and get unique recipients
+    return [...new Set(
+        (data || []).map(d => d.recipient.replace(/{COMPANY}/g, companyName))
+    )];
+}

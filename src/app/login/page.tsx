@@ -56,7 +56,7 @@ export default function LoginPage() {
                     <div className="flex justify-center mb-4">
                         <Shield className="w-16 h-16 text-blue-500" />
                     </div>
-                    <CardTitle className="text-2xl text-slate-100">Telesør Sikkerhetssenter</CardTitle>
+                    <CardTitle className="text-2xl text-slate-100">Nordavind Sikkerhetssenter</CardTitle>
                     <CardDescription className="text-slate-400">
                         Skriv inn tilgangskode
                     </CardDescription>
@@ -66,7 +66,7 @@ export default function LoginPage() {
                         <div>
                             <Input
                                 type="text"
-                                placeholder="Skriv inn tilgangskode (f.eks. ALPHA)"
+                                placeholder="Skriv inn tilgangskode (f.eks. NORD)"
                                 value={code}
                                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                                 className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500"
@@ -91,9 +91,9 @@ export default function LoginPage() {
                         </Button>
 
                         <div className="text-xs text-slate-500 text-center mt-4">
-                            <p>Tilgjengelige koder: ALPHA, BRAVO, CHARLIE, DELTA, ECHO,</p>
-                            <p>FOXTROT, GOLF, HOTEL, INDIA, JULIET</p>
-                            <p className="mt-1">Administrator: ADMIN-2024</p>
+                            <p>Tilgjengelige koder: NORD, VEST, OST, SOR,</p>
+                            <p>NORDVEST, SOROST, SORVEST, NORDOST</p>
+                            <p className="mt-1">Administrator: ADMIN-2025</p>
                         </div>
                     </form>
                 </CardContent>

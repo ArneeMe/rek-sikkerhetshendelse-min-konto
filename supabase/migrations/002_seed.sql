@@ -64,10 +64,9 @@ INSERT INTO scheduled_events (trigger_at_minutes, division, type, title, content
                                                                                                              (30, NULL, 'tweet', '@Telesør Network Issues', '@Telesor your network is down in Oslo. Multiple users reporting outages. #NetworkDown', 'medium', '@concerned_user'),
                                                                                                              (30, 'management', 'alert', 'Ransom Note Received', 'Threat actors have made contact via secure channel. Demands received.', 'critical');
 
-
--- Sample emails for testing
+-- Use {COMPANY} as placeholder - will be replaced with actual company name when rendered
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'admin@microsoft-support-verify.com', 'ola.hansen@telesor.no', 'URGENT: Microsoft 365 License Expiring Today!',
+    (NULL, 'admin@microsoft-support-verify.com', 'ola.hansen@{COMPANY}.no', 'URGENT: Microsoft 365 License Expiring Today!',
      'Dear User,
 
      Your Microsoft 365 license will expire in 24 hours. To avoid service interruption, please verify your account immediately.
@@ -87,7 +86,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 2. HR email about Ola's vacation
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'hr@telesor.no', 'everyone@telesor.no', 'Ferieoversikt - Oktober',
+    (NULL, 'hr@{COMPANY}.no', 'everyone@{COMPANY}.no', 'Ferieoversikt - Oktober',
      'Hei alle,
 
      Her er ferieoversikten for oktober:
@@ -104,7 +103,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 3. IT Security warning about phishing
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'security@telesor.no', 'everyone@telesor.no', 'ADVARSEL: Phishing-kampanje oppdaget',
+    (NULL, 'security@{COMPANY}.no', 'everyone@{COMPANY}.no', 'ADVARSEL: Phishing-kampanje oppdaget',
      'Kjære kolleger,
 
      Vi har oppdaget en aktiv phishing-kampanje som utgir seg for å være fra Microsoft Support.
@@ -122,11 +121,11 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 4. System alert about unusual login
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'azure-alerts@system.telesor.no', 'it-admin@telesor.no', 'Azure AD Alert: Conditional Access Policy Modified',
+    (NULL, 'azure-alerts@system.{COMPANY}.no', 'it-admin@{COMPANY}.no', 'Azure AD Alert: Conditional Access Policy Modified',
      'ALERT: Conditional Access Policy Change Detected
 
      Policy Name: MFA_Required_Policy
-     Modified By: ola.hansen@telesor.no
+     Modified By: ola.hansen@{COMPANY}.no
      Timestamp: 2024-10-04 23:15:47 UTC
      IP Address: 185.220.101.47 (Location: Unknown)
      Change: Policy disabled
@@ -136,7 +135,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 5. Email about database backup
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'ola.hansen@telesor.no', 'per.jensen@telesor.no', 'RE: Backup-rutiner',
+    (NULL, 'ola.hansen@{COMPANY}.no', 'per.jensen@{COMPANY}.no', 'RE: Backup-rutiner',
      'Hei Per,
 
      Takk for oppdateringen. Jeg har lagt merke til at siste backup er fra mandag. Skal vi ikke ha daglige backuper?
@@ -149,7 +148,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 6. Response about backup (before incident)
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'per.jensen@telesor.no', 'ola.hansen@telesor.no', 'RE: RE: Backup-rutiner',
+    (NULL, 'per.jensen@{COMPANY}.no', 'ola.hansen@{COMPANY}.no', 'RE: RE: Backup-rutiner',
      'Hei Ola,
 
      Jeg sjekket nettopp. Backup-scriptet feilet i går kveld pga disk space issues. Jeg har ryddet opp og kjører manuell backup nå.
@@ -161,7 +160,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 7. Customer email (normal business)
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'kunde@eksempel.no', 'support@telesor.no', 'Spørsmål om tjenesten',
+    (NULL, 'kunde@eksempel.no', 'support@{COMPANY}.no', 'Spørsmål om tjenesten',
      'Hei,
 
      Vi har opplevd noen problemer med nettverksforbindelsen den siste uken. Spesielt i Oslo-området.
@@ -175,7 +174,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 8. IT discussing server access
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'kari.nordmann@telesor.no', 'it-admin@telesor.no', 'Trenger tilgang til Prod-server',
+    (NULL, 'kari.nordmann@{COMPANY}.no', 'it-admin@{COMPANY}.no', 'Trenger tilgang til Prod-server',
      'Hei,
 
      Jeg trenger midlertidig tilgang til prod-serveren for å debugge en kritisk bug i produksjon.
@@ -188,7 +187,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 9. System alert about file upload
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'monitoring@system.telesor.no', 'it-admin@telesor.no', 'Alert: Unusual File Activity Detected',
+    (NULL, 'monitoring@system.{COMPANY}.no', 'it-admin@{COMPANY}.no', 'Alert: Unusual File Activity Detected',
      'WARNING: Unusual File Upload Detected
 
      Server: Øst Basestasjon
@@ -204,7 +203,7 @@ INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, typ
 
 -- 10. CEO email about company statement (to show what the ransom note references)
 INSERT INTO emails (company_id, sender, recipient, subject, body, timestamp, type) VALUES
-    (NULL, 'ceo@telesor.no', 'everyone@telesor.no', 'Selskapets posisjon på bærekraft',
+    (NULL, 'ceo@{COMPANY}.no', 'everyone@{COMPANY}.no', 'Selskapets posisjon på bærekraft',
      'Kjære alle,
 
      Som dere kanskje har sett i mediene, har vi tatt en klar posisjon på bærekraft og grønn energi.

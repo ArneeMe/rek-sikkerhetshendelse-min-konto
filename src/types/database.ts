@@ -43,19 +43,6 @@ export interface DatabaseEmail {
     created_at: string;
 }
 
-export interface DatabaseEmailLog {
-    id: string;
-    company_id: number | null;
-    division: 'tech' | 'non-tech' | 'management' | null;
-    timestamp: string;
-    sender: string;
-    recipient: string;
-    subject: string;
-    status: 'legitimate' | 'phishing' | 'suspicious';
-    opened: number;
-    clicked: number;
-}
-
 export interface DatabaseUserActivity {
     id: string;
     company_id: number | null;
