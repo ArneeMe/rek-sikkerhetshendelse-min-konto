@@ -1,7 +1,6 @@
 // src/lib/db.ts
 import { supabase } from './supabase';
 import { Event, LogEntry, Server } from '@/types';
-import { applyStandardFilters } from './db-helpers';
 import type {
     DatabaseEvent,
     DatabaseLog,
@@ -12,6 +11,11 @@ import type {
     DatabaseScheduledEvent,
     DatabaseGameSession,
 } from '@/types/database';
+
+// Helper to apply company filter only
+function applyCompanyFilter<T>(query: T, companyId: number): T {
+    return (query as any).or(`company_id.eq.${companyId},company_id.is.null`) as T;
+}
 
 // ===== GAME SESSION MANAGEMENT =====
 
@@ -103,16 +107,15 @@ export async function getServers(): Promise<Server[]> {
 
 // ===== EVENTS =====
 
-export async function getEvents(companyId: number, division?: string): Promise<Event[]> {
+export async function getEvents(companyId: number): Promise<Event[]> {
     const staticQuery = supabase
         .from('events')
         .select('*')
         .order('created_at', { ascending: false });
 
-    const { data: staticEvents, error: staticError } = await applyStandardFilters(
+    const { data: staticEvents, error: staticError } = await applyCompanyFilter(
         staticQuery,
-        companyId,
-        division
+        companyId
     );
 
     if (staticError) {
@@ -133,10 +136,9 @@ export async function getEvents(companyId: number, division?: string): Promise<E
             .select('*')
             .lte('trigger_at_minutes', minutesElapsed);
 
-        const { data: scheduled, error: scheduledError } = await applyStandardFilters(
+        const { data: scheduled, error: scheduledError } = await applyCompanyFilter(
             scheduledQuery,
-            companyId,
-            division
+            companyId
         );
 
         if (!scheduledError && scheduled) {
@@ -176,13 +178,13 @@ export async function getEvents(companyId: number, division?: string): Promise<E
 
 // ===== LOGS =====
 
-export async function getLogs(companyId: number, division?: string, source?: string): Promise<LogEntry[]> {
+export async function getLogs(companyId: number, source?: string): Promise<LogEntry[]> {
     let query = supabase
         .from('logs')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    query = applyStandardFilters(query, companyId, division);
+    query = applyCompanyFilter(query, companyId);
 
     if (source) {
         query = query.eq('source', source);
@@ -207,13 +209,13 @@ export async function getLogs(companyId: number, division?: string, source?: str
 
 // ===== EMAIL LOGS =====
 
-export async function getEmailLogs(companyId: number, division?: string) {
+export async function getEmailLogs(companyId: number) {
     const query = supabase
         .from('email_logs')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    const { data, error } = await applyStandardFilters(query, companyId, division);
+    const { data, error } = await applyCompanyFilter(query, companyId);
 
     if (error) {
         console.error('Error fetching email logs:', error);
@@ -225,13 +227,13 @@ export async function getEmailLogs(companyId: number, division?: string) {
 
 // ===== USER ACTIVITY =====
 
-export async function getUserActivity(companyId: number, division?: string) {
+export async function getUserActivity(companyId: number) {
     const query = supabase
         .from('user_activity')
         .select('*')
         .order('last_login', { ascending: false });
 
-    const { data, error } = await applyStandardFilters(query, companyId, division);
+    const { data, error } = await applyCompanyFilter(query, companyId);
 
     if (error) {
         console.error('Error fetching user activity:', error);
@@ -243,13 +245,13 @@ export async function getUserActivity(companyId: number, division?: string) {
 
 // ===== NETWORK CONNECTIONS =====
 
-export async function getNetworkConnections(companyId: number, division?: string) {
+export async function getNetworkConnections(companyId: number) {
     const query = supabase
         .from('network_connections')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    const { data, error } = await applyStandardFilters(query, companyId, division);
+    const { data, error } = await applyCompanyFilter(query, companyId);
 
     if (error) {
         console.error('Error fetching network connections:', error);
@@ -285,7 +287,6 @@ export async function updateServer(serverId: string, updates: {
 
 export async function createEvent(event: {
     companyId: number | null;
-    division: string | null;
     type: string;
     title: string;
     content: string;
@@ -294,7 +295,7 @@ export async function createEvent(event: {
 }) {
     const { data, error } = await supabase.from('events').insert({
         company_id: event.companyId,
-        division: event.division,
+        division: null,
         type: event.type,
         title: event.title,
         content: event.content,
@@ -312,14 +313,13 @@ export async function createEvent(event: {
 
 export async function createLog(log: {
     companyId: number | null;
-    division: string | null;
     level: string;
     source: string;
     message: string;
 }) {
     const { data, error } = await supabase.from('logs').insert({
         company_id: log.companyId,
-        division: log.division,
+        division: null,
         level: log.level,
         source: log.source,
         message: log.message,
@@ -335,7 +335,6 @@ export async function createLog(log: {
 
 export async function createScheduledEvent(event: {
     triggerAtMinutes: number;
-    division: string | null;
     type: string;
     title: string;
     content: string;
@@ -344,7 +343,7 @@ export async function createScheduledEvent(event: {
 }) {
     const { data, error } = await supabase.from('scheduled_events').insert({
         trigger_at_minutes: event.triggerAtMinutes,
-        division: event.division,
+        division: null,
         type: event.type,
         title: event.title,
         content: event.content,

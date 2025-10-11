@@ -1,5 +1,4 @@
 // src/app/game/emails/page.tsx
-import { DivisionGuard } from '@/components/game/DivisionGuard';
 import { PageHeader } from '@/components/game/PageHeader';
 import { DataTable, Column } from '@/components/game/DataTable';
 import { Badge } from '@/components/ui/badge';
@@ -40,20 +39,18 @@ const columns: Column<typeof emailLogs[0]>[] = [
 
 export default function EmailsPage() {
     return (
-        <DivisionGuard pagePath="/game/emails">
-            <div className="space-y-6">
-                <PageHeader
-                    icon={Mail}
-                    title="E-postlogger"
-                    description="Spor e-postaktivitet og phishing-forsøk"
-                />
+        <div className="space-y-6">
+            <PageHeader
+                icon={Mail}
+                title="E-postlogger"
+                description="Spor e-postaktivitet og phishing-forsøk"
+            />
 
-                <DataTable
-                    columns={columns}
-                    data={emailLogs}
-                    emptyMessage="Ingen e-postlogger tilgjengelige"
-                />
-            </div>
-        </DivisionGuard>
+            <DataTable
+                columns={columns}
+                data={emailLogs}
+                emptyMessage="Ingen e-postlogger tilgjengelige"
+            />
+        </div>
     );
 }

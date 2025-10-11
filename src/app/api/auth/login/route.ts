@@ -5,7 +5,7 @@ import { setSession } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
     try {
-        const { code, division } = await request.json();
+        const { code } = await request.json();
 
         if (!code) {
             return NextResponse.json(
@@ -23,34 +23,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Admin doesn't need division
-        if (company.isAdmin) {
-            await setSession({
-                companyId: company.id,
-                companyName: company.name,
-                isAdmin: true,
-            });
-
-            return NextResponse.json({ success: true, company });
-        }
-
-        // Regular users need division
-        if (!division) {
-            return NextResponse.json(
-                { error: 'Division is required' },
-                { status: 400 }
-            );
-        }
-
-        // Set session cookie with division
+        // Set session cookie
         await setSession({
             companyId: company.id,
             companyName: company.name,
-            division: division,
-            isAdmin: false,
+            isAdmin: company.isAdmin || false,
         });
 
-        return NextResponse.json({ success: true, company, division });
+        return NextResponse.json({ success: true, company });
     } catch {
         return NextResponse.json(
             { error: 'Internal server error' },

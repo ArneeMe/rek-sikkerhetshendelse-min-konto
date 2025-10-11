@@ -1,5 +1,4 @@
 // src/app/game/network/page.tsx
-import { DivisionGuard } from '@/components/game/DivisionGuard';
 import { PageHeader } from '@/components/game/PageHeader';
 import { DataTable, Column } from '@/components/game/DataTable';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,49 +40,47 @@ const columns: Column<typeof networkConnections[0]>[] = [
 
 export default function NetworkPage() {
     return (
-        <DivisionGuard pagePath="/game/network">
-            <div className="space-y-6">
-                <PageHeader
-                    icon={Network}
-                    title="Nettverksmonitor"
-                    description="Sanntidsanalyse av nettverkstilkoblinger"
-                />
+        <div className="space-y-6">
+            <PageHeader
+                icon={Network}
+                title="Nettverksmonitor"
+                description="Sanntidsanalyse av nettverkstilkoblinger"
+            />
 
-                {/* Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <Card className="bg-slate-900 border-slate-700">
-                        <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Aktive tilkoblinger</div>
-                            <div className="text-2xl font-bold text-slate-100 mt-1">127</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-slate-900 border-slate-700">
-                        <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Mistenkelige</div>
-                            <div className="text-2xl font-bold text-orange-400 mt-1">3</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-slate-900 border-slate-700">
-                        <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Blokkerte</div>
-                            <div className="text-2xl font-bold text-red-400 mt-1">12</div>
-                        </CardContent>
-                    </Card>
-                    <Card className="bg-slate-900 border-slate-700">
-                        <CardContent className="p-4">
-                            <div className="text-sm text-slate-400">Total trafikk</div>
-                            <div className="text-2xl font-bold text-blue-400 mt-1">45.2 GB</div>
-                        </CardContent>
-                    </Card>
-                </div>
-
-                {/* Connection Table */}
-                <DataTable
-                    columns={columns}
-                    data={networkConnections}
-                    emptyMessage="Ingen nettverkstilkoblinger oppdaget"
-                />
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card className="bg-slate-900 border-slate-700">
+                    <CardContent className="p-4">
+                        <div className="text-sm text-slate-400">Aktive tilkoblinger</div>
+                        <div className="text-2xl font-bold text-slate-100 mt-1">127</div>
+                    </CardContent>
+                </Card>
+                <Card className="bg-slate-900 border-slate-700">
+                    <CardContent className="p-4">
+                        <div className="text-sm text-slate-400">Mistenkelige</div>
+                        <div className="text-2xl font-bold text-orange-400 mt-1">3</div>
+                    </CardContent>
+                </Card>
+                <Card className="bg-slate-900 border-slate-700">
+                    <CardContent className="p-4">
+                        <div className="text-sm text-slate-400">Blokkerte</div>
+                        <div className="text-2xl font-bold text-red-400 mt-1">12</div>
+                    </CardContent>
+                </Card>
+                <Card className="bg-slate-900 border-slate-700">
+                    <CardContent className="p-4">
+                        <div className="text-sm text-slate-400">Total trafikk</div>
+                        <div className="text-2xl font-bold text-blue-400 mt-1">45.2 GB</div>
+                    </CardContent>
+                </Card>
             </div>
-        </DivisionGuard>
+
+            {/* Connection Table */}
+            <DataTable
+                columns={columns}
+                data={networkConnections}
+                emptyMessage="Ingen nettverkstilkoblinger oppdaget"
+            />
+        </div>
     );
 }

@@ -1,5 +1,4 @@
 // src/app/game/users/page.tsx
-import { DivisionGuard } from '@/components/game/DivisionGuard';
 import { PageHeader } from '@/components/game/PageHeader';
 import { DataTable, Column } from '@/components/game/DataTable';
 import { Badge } from '@/components/ui/badge';
@@ -40,20 +39,18 @@ const columns: Column<typeof userActivity[0]>[] = [
 
 export default function UsersPage() {
     return (
-        <DivisionGuard pagePath="/game/users">
-            <div className="space-y-6">
-                <PageHeader
-                    icon={Users}
-                    title="Brukeraktivitet"
-                    description="Overvåk brukeratferd og tilgangsmønstre"
-                />
+        <div className="space-y-6">
+            <PageHeader
+                icon={Users}
+                title="Brukeraktivitet"
+                description="Overvåk brukeratferd og tilgangsmønstre"
+            />
 
-                <DataTable
-                    columns={columns}
-                    data={userActivity}
-                    emptyMessage="Ingen brukeraktivitet registrert"
-                />
-            </div>
-        </DivisionGuard>
+            <DataTable
+                columns={columns}
+                data={userActivity}
+                emptyMessage="Ingen brukeraktivitet registrert"
+            />
+        </div>
     );
 }

@@ -9,7 +9,7 @@ import { Inbox } from 'lucide-react';
 
 export default async function InboxPage() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId, session!.division);
+    const events = await getEvents(session!.companyId);
     const unreadCount = events.filter((e) => !e.read).length;
 
     return (

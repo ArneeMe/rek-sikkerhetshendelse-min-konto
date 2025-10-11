@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
-import { getDivisionNavItems, getDivisionDisplayName } from '@/lib/division-utils';
+import { getNavItems } from '@/lib/division-utils';
 
 export default async function GameLayout({
                                              children,
@@ -17,8 +17,7 @@ export default async function GameLayout({
         redirect('/login');
     }
 
-    const navItems = getDivisionNavItems(session.division);
-    const divisionName = getDivisionDisplayName(session.division);
+    const navItems = getNavItems();
 
     return (
         <div className="min-h-screen bg-slate-950">
@@ -33,11 +32,11 @@ export default async function GameLayout({
                                 <Shield className="w-6 h-6 text-blue-500" />
                                 <div>
                                     <h1 className="text-xl font-bold text-slate-100">Telesør Sikkerhetssenter</h1>
-                                    <p className="text-xs text-slate-400">{session.companyName} - {divisionName}</p>
+                                    <p className="text-xs text-slate-400">{session.companyName}</p>
                                 </div>
                             </Link>
 
-                            {/* Dynamic Navigation */}
+                            {/* Unified Navigation */}
                             <nav className="hidden md:flex items-center gap-2">
                                 {navItems.map((item) => {
                                     const Icon = item.icon;

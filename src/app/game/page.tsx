@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/ui/stat-card';
 import { ListItem } from '@/components/ui/list-item';
-import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone, Shield } from 'lucide-react';
+import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone} from 'lucide-react';
 import { getEvents, getServers, getLogs } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import { getSeverityColor } from '@/lib/ui-helpers';
@@ -11,8 +11,13 @@ import Link from 'next/link';
 
 export default async function GameDashboard() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId, session!.division);
+    const events = await getEvents(session!.companyId);
+    const servers = await getServers();
+    const logs = await getLogs(session!.companyId);
+
     const unreadCount = events.filter((e) => !e.read).length;
+    const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
+    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
 
     return (
         <div className="space-y-6">
@@ -23,17 +28,10 @@ export default async function GameDashboard() {
                     <Badge variant="outline" className="text-slate-300">
                         {session?.companyName}
                     </Badge>
-                    {session?.division && (
-                        <Badge variant="outline" className="text-slate-300 capitalize">
-                            {session.division === 'tech' ? 'Teknisk Avdeling' :
-                                session.division === 'non-tech' ? 'Ikke-Teknisk Avdeling' :
-                                    'Ledelse'}
-                        </Badge>
-                    )}
                 </div>
             </div>
 
-            {/* Common: Inbox */}
+            {/* Stats Grid - All users see all stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <StatCard
                     title="Uleste hendelser"
@@ -49,26 +47,78 @@ export default async function GameDashboard() {
                     borderColor="hover:border-blue-500"
                 />
 
-                {/* Tech Division */}
-                {session?.division === 'tech' && (
-                    <>
-                        <TechDashboard />
-                    </>
-                )}
+                <StatCard
+                    title="Kritiske servere"
+                    value={criticalServers}
+                    description="Klikk for å se servere"
+                    icon={Server}
+                    iconColor="text-orange-400"
+                    badge={criticalServers > 0 ? {
+                        text: 'Undersøk Nå',
+                        className: 'bg-orange-600'
+                    } : undefined}
+                    href="/game/servers"
+                    borderColor="hover:border-orange-500"
+                />
 
-                {/* Non-Tech Division */}
-                {session?.division === 'non-tech' && (
-                    <>
-                        <NonTechDashboard />
-                    </>
-                )}
+                <StatCard
+                    title="Kritiske logger"
+                    value={criticalLogs}
+                    description="Klikk for å se logger"
+                    icon={FileText}
+                    iconColor="text-red-400"
+                    badge={criticalLogs > 0 ? {
+                        text: 'Gjennomgang Påkrevd',
+                        className: 'bg-red-600'
+                    } : undefined}
+                    href="/game/logs"
+                    borderColor="hover:border-red-500"
+                />
+            </div>
 
-                {/* Management Division */}
-                {session?.division === 'management' && (
-                    <>
-                        <ManagementDashboard />
-                    </>
-                )}
+            {/* Secondary Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <StatCard
+                    title="Mistenkelige brukere"
+                    value={2}
+                    description="Klikk for å se aktivitet"
+                    icon={Users}
+                    iconColor="text-purple-400"
+                    badge={{
+                        text: 'Handling Påkrevd',
+                        className: 'bg-purple-600'
+                    }}
+                    href="/game/users"
+                    borderColor="hover:border-purple-500"
+                />
+
+                <StatCard
+                    title="Phishing e-poster"
+                    value={1}
+                    description="Klikk for å se e-poster"
+                    icon={Mail}
+                    iconColor="text-red-400"
+                    badge={{
+                        text: 'Undersøk',
+                        className: 'bg-red-600'
+                    }}
+                    href="/game/emails"
+                    borderColor="hover:border-red-500"
+                />
+
+                <StatCard
+                    title="Ventende kommunikasjon"
+                    value={4}
+                    description="Klikk for å se"
+                    icon={Phone}
+                    iconColor="text-orange-400"
+                    badge={{
+                        text: 'Respons Nødvendig',
+                        className: 'bg-orange-600'
+                    }}
+                    href="/game/comms"
+                    borderColor="hover:border-orange-500"
+                />
             </div>
 
             {/* Recent Activity */}
@@ -95,117 +145,5 @@ export default async function GameDashboard() {
                 </CardContent>
             </Card>
         </div>
-    );
-}
-
-// Tech Division Dashboard
-async function TechDashboard() {
-    const session = await getSession();
-    const servers = await getServers();
-    const logs = await getLogs(session!.companyId, session!.division);
-
-    const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
-    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
-
-    return (
-        <>
-            <StatCard
-                title="Kritiske servere"
-                value={criticalServers}
-                description="Klikk for å se servere"
-                icon={Server}
-                iconColor="text-orange-400"
-                badge={criticalServers > 0 ? {
-                    text: 'Undersøk Nå',
-                    className: 'bg-orange-600'
-                } : undefined}
-                href="/game/servers"
-                borderColor="hover:border-orange-500"
-            />
-
-            <StatCard
-                title="Kritiske logger"
-                value={criticalLogs}
-                description="Klikk for å se logger"
-                icon={FileText}
-                iconColor="text-red-400"
-                badge={criticalLogs > 0 ? {
-                    text: 'Gjennomgang Påkrevd',
-                    className: 'bg-red-600'
-                } : undefined}
-                href="/game/logs"
-                borderColor="hover:border-red-500"
-            />
-        </>
-    );
-}
-
-// Non-Tech Division Dashboard
-function NonTechDashboard() {
-    return (
-        <>
-            <StatCard
-                title="Mistenkelige brukere"
-                value={2}
-                description="Klikk for å se aktivitet"
-                icon={Users}
-                iconColor="text-purple-400"
-                badge={{
-                    text: 'Handling Påkrevd',
-                    className: 'bg-purple-600'
-                }}
-                href="/game/users"
-                borderColor="hover:border-purple-500"
-            />
-
-            <StatCard
-                title="Phishing e-poster"
-                value={1}
-                description="Klikk for å se e-poster"
-                icon={Mail}
-                iconColor="text-red-400"
-                badge={{
-                    text: 'Undersøk',
-                    className: 'bg-red-600'
-                }}
-                href="/game/emails"
-                borderColor="hover:border-red-500"
-            />
-        </>
-    );
-}
-
-// Management Division Dashboard
-function ManagementDashboard() {
-    return (
-        <>
-            <StatCard
-                title="Ventende kommunikasjon"
-                value={4}
-                description="Klikk for å se"
-                icon={Phone}
-                iconColor="text-orange-400"
-                badge={{
-                    text: 'Respons Nødvendig',
-                    className: 'bg-orange-600'
-                }}
-                href="/game/comms"
-                borderColor="hover:border-orange-500"
-            />
-
-            <StatCard
-                title="Regelbrudd"
-                value={3}
-                description="Klikk for å gjennomgå"
-                icon={Shield}
-                iconColor="text-red-400"
-                badge={{
-                    text: 'Kritisk',
-                    className: 'bg-red-600'
-                }}
-                href="/game/policies"
-                borderColor="hover:border-red-500"
-            />
-        </>
     );
 }
