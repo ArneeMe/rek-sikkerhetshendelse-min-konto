@@ -52,8 +52,8 @@ export async function getEmails(companyId: number, filters?: EmailFilters) {
     let emails = (data || []) as DatabaseEmail[];
 
     // Get company name for substitution
-    const companyName = Object.entries(COMPANY_CODES)
-        .find(([_, value]) => value.id === companyId)?.[1]?.name?.toLowerCase() || 'company';
+    const companyEntry = Object.values(COMPANY_CODES).find(company => company.id === companyId);
+    const companyName = companyEntry?.name?.toLowerCase() || 'company';
 
     // Apply dynamic substitution for {COMPANY} placeholder
     emails = emails.map(email => ({
@@ -94,8 +94,8 @@ export async function getEmailSenders(companyId: number) {
     }
 
     // Get company name for substitution
-    const companyName = Object.entries(COMPANY_CODES)
-        .find(([_, value]) => value.id === companyId)?.[1]?.name?.toLowerCase() || 'company';
+    const companyEntry = Object.values(COMPANY_CODES).find(company => company.id === companyId);
+    const companyName = companyEntry?.name?.toLowerCase() || 'company';
 
     // Apply substitution and get unique senders
     return [...new Set(
@@ -120,8 +120,8 @@ export async function getEmailRecipients(companyId: number) {
     }
 
     // Get company name for substitution
-    const companyName = Object.entries(COMPANY_CODES)
-        .find(([_, value]) => value.id === companyId)?.[1]?.name?.toLowerCase() || 'company';
+    const companyEntry = Object.values(COMPANY_CODES).find(company => company.id === companyId);
+    const companyName = companyEntry?.name?.toLowerCase() || 'company';
 
     // Apply substitution and get unique recipients
     return [...new Set(
