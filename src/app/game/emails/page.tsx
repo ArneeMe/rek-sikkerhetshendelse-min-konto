@@ -1,7 +1,7 @@
 // src/app/game/emails/page.tsx
 import { PageHeader } from '@/components/game/PageHeader';
 import { Mail } from 'lucide-react';
-import { getEmails, getEmailSenders, getEmailRecipients } from '@/lib/db-emails';
+import { getEmails, getEmailSenders, getEmailRecipients } from '@/lib/db/db-emails';
 import { getSession } from '@/lib/session';
 import { EmailsClient } from './emails-client';
 
