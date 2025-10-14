@@ -1,21 +1,26 @@
-export const COMPANY_CODES = {
-    'NORD': { id: 1, name: 'Nordavind' },
-    'VEST': { id: 2, name: 'Vestavind' },
-    'OST': { id: 3, name: 'Østavind' },
-    'SOR': { id: 4, name: 'Søravind' },
-    'NORDVEST': { id: 5, name: 'Nordevestavind' },
-    'SOROST': { id: 6, name: 'Sørøstavind' },
-    'SORVEST': { id: 7, name: 'Sørvestavind' },
-    'NORDOST': { id: 8, name: 'Nordøstavind' },
+// src/lib/constants.ts
+// Single company (Nordavind AS) with multiple teams
+
+export const COMPANY_NAME = 'Nordavind AS';
+
+export const TEAM_CODES = {
+    'ALFA': { id: 1, name: 'Team Alfa' },
+    'BRAVO': { id: 2, name: 'Team Bravo' },
+    'CHARLIE': { id: 3, name: 'Team Charlie' },
+    'DELTA': { id: 4, name: 'Team Delta' },
+    'ECHO': { id: 5, name: 'Team Echo' },
+    'FOXTROT': { id: 6, name: 'Team Foxtrot' },
+    'GOLF': { id: 7, name: 'Team Golf' },
+    'HOTEL': { id: 8, name: 'Team Hotel' },
     'ADMIN-2025': { id: 0, name: 'Administrator', isAdmin: true },
 } as const;
 
-export type CompanyCode = keyof typeof COMPANY_CODES;
+export type TeamCode = keyof typeof TEAM_CODES;
 
-export function validateCompanyCode(code: string): { id: number; name: string; isAdmin?: boolean } | null {
+export function validateTeamCode(code: string): { id: number; name: string; isAdmin?: boolean } | null {
     const upperCode = code.toUpperCase();
-    if (upperCode in COMPANY_CODES) {
-        return COMPANY_CODES[upperCode as CompanyCode];
+    if (upperCode in TEAM_CODES) {
+        return TEAM_CODES[upperCode as TeamCode];
     }
     return null;
 }

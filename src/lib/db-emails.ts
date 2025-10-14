@@ -1,7 +1,7 @@
+// src/lib/db-emails.ts
 import {supabase} from "@/lib/supabase";
 import type {DatabaseEmail} from "@/types/database";
-import {COMPANY_CODES} from "@/lib/constants";
-import {applyCompanyFilter} from "@/lib/db-helpers";
+import {applyTeamFilter} from "@/lib/db-helpers";
 
 export interface EmailFilters {
     search?: string;
@@ -12,14 +12,14 @@ export interface EmailFilters {
     dateTo?: string;
 }
 
-export async function getEmails(companyId: number, filters?: EmailFilters) {
+export async function getEmails(teamId: number, filters?: EmailFilters) {
     let query = supabase
         .from('emails')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    // Apply company filter
-    query = applyCompanyFilter(query, companyId);
+    // Apply team filter
+    query = applyTeamFilter(query, teamId);
 
     // Apply filters
     if (filters?.sender) {
@@ -51,19 +51,7 @@ export async function getEmails(companyId: number, filters?: EmailFilters) {
 
     let emails = (data || []) as DatabaseEmail[];
 
-    // Get company name for substitution
-    const companyEntry = Object.values(COMPANY_CODES).find(company => company.id === companyId);
-    const companyName = companyEntry?.name?.toLowerCase() || 'company';
-
-    // Apply dynamic substitution for {COMPANY} placeholder
-    emails = emails.map(email => ({
-        ...email,
-        sender: email.sender.replace(/{COMPANY}/g, companyName),
-        recipient: email.recipient.replace(/{COMPANY}/g, companyName),
-        body: email.body.replace(/{COMPANY}/g, companyName),
-    }));
-
-    // Apply search filter (client-side, after substitution)
+    // Apply search filter (client-side)
     if (filters?.search) {
         const searchLower = filters.search.toLowerCase();
         emails = emails.filter(email =>
@@ -78,13 +66,13 @@ export async function getEmails(companyId: number, filters?: EmailFilters) {
 }
 
 // Get unique senders for filter dropdown
-export async function getEmailSenders(companyId: number) {
+export async function getEmailSenders(teamId: number) {
     let query = supabase
         .from('emails')
         .select('sender')
         .order('sender');
 
-    query = applyCompanyFilter(query, companyId);
+    query = applyTeamFilter(query, teamId);
 
     const { data, error } = await query;
 
@@ -93,24 +81,18 @@ export async function getEmailSenders(companyId: number) {
         return [];
     }
 
-    // Get company name for substitution
-    const companyEntry = Object.values(COMPANY_CODES).find(company => company.id === companyId);
-    const companyName = companyEntry?.name?.toLowerCase() || 'company';
-
-    // Apply substitution and get unique senders
-    return [...new Set(
-        (data || []).map(d => d.sender.replace(/{COMPANY}/g, companyName))
-    )];
+    // Get unique senders
+    return [...new Set((data || []).map(d => d.sender))];
 }
 
 // Get unique recipients for filter dropdown
-export async function getEmailRecipients(companyId: number) {
+export async function getEmailRecipients(teamId: number) {
     let query = supabase
         .from('emails')
         .select('recipient')
         .order('recipient');
 
-    query = applyCompanyFilter(query, companyId);
+    query = applyTeamFilter(query, teamId);
 
     const { data, error } = await query;
 
@@ -119,12 +101,6 @@ export async function getEmailRecipients(companyId: number) {
         return [];
     }
 
-    // Get company name for substitution
-    const companyEntry = Object.values(COMPANY_CODES).find(company => company.id === companyId);
-    const companyName = companyEntry?.name?.toLowerCase() || 'company';
-
-    // Apply substitution and get unique recipients
-    return [...new Set(
-        (data || []).map(d => d.recipient.replace(/{COMPANY}/g, companyName))
-    )];
+    // Get unique recipients
+    return [...new Set((data || []).map(d => d.recipient))];
 }

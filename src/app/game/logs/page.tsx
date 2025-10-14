@@ -8,7 +8,7 @@ import { LogsClient } from './logs-client';
 
 export default async function LogsPage() {
     const session = await getSession();
-    const logs = await getLogs(session!.companyId);
+    const logs = await getLogs(session!.teamId);
 
     return (
         <div className="space-y-6">

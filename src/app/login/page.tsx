@@ -38,7 +38,7 @@ export default function LoginPage() {
             }
 
             // Redirect based on admin status
-            if (data.company.isAdmin) {
+            if (data.team.isAdmin) {
                 router.push('/admin');
             } else {
                 router.push('/game');
@@ -58,7 +58,7 @@ export default function LoginPage() {
                     </div>
                     <CardTitle className="text-2xl text-slate-100">Nordavind Sikkerhetssenter</CardTitle>
                     <CardDescription className="text-slate-400">
-                        Skriv inn tilgangskode
+                        Skriv inn teamkode
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -66,7 +66,7 @@ export default function LoginPage() {
                         <div>
                             <Input
                                 type="text"
-                                placeholder="Skriv inn tilgangskode (f.eks. NORD)"
+                                placeholder="Skriv inn teamkode (f.eks. ALFA)"
                                 value={code}
                                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                                 className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500"
@@ -91,8 +91,9 @@ export default function LoginPage() {
                         </Button>
 
                         <div className="text-xs text-slate-500 text-center mt-4">
-                            <p>Tilgjengelige koder: NORD, VEST, OST, SOR,</p>
-                            <p>NORDVEST, SOROST, SORVEST, NORDOST</p>
+                            <p>Tilgjengelige teamkoder:</p>
+                            <p>ALFA, BRAVO, CHARLIE, DELTA,</p>
+                            <p>ECHO, FOXTROT, GOLF, HOTEL</p>
                             <p className="mt-1">Administrator: ADMIN-2025</p>
                         </div>
                     </form>

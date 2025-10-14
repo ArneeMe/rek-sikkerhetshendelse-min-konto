@@ -10,7 +10,7 @@ export interface DatabaseServer {
 
 export interface DatabaseEvent {
     id: string;
-    company_id: number | null;
+    team_id: number | null;
     division: 'tech' | 'non-tech' | 'management' | null;
     type: 'email' | 'tweet' | 'alert' | 'server-status';
     title: string;
@@ -23,7 +23,7 @@ export interface DatabaseEvent {
 
 export interface DatabaseLog {
     id: string;
-    company_id: number | null;
+    team_id: number | null;
     division: 'tech' | 'non-tech' | 'management' | null;
     timestamp: string;
     level: 'info' | 'warning' | 'error' | 'critical';
@@ -33,7 +33,7 @@ export interface DatabaseLog {
 
 export interface DatabaseEmail {
     id: string;
-    company_id: number | null;
+    team_id: number | null;
     sender: string;
     recipient: string;
     subject: string;
@@ -45,7 +45,7 @@ export interface DatabaseEmail {
 
 export interface DatabaseUserActivity {
     id: string;
-    company_id: number | null;
+    team_id: number | null;
     division: 'tech' | 'non-tech' | 'management' | null;
     user_id: string;
     name: string;
@@ -57,7 +57,7 @@ export interface DatabaseUserActivity {
 
 export interface DatabaseNetworkConnection {
     id: string;
-    company_id: number | null;
+    team_id: number | null;
     division: 'tech' | 'non-tech' | 'management' | null;
     timestamp: string;
     source: string;

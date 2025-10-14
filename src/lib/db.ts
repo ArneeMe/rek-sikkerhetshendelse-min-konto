@@ -11,12 +11,17 @@ import type {
     DatabaseGameSession,
 } from '@/types/database';
 
-// Helper to apply company filter only
-function applyCompanyFilter<T>(query: T, companyId: number): T {
-    return (query as unknown as { or: (filter: string) => T }).or(`company_id.eq.${companyId},company_id.is.null`);
+// Helper to apply team filter only
+// For admins: pass teamId = 0 to see all teams (no filtering)
+// For regular teams: filters by team_id OR team_id is null (broadcasts)
+function applyTeamFilter<T>(query: T, teamId: number): T {
+    if (teamId === 0) {
+        // Admin sees everything - no filter
+        return query;
+    }
+    // Regular team sees their own data + broadcasts (null team_id)
+    return (query as unknown as { or: (filter: string) => T }).or(`team_id.eq.${teamId},team_id.is.null`);
 }
-
-
 
 // ===== GAME SESSION MANAGEMENT =====
 
@@ -108,15 +113,15 @@ export async function getServers(): Promise<Server[]> {
 
 // ===== EVENTS =====
 
-export async function getEvents(companyId: number): Promise<Event[]> {
+export async function getEvents(teamId: number): Promise<Event[]> {
     const staticQuery = supabase
         .from('events')
         .select('*')
         .order('created_at', { ascending: false });
 
-    const { data: staticEvents, error: staticError } = await applyCompanyFilter(
+    const { data: staticEvents, error: staticError } = await applyTeamFilter(
         staticQuery,
-        companyId
+        teamId
     );
 
     if (staticError) {
@@ -137,9 +142,9 @@ export async function getEvents(companyId: number): Promise<Event[]> {
             .select('*')
             .lte('trigger_at_minutes', minutesElapsed);
 
-        const { data: scheduled, error: scheduledError } = await applyCompanyFilter(
+        const { data: scheduled, error: scheduledError } = await applyTeamFilter(
             scheduledQuery,
-            companyId
+            teamId
         );
 
         if (!scheduledError && scheduled) {
@@ -179,13 +184,13 @@ export async function getEvents(companyId: number): Promise<Event[]> {
 
 // ===== LOGS =====
 
-export async function getLogs(companyId: number, source?: string): Promise<LogEntry[]> {
+export async function getLogs(teamId: number, source?: string): Promise<LogEntry[]> {
     let query = supabase
         .from('logs')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    query = applyCompanyFilter(query, companyId);
+    query = applyTeamFilter(query, teamId);
 
     if (source) {
         query = query.eq('source', source);
@@ -208,16 +213,15 @@ export async function getLogs(companyId: number, source?: string): Promise<LogEn
     }));
 }
 
-
 // ===== USER ACTIVITY =====
 
-export async function getUserActivity(companyId: number) {
+export async function getUserActivity(teamId: number) {
     const query = supabase
         .from('user_activity')
         .select('*')
         .order('last_login', { ascending: false });
 
-    const { data, error } = await applyCompanyFilter(query, companyId);
+    const { data, error } = await applyTeamFilter(query, teamId);
 
     if (error) {
         console.error('Error fetching user activity:', error);
@@ -229,13 +233,13 @@ export async function getUserActivity(companyId: number) {
 
 // ===== NETWORK CONNECTIONS =====
 
-export async function getNetworkConnections(companyId: number) {
+export async function getNetworkConnections(teamId: number) {
     const query = supabase
         .from('network_connections')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    const { data, error } = await applyCompanyFilter(query, companyId);
+    const { data, error } = await applyTeamFilter(query, teamId);
 
     if (error) {
         console.error('Error fetching network connections:', error);
@@ -270,7 +274,7 @@ export async function updateServer(serverId: string, updates: {
 }
 
 export async function createEvent(event: {
-    companyId: number | null;
+    teamId: number | null;
     type: string;
     title: string;
     content: string;
@@ -278,7 +282,7 @@ export async function createEvent(event: {
     from?: string;
 }) {
     const { data, error } = await supabase.from('events').insert({
-        company_id: event.companyId,
+        team_id: event.teamId,
         division: null,
         type: event.type,
         title: event.title,
@@ -296,13 +300,13 @@ export async function createEvent(event: {
 }
 
 export async function createLog(log: {
-    companyId: number | null;
+    teamId: number | null;
     level: string;
     source: string;
     message: string;
 }) {
     const { data, error } = await supabase.from('logs').insert({
-        company_id: log.companyId,
+        team_id: log.teamId,
         division: null,
         level: log.level,
         source: log.source,

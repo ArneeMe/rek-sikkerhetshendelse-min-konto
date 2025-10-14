@@ -7,9 +7,9 @@ import { EmailsClient } from './emails-client';
 
 export default async function EmailsPage() {
     const session = await getSession();
-    const emails = await getEmails(session!.companyId);
-    const senders = await getEmailSenders(session!.companyId);
-    const recipients = await getEmailRecipients(session!.companyId);
+    const emails = await getEmails(session!.teamId);
+    const senders = await getEmailSenders(session!.teamId);
+    const recipients = await getEmailRecipients(session!.teamId);
 
     return (
         <div className="space-y-6">

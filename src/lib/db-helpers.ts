@@ -4,7 +4,6 @@
  * Apply division filter to query
  * Returns rows where division matches OR division is null (broadcast)
  */
-
 export function applyDivisionFilter<T>(query: T, division?: string): T {
     if (division) { // eslint-disable-next-line
         return (query as any).or(`division.eq.${division},division.is.null`) as T;
@@ -13,22 +12,22 @@ export function applyDivisionFilter<T>(query: T, division?: string): T {
 }
 
 /**
- * Apply company filter to query
- * Returns rows where company_id matches OR company_id is null (broadcast)
+ * Apply team filter to query
+ * Returns rows where team_id matches OR team_id is null (broadcast to all teams)
  */
-
-export function applyCompanyFilter<T>(query: T, companyId: number): T { // eslint-disable-next-line
-    return (query as any).or(`company_id.eq.${companyId},company_id.is.null`) as T;
+export function applyTeamFilter<T>(query: T, teamId: number): T { // eslint-disable-next-line
+    return (query as any).or(`team_id.eq.${teamId},team_id.is.null`) as T;
 }
+
 /**
- * Apply both company and division filters
+ * Apply both team and division filters
  */
 export function applyStandardFilters<T>(
     query: T,
-    companyId: number,
+    teamId: number,
     division?: string,
 ): T {
-    let filteredQuery = applyCompanyFilter(query, companyId);
+    let filteredQuery = applyTeamFilter(query, teamId);
     if (division) {
         filteredQuery = applyDivisionFilter(filteredQuery, division);
     }

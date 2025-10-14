@@ -7,13 +7,14 @@ import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone} from 'lucid
 import { getEvents, getServers, getLogs } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import { getSeverityColor } from '@/lib/ui-helpers';
+import { COMPANY_NAME } from '@/lib/constants';
 import Link from 'next/link';
 
 export default async function GameDashboard() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId);
+    const events = await getEvents(session!.teamId);
     const servers = await getServers();
-    const logs = await getLogs(session!.companyId);
+    const logs = await getLogs(session!.teamId);
 
     const unreadCount = events.filter((e) => !e.read).length;
     const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
@@ -26,7 +27,10 @@ export default async function GameDashboard() {
                 <p className="text-slate-400">Overvåk systemene dine og håndter hendelser</p>
                 <div className="flex gap-2 mt-3">
                     <Badge variant="outline" className="text-slate-300">
-                        {session?.companyName}
+                        {COMPANY_NAME}
+                    </Badge>
+                    <Badge variant="outline" className="text-slate-300">
+                        {session?.teamName}
                     </Badge>
                 </div>
             </div>

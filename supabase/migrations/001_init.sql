@@ -1,7 +1,8 @@
--- supabase/migrations/001_schema.sql
+-- supabase/migrations/001_init.sql
 -- Core database schema for cyber security game
+-- Single company (Nordavind AS) with multiple teams
 
--- Servers/Basestations table
+-- ===== SERVERS TABLE =====
 CREATE TABLE servers (
                          id TEXT PRIMARY KEY,
                          name TEXT NOT NULL,
@@ -11,10 +12,11 @@ CREATE TABLE servers (
                          updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Events table (inbox items, alerts, emails, tweets)
+-- ===== EVENTS TABLE =====
+-- Inbox items, alerts, emails, tweets
 CREATE TABLE events (
                         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                        company_id INT,  -- null = broadcast to all companies
+                        team_id INT,  -- null = broadcast to all teams
                         division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),  -- null = visible to all divisions
                         type TEXT NOT NULL CHECK (type IN ('email', 'tweet', 'alert', 'server-status')),
                         title TEXT NOT NULL,
@@ -25,20 +27,78 @@ CREATE TABLE events (
                         created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Logs table (system logs)
+-- ===== LOGS TABLE =====
+-- System logs
 CREATE TABLE logs (
                       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                      company_id INT,  -- null = visible to all companies
+                      team_id INT,  -- null = visible to all teams
                       division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),  -- null = visible to all divisions
                       timestamp TIMESTAMPTZ DEFAULT NOW(),
                       level TEXT NOT NULL CHECK (level IN ('info', 'warning', 'error', 'critical')),
                       source TEXT NOT NULL,  -- server id reference
                       message TEXT NOT NULL
 );
--- supabase/migrations/005_game_sessions.sql
--- Tables for timed event system
 
--- Game sessions table (tracks when games start/end)
+-- ===== EMAILS TABLE =====
+-- Email archive/logs
+CREATE TABLE emails (
+                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        team_id INT,  -- null = visible to all teams
+                        sender TEXT NOT NULL,
+                        recipient TEXT NOT NULL,
+                        subject TEXT NOT NULL,
+                        body TEXT NOT NULL,
+                        timestamp TIMESTAMPTZ DEFAULT NOW(),
+                        type TEXT NOT NULL CHECK (type IN ('internal', 'external', 'system')),
+                        created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- ===== EMAIL LOGS TABLE =====
+-- Email tracking/metrics
+CREATE TABLE email_logs (
+                            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                            team_id INT,
+                            division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                            timestamp TIMESTAMPTZ DEFAULT NOW(),
+                            sender TEXT NOT NULL,
+                            recipient TEXT NOT NULL,
+                            subject TEXT NOT NULL,
+                            status TEXT NOT NULL CHECK (status IN ('legitimate', 'phishing', 'suspicious')),
+                            opened INT DEFAULT 0,
+                            clicked INT DEFAULT 0
+);
+
+-- ===== USER ACTIVITY TABLE =====
+-- User behavior tracking
+CREATE TABLE user_activity (
+                               id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                               team_id INT,
+                               division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                               user_id TEXT NOT NULL,
+                               name TEXT NOT NULL,
+                               role TEXT NOT NULL,
+                               last_login TIMESTAMPTZ,
+                               location TEXT,
+                               status TEXT NOT NULL CHECK (status IN ('normal', 'suspicious', 'clicked-phishing', 'compromised'))
+);
+
+-- ===== NETWORK CONNECTIONS TABLE =====
+-- Network traffic monitoring
+CREATE TABLE network_connections (
+                                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                     team_id INT,
+                                     division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
+                                     timestamp TIMESTAMPTZ DEFAULT NOW(),
+                                     source TEXT NOT NULL,
+                                     destination TEXT NOT NULL,
+                                     port INT NOT NULL,
+                                     protocol TEXT NOT NULL,
+                                     status TEXT NOT NULL CHECK (status IN ('active', 'suspicious', 'blocked')),
+                                     traffic TEXT NOT NULL
+);
+
+-- ===== GAME SESSIONS TABLE =====
+-- Tracks when games start/end for timed events
 CREATE TABLE game_sessions (
                                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                                started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -47,7 +107,8 @@ CREATE TABLE game_sessions (
                                created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Scheduled events table (template events with relative timing)
+-- ===== SCHEDULED EVENTS TABLE =====
+-- Template events that trigger at specific times during the game
 CREATE TABLE scheduled_events (
                                   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                                   trigger_at_minutes INT NOT NULL,  -- Minutes after game start
@@ -60,78 +121,42 @@ CREATE TABLE scheduled_events (
                                   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE email_logs (
-                            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                            company_id INT,
-                            division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
-                            timestamp TIMESTAMPTZ DEFAULT NOW(),
-                            sender TEXT NOT NULL,
-                            recipient TEXT NOT NULL,
-                            subject TEXT NOT NULL,
-                            status TEXT NOT NULL CHECK (status IN ('legitimate', 'phishing', 'suspicious')),
-                            opened INT DEFAULT 0,
-                            clicked INT DEFAULT 0
-);
+-- ===== INDEXES =====
+-- Servers
+CREATE INDEX idx_servers_status ON servers(status);
 
--- User activity table (for Non-Tech division)
-CREATE TABLE user_activity (
-                               id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                               company_id INT,
-                               division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
-                               user_id TEXT NOT NULL,
-                               name TEXT NOT NULL,
-                               role TEXT NOT NULL,
-                               last_login TIMESTAMPTZ,
-                               location TEXT,
-                               status TEXT NOT NULL CHECK (status IN ('normal', 'suspicious', 'clicked-phishing', 'compromised'))
-);
+-- Events
+CREATE INDEX idx_events_team ON events(team_id);
+CREATE INDEX idx_events_division ON events(division);
+CREATE INDEX idx_events_created ON events(created_at DESC);
 
--- Network connections table (for Tech division)
-CREATE TABLE network_connections (
-                                     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                                     company_id INT,
-                                     division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
-                                     timestamp TIMESTAMPTZ DEFAULT NOW(),
-                                     source TEXT NOT NULL,
-                                     destination TEXT NOT NULL,
-                                     port INT NOT NULL,
-                                     protocol TEXT NOT NULL,
-                                     status TEXT NOT NULL CHECK (status IN ('active', 'suspicious', 'blocked')),
-                                     traffic TEXT NOT NULL
-);
+-- Logs
+CREATE INDEX idx_logs_team ON logs(team_id);
+CREATE INDEX idx_logs_division ON logs(division);
+CREATE INDEX idx_logs_source ON logs(source);
+CREATE INDEX idx_logs_timestamp ON logs(timestamp DESC);
 
-
-CREATE TABLE emails (
-                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                        company_id INT,  -- null = visible to all companies
-                        sender TEXT NOT NULL,
-                        recipient TEXT NOT NULL,
-                        subject TEXT NOT NULL,
-                        body TEXT NOT NULL,
-                        timestamp TIMESTAMPTZ DEFAULT NOW(),
-                        type TEXT NOT NULL CHECK (type IN ('internal', 'external', 'system')),
-                        created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
-
-CREATE INDEX idx_emails_company ON emails(company_id);
+-- Emails
+CREATE INDEX idx_emails_team ON emails(team_id);
 CREATE INDEX idx_emails_timestamp ON emails(timestamp DESC);
 CREATE INDEX idx_emails_sender ON emails(sender);
 CREATE INDEX idx_emails_recipient ON emails(recipient);
 CREATE INDEX idx_emails_type ON emails(type);
-CREATE INDEX idx_email_logs_company ON email_logs(company_id);
+
+-- Email Logs
+CREATE INDEX idx_email_logs_team ON email_logs(team_id);
 CREATE INDEX idx_email_logs_division ON email_logs(division);
-CREATE INDEX idx_user_activity_company ON user_activity(company_id);
+
+-- User Activity
+CREATE INDEX idx_user_activity_team ON user_activity(team_id);
 CREATE INDEX idx_user_activity_division ON user_activity(division);
-CREATE INDEX idx_network_connections_company ON network_connections(company_id);
+
+-- Network Connections
+CREATE INDEX idx_network_connections_team ON network_connections(team_id);
 CREATE INDEX idx_network_connections_division ON network_connections(division);
+
+-- Game Sessions
 CREATE INDEX idx_game_sessions_status ON game_sessions(status);
+
+-- Scheduled Events
 CREATE INDEX idx_scheduled_events_trigger ON scheduled_events(trigger_at_minutes);
-CREATE INDEX idx_servers_status ON servers(status);
-CREATE INDEX idx_events_company ON events(company_id);
-CREATE INDEX idx_events_division ON events(division);
-CREATE INDEX idx_events_created ON events(created_at DESC);
-CREATE INDEX idx_logs_company ON logs(company_id);
-CREATE INDEX idx_logs_division ON logs(division);
-CREATE INDEX idx_logs_source ON logs(source);
-CREATE INDEX idx_logs_timestamp ON logs(timestamp DESC);

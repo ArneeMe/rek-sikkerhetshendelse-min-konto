@@ -1,3 +1,4 @@
+// src/app/game/layout.tsx
 import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
@@ -5,6 +6,7 @@ import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
 import { getNavItems } from '@/lib/division-utils';
+import { COMPANY_NAME } from '@/lib/constants';
 
 export default async function GameLayout({
                                              children,
@@ -31,8 +33,8 @@ export default async function GameLayout({
                             <Link href="/game" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
                                 <Shield className="w-6 h-6 text-blue-500" />
                                 <div>
-                                    <h1 className="text-xl font-bold text-slate-100">Nordavind Sikkerhetssenter</h1>
-                                    <p className="text-xs text-slate-400">{session.companyName}</p>
+                                    <h1 className="text-xl font-bold text-slate-100">{COMPANY_NAME} - Sikkerhetssenter</h1>
+                                    <p className="text-xs text-slate-400">{session.teamName}</p>
                                 </div>
                             </Link>
 
