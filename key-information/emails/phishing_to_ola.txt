@@ -1,0 +1,15 @@
+Dear User,
+
+     Your Microsoft 365 license will expire in 24 hours. To avoid service interruption, please verify your account immediately.
+
+     Click here to verify: http://microsoft-verify-account.com/renew
+
+     Failure to verify will result in:
+     - Loss of email access
+     - Deletion of all files in OneDrive
+     - Suspension of Teams access
+
+     This is an automated message from Microsoft Support.
+
+     Best regards,
+     Microsoft 365 Support Team
