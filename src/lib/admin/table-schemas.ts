@@ -1,0 +1,188 @@
+// src/lib/admin/table-schemas.ts
+// Centralized table schema definitions for admin forms
+// Based on database types in src/types/database.ts
+
+export type FieldType = 'text' | 'textarea' | 'select' | 'team-select' | 'number' | 'datetime-local';
+
+export interface FieldConfig {
+    name: string;
+    label: string;
+    type: FieldType;
+    required: boolean;
+    placeholder?: string;
+    options?: string[];
+}
+
+export interface TableSchema {
+    label: string;
+    fields: FieldConfig[];
+}
+
+// Define field configurations based on database types
+export const TABLE_SCHEMAS: Record<string, TableSchema> = {
+    logs: {
+        label: 'System Logs',
+        fields: [
+            {
+                name: 'team_id',
+                label: 'Team',
+                type: 'team-select',
+                required: false
+            },
+            {
+                name: 'division',
+                label: 'Division',
+                type: 'select',
+                required: false,
+                options: ['tech', 'non-tech', 'management']
+            },
+            {
+                name: 'timestamp',
+                label: 'Timestamp',
+                type: 'datetime-local',
+                required: false,
+                placeholder: 'Leave empty for current time'
+            },
+            {
+                name: 'level',
+                label: 'Level',
+                type: 'select',
+                required: true,
+                options: ['info', 'warning', 'error', 'critical']
+            },
+            {
+                name: 'source',
+                label: 'Source',
+                type: 'text',
+                required: true,
+                placeholder: 'e.g., vest, ost, auth-system'
+            },
+            {
+                name: 'message',
+                label: 'Message',
+                type: 'textarea',
+                required: true
+            },
+        ]
+    },
+    emails: {
+        label: 'Emails',
+        fields: [
+            {
+                name: 'team_id',
+                label: 'Team',
+                type: 'team-select',
+                required: false
+            },
+            {
+                name: 'timestamp',
+                label: 'Timestamp',
+                type: 'datetime-local',
+                required: false,
+                placeholder: 'Leave empty for current time'
+            },
+            {
+                name: 'sender',
+                label: 'Sender',
+                type: 'text',
+                required: true,
+                placeholder: 'email@example.com'
+            },
+            {
+                name: 'recipient',
+                label: 'Recipient',
+                type: 'text',
+                required: true,
+                placeholder: 'user@company.no'
+            },
+            {
+                name: 'subject',
+                label: 'Subject',
+                type: 'text',
+                required: true
+            },
+            {
+                name: 'body',
+                label: 'Body',
+                type: 'textarea',
+                required: true
+            },
+            {
+                name: 'type',
+                label: 'Type',
+                type: 'select',
+                required: true,
+                options: ['internal', 'external', 'system']
+            },
+        ]
+    },
+    events: {
+        label: 'Events (Inbox)',
+        fields: [
+            {
+                name: 'team_id',
+                label: 'Team',
+                type: 'team-select',
+                required: false
+            },
+            {
+                name: 'division',
+                label: 'Division',
+                type: 'select',
+                required: false,
+                options: ['tech', 'non-tech', 'management']
+            },
+            {
+                name: 'type',
+                label: 'Type',
+                type: 'select',
+                required: true,
+                options: ['email', 'tweet', 'alert', 'server-status']
+            },
+            {
+                name: 'title',
+                label: 'Title',
+                type: 'text',
+                required: true
+            },
+            {
+                name: 'content',
+                label: 'Content',
+                type: 'textarea',
+                required: true
+            },
+            {
+                name: 'severity',
+                label: 'Severity',
+                type: 'select',
+                required: true,
+                options: ['low', 'medium', 'high', 'critical']
+            },
+            {
+                name: 'from_sender',
+                label: 'From',
+                type: 'text',
+                required: false,
+                placeholder: 'email or @handle'
+            },
+        ]
+    },
+};
+
+// Helper to get schema for a table
+export function getTableSchema(table: string): TableSchema | undefined {
+    return TABLE_SCHEMAS[table];
+}
+
+// Helper to get all available tables
+export function getAvailableTables(): Array<{ key: string; label: string }> {
+    return Object.entries(TABLE_SCHEMAS).map(([key, schema]) => ({
+        key,
+        label: schema.label
+    }));
+}
+
+// Type guard to validate table name
+export function isValidTable(table: string): table is keyof typeof TABLE_SCHEMAS {
+    return table in TABLE_SCHEMAS;
+}

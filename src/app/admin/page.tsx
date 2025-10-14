@@ -4,6 +4,7 @@ import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
 import { AdminControls } from './admin-controls';
 import { AdminAutoRefresh } from './admin-auto-refresh';
+import { InsertForm } from './insert-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Play, AlertCircle } from 'lucide-react';
@@ -155,6 +156,9 @@ export default async function AdminPage() {
                         </CardContent>
                     </Card>
                 )}
+
+                {/* Insert Form */}
+                <InsertForm />
             </div>
         </div>
     );
