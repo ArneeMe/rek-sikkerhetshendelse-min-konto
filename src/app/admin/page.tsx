@@ -24,7 +24,6 @@ export default async function AdminPage() {
         id: string;
         trigger_at_minutes: number;
         title: string;
-        division: string | null;
     }> = [];
 
     if (gameSession) {
@@ -128,19 +127,6 @@ export default async function AdminPage() {
                                     >
                                         <div className="flex-1">
                                             <div className="font-medium text-slate-100">{event.title}</div>
-                                            <div className="text-sm text-slate-400">
-                                                {event.division ? (
-                                                    <Badge variant="outline" className="text-xs mt-1 capitalize">
-                                                        {event.division === 'tech' ? 'Teknisk' :
-                                                            event.division === 'non-tech' ? 'Ikke-teknisk' :
-                                                                'Ledelse'}
-                                                    </Badge>
-                                                ) : (
-                                                    <Badge variant="outline" className="text-xs mt-1">
-                                                        Alle avdelinger
-                                                    </Badge>
-                                                )}
-                                            </div>
                                         </div>
                                         <div className="text-right">
                                             <div className="font-mono text-blue-400">

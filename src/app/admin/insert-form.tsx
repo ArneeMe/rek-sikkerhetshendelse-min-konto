@@ -46,13 +46,6 @@ export function InsertForm() {
                 processedData.team_id = parseInt(processedData.team_id as string);
             }
 
-            // Handle null divisions (only if division exists in schema)
-            if ('division' in processedData) {
-                if (processedData.division === 'all' || !processedData.division) {
-                    processedData.division = null;
-                }
-            }
-
             // Convert datetime-local to ISO format for timestamp fields
             if ('timestamp' in processedData && processedData.timestamp) {
                 // Convert from datetime-local format to ISO string
@@ -121,7 +114,6 @@ export function InsertForm() {
                             <SelectValue placeholder={`Select ${field.label}`} />
                         </SelectTrigger>
                         <SelectContent className="bg-slate-800 border-slate-700">
-                            {!field.required && <SelectItem value="all">All (Broadcast)</SelectItem>}
                             {field.options?.map((option: string) => (
                                 <SelectItem key={option} value={option} className="capitalize">
                                     {option}

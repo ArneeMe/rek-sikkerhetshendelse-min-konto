@@ -54,12 +54,3 @@ export function getRelativeTime(date: Date): string {
     if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
     return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
 }
-
-// Filter events by division
-export function filterByDivision<T extends { division?: string }>(
-    items: T[],
-    userDivision?: string
-): T[] {
-    if (!userDivision) return items; // Admin sees all
-    return items.filter(item => !item.division || item.division === userDivision);
-}

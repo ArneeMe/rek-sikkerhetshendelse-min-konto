@@ -30,13 +30,6 @@ export const TABLE_SCHEMAS: Record<string, TableSchema> = {
                 required: false
             },
             {
-                name: 'division',
-                label: 'Division',
-                type: 'select',
-                required: false,
-                options: ['tech', 'non-tech', 'management']
-            },
-            {
                 name: 'timestamp',
                 label: 'Timestamp',
                 type: 'datetime-local',
@@ -124,13 +117,6 @@ export const TABLE_SCHEMAS: Record<string, TableSchema> = {
                 label: 'Team',
                 type: 'team-select',
                 required: false
-            },
-            {
-                name: 'division',
-                label: 'Division',
-                type: 'select',
-                required: false,
-                options: ['tech', 'non-tech', 'management']
             },
             {
                 name: 'type',

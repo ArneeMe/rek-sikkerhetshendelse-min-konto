@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
-import { getNavItems } from '@/lib/division-utils';
+import { NAVIGATION } from '@/lib/navigation-config';
 import { COMPANY_NAME } from '@/lib/constants';
 
 export default async function GameLayout({
@@ -18,8 +18,6 @@ export default async function GameLayout({
     if (!session) {
         redirect('/login');
     }
-
-    const navItems = getNavItems();
 
     return (
         <div className="min-h-screen bg-slate-950">
@@ -40,7 +38,7 @@ export default async function GameLayout({
 
                             {/* Unified Navigation */}
                             <nav className="hidden md:flex items-center gap-2">
-                                {navItems.map((item) => {
+                                {NAVIGATION.map((item) => {
                                     const Icon = item.icon;
                                     return (
                                         <Link key={item.href} href={item.href}>
