@@ -24,11 +24,11 @@ export interface NavItem {
 export const NAVIGATION: NavItem[] = [
     { icon: Home, label: 'Oversikt', href: '/game' },
     { icon: Inbox, label: 'Innboks', href: '/game/inbox' },
-    { icon: MessageSquare, label: 'Chat', href: '/game/chat' },
     { icon: Server, label: 'Servere', href: '/game/servers', hidden: true },
     { icon: FileText, label: 'Logger', href: '/game/logs' },
     { icon: Network, label: 'Nettverk', href: '/game/network', hidden: true },
-    { icon: Users, label: 'Brukeraktivitet', href: '/game/users' },
+    { icon: Users, label: 'Brukeraktivitet', href: '/game/users', hidden:true },
+    { icon: MessageSquare, label: 'Chat', href: '/game/chat' },
     { icon: Mail, label: 'E-postlogger', href: '/game/emails' },
     { icon: Phone, label: 'Kommunikasjon', href: '/game/comms', hidden: true },
     { icon: Shield, label: 'Retningslinjer', href: '/game/policies', hidden: true },

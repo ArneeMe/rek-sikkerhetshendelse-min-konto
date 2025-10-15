@@ -1,7 +1,11 @@
-import { NextResponse } from 'next/server';
+// src/app/api/auth/logout/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 import { clearSession } from '@/lib/session';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
     await clearSession();
-    return NextResponse.redirect(new URL('/login', process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'));
+
+    // Use the request origin to build the redirect URL
+    const url = new URL('/login', request.url);
+    return NextResponse.redirect(url);
 }
