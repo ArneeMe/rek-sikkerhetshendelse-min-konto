@@ -5,7 +5,7 @@ import { clearSession } from '@/lib/session';
 export async function POST(request: NextRequest) {
     await clearSession();
 
-    // Use the request origin to build the redirect URL
+    // Use 303 status to force GET method on redirect
     const url = new URL('/login', request.url);
-    return NextResponse.redirect(url);
+    return NextResponse.redirect(url, 303);
 }
