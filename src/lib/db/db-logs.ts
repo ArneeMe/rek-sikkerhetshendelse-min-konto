@@ -1,98 +1,114 @@
-// src/lib/db-logs.ts
-// System logs management
-
+// src/lib/db/db-logs.ts
 import { supabase } from '../supabase';
-import { LogEntry } from '@/types';
-import type { DatabaseLog } from '@/types/database';
+import type { AppLog, DbLog, AzureAuditLog, AzureSigninLog } from '@/types/logs';
 
-// Helper to apply team filter
-function applyTeamFilter<T>(query: T, teamId: number): T {
-    if (teamId === 0) {
-        // Admin sees everything
-        return query;
-    }
-    // Regular team sees their own data + broadcasts (null team_id)
-    return (query as unknown as { or: (filter: string) => T }).or(`team_id.eq.${teamId},team_id.is.null`);
-}
-
-export async function getLogs(teamId: number, source?: string): Promise<LogEntry[]> {
-    let query = supabase
-        .from('logs')
+export async function getAppLogs(): Promise<AppLog[]> {
+    const { data, error } = await supabase
+        .from('app_logs')
         .select('*')
         .order('timestamp', { ascending: false });
 
-    query = applyTeamFilter(query, teamId);
-
-    if (source) {
-        query = query.eq('source', source);
-    }
-
-    const { data, error } = await query;
-
     if (error) {
-        console.error('Error fetching logs:', error);
+        console.error('Error fetching app logs:', error);
         return [];
     }
 
-    const typedLogs = (data || []) as DatabaseLog[];
-    return typedLogs.map((log) => ({
-        id: log.id,
-        timestamp: new Date(log.timestamp),
-        level: log.level,
-        source: log.source,
-        message: log.message,
-    }));
+    return (data || []) as AppLog[];
 }
 
-export async function getLogsByLevel(
-    teamId: number,
-    level: 'info' | 'warning' | 'error' | 'critical'
-): Promise<LogEntry[]> {
-    const query = supabase
-        .from('logs')
+export async function getDbLogs(): Promise<DbLog[]> {
+    const { data, error } = await supabase
+        .from('db_logs')
         .select('*')
-        .eq('level', level)
         .order('timestamp', { ascending: false });
 
-    const { data, error } = await applyTeamFilter(query, teamId);
-
     if (error) {
-        console.error('Error fetching logs by level:', error);
+        console.error('Error fetching db logs:', error);
         return [];
     }
 
-    const typedLogs = (data || []) as DatabaseLog[];
-    return typedLogs.map((log) => ({
-        id: log.id,
-        timestamp: new Date(log.timestamp),
-        level: log.level,
-        source: log.source,
-        message: log.message,
-    }));
+    return (data || []) as DbLog[];
 }
 
-export async function getLogsBySource(teamId: number, source: string): Promise<LogEntry[]> {
-    return getLogs(teamId, source);
-}
-
-export async function createLog(log: {
-    teamId: number | null;
-    level: string;
-    source: string;
-    message: string;
-}) {
-    const { data, error } = await supabase.from('logs').insert({
-        team_id: log.teamId,
-        division: null,
-        level: log.level,
-        source: log.source,
-        message: log.message,
-    }).select();
+export async function getAzureAuditLogs(): Promise<AzureAuditLog[]> {
+    const { data, error } = await supabase
+        .from('azure_audit_logs')
+        .select('*')
+        .order('timestamp', { ascending: false });
 
     if (error) {
-        console.error('Error creating log:', error);
-        return null;
+        console.error('Error fetching azure audit logs:', error);
+        return [];
     }
 
-    return data?.[0] as DatabaseLog | undefined;
+    return (data || []) as AzureAuditLog[];
+}
+
+export async function getAzureSigninLogs(): Promise<AzureSigninLog[]> {
+    const { data, error } = await supabase
+        .from('azure_signin_logs')
+        .select('*')
+        .order('timestamp', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching azure signin logs:', error);
+        return [];
+    }
+
+    return (data || []) as AzureSigninLog[];
+}
+
+// Helper function to count all error/failed logs across all log types
+export async function getCriticalLogsCount(): Promise<number> {
+    let count = 0;
+
+    // App logs - count HTTP errors (4xx, 5xx status codes)
+    const { data: appLogs } = await supabase
+        .from('app_logs')
+        .select('result');
+
+    if (appLogs) {
+        count += appLogs.filter(log => {
+            const result = log.result;
+            return result.startsWith('4') || result.startsWith('5');
+        }).length;
+    }
+
+    // DB logs - count failures
+    const { data: dbLogs } = await supabase
+        .from('db_logs')
+        .select('result');
+
+    if (dbLogs) {
+        count += dbLogs.filter(log =>
+            log.result.toLowerCase().includes('fail') ||
+            log.result.toLowerCase().includes('error')
+        ).length;
+    }
+
+    // Azure audit logs - count failures
+    const { data: azureAuditLogs } = await supabase
+        .from('azure_audit_logs')
+        .select('result');
+
+    if (azureAuditLogs) {
+        count += azureAuditLogs.filter(log =>
+            log.result.toLowerCase().includes('fail') ||
+            log.result.toLowerCase().includes('error')
+        ).length;
+    }
+
+    // Azure signin logs - count failures
+    const { data: azureSigninLogs } = await supabase
+        .from('azure_signin_logs')
+        .select('status');
+
+    if (azureSigninLogs) {
+        count += azureSigninLogs.filter(log =>
+            log.status.toLowerCase().includes('fail') ||
+            log.status.toLowerCase().includes('error')
+        ).length;
+    }
+
+    return count;
 }

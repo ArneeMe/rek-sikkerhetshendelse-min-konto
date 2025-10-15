@@ -116,6 +116,71 @@ CREATE TABLE scheduled_events (
                                   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+
+CREATE TABLE app_logs (
+                          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                          timestamp TIMESTAMPTZ NOT NULL,
+                          event_type TEXT NOT NULL,
+                          user_name TEXT NOT NULL,
+                          source_ip TEXT NOT NULL,
+                          target_resource TEXT NOT NULL,
+                          action TEXT NOT NULL,
+                          details TEXT NOT NULL,
+                          result TEXT NOT NULL,
+                          created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Database Logs
+CREATE TABLE db_logs (
+                         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                         timestamp TIMESTAMPTZ NOT NULL,
+                         event_type TEXT NOT NULL,
+                         user_name TEXT NOT NULL,
+                         source_ip TEXT NOT NULL,
+                         database_name TEXT NOT NULL,
+                         query TEXT NOT NULL,
+                         rows_affected TEXT NOT NULL,
+                         details TEXT NOT NULL,
+                         result TEXT NOT NULL,
+                         created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Azure Audit Logs
+CREATE TABLE azure_audit_logs (
+                                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                  timestamp TIMESTAMPTZ NOT NULL,
+                                  actor TEXT NOT NULL,
+                                  action TEXT NOT NULL,
+                                  target TEXT NOT NULL,
+                                  target_type TEXT NOT NULL,
+                                  details TEXT NOT NULL,
+                                  source_ip TEXT NOT NULL,
+                                  result TEXT NOT NULL,
+                                  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Azure Sign-in Logs
+CREATE TABLE azure_signin_logs (
+                                   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                   timestamp TIMESTAMPTZ NOT NULL,
+                                   user_name TEXT NOT NULL,
+                                   source_ip TEXT NOT NULL,
+                                   location TEXT NOT NULL,
+                                   application TEXT NOT NULL,
+                                   status TEXT NOT NULL,
+                                   failure_reason TEXT,
+                                   device_info TEXT NOT NULL,
+                                   created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_app_logs_timestamp ON app_logs(timestamp DESC);
+CREATE INDEX idx_db_logs_timestamp ON db_logs(timestamp DESC);
+CREATE INDEX idx_azure_audit_logs_timestamp ON azure_audit_logs(timestamp DESC);
+CREATE INDEX idx_azure_signin_logs_timestamp ON azure_signin_logs(timestamp DESC);
+
+
+
 -- ===== INDEXES =====
 -- Servers
 CREATE INDEX idx_servers_status ON servers(status);
