@@ -1,6 +1,5 @@
 // src/lib/db.ts
 // Main database module - barrel export for all database operations
-// This maintains backward compatibility while organizing code into focused modules
 
 // Game session management
 export {
@@ -28,10 +27,11 @@ export {
 
 // Logs management
 export {
-    getLogs,
-    getLogsByLevel,
-    getLogsBySource,
-    createLog,
+    getAppLogs,
+    getDbLogs,
+    getAzureAuditLogs,
+    getAzureSigninLogs,
+    getCriticalLogsCount,
 } from './db/db-logs';
 
 // User activity

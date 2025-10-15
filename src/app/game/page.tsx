@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/ui/stat-card';
 import { ListItem } from '@/components/ui/list-item';
 import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone} from 'lucide-react';
-import { getEvents, getServers, getLogs } from '@/lib/db';
+import { getEvents, getServers, getCriticalLogsCount } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import { getSeverityColor } from '@/lib/ui-helpers';
 import { COMPANY_NAME } from '@/lib/constants';
@@ -14,11 +14,10 @@ export default async function GameDashboard() {
     const session = await getSession();
     const events = await getEvents(session!.teamId);
     const servers = await getServers();
-    const logs = await getLogs(session!.teamId);
+    const criticalLogsCount = await getCriticalLogsCount();
 
     const unreadCount = events.filter((e) => !e.read).length;
     const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
-    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
 
     return (
         <div className="space-y-6">
@@ -66,12 +65,12 @@ export default async function GameDashboard() {
                 />
 
                 <StatCard
-                    title="Kritiske logger"
-                    value={criticalLogs}
+                    title="Feilede logger"
+                    value={criticalLogsCount}
                     description="Klikk for å se logger"
                     icon={FileText}
                     iconColor="text-red-400"
-                    badge={criticalLogs > 0 ? {
+                    badge={criticalLogsCount > 0 ? {
                         text: 'Gjennomgang Påkrevd',
                         className: 'bg-red-600'
                     } : undefined}

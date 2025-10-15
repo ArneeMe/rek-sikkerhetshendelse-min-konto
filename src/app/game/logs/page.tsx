@@ -1,24 +1,29 @@
 // src/app/game/logs/page.tsx
-import { getLogs } from '@/lib/db';
-import { getSession } from '@/lib/session';
-import { SERVERS } from '@/lib/mock-data';
 import { PageHeader } from '@/components/game/PageHeader';
 import { FileText } from 'lucide-react';
 import { LogsClient } from './logs-client';
+import { getAppLogs, getDbLogs, getAzureAuditLogs, getAzureSigninLogs } from '@/lib/db';
 
 export default async function LogsPage() {
-    const session = await getSession();
-    const logs = await getLogs(session!.teamId);
+    const appLogs = await getAppLogs();
+    const dbLogs = await getDbLogs();
+    const azureAuditLogs = await getAzureAuditLogs();
+    const azureSigninLogs = await getAzureSigninLogs();
 
     return (
         <div className="space-y-6">
             <PageHeader
                 icon={FileText}
                 title="Systemlogger"
-                description="Overvåk basestasjonaktivitet og sikkerhetshendelser"
+                description="Overvåk applikasjoner, databaser og Azure-aktivitet"
             />
 
-            <LogsClient logs={logs} servers={SERVERS} />
+            <LogsClient
+                appLogs={appLogs}
+                dbLogs={dbLogs}
+                azureAuditLogs={azureAuditLogs}
+                azureSigninLogs={azureSigninLogs}
+            />
         </div>
     );
 }
