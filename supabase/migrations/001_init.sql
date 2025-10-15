@@ -1,6 +1,7 @@
 -- supabase/migrations/001_init.sql
 -- Core database schema for cyber security game
 -- Single company (Nordavind AS) with multiple teams
+-- NO DIVISIONS - only team-based filtering
 
 -- ===== SERVERS TABLE =====
 CREATE TABLE servers (
@@ -17,7 +18,6 @@ CREATE TABLE servers (
 CREATE TABLE events (
                         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                         team_id INT,  -- null = broadcast to all teams
-                        division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),  -- null = visible to all divisions
                         type TEXT NOT NULL CHECK (type IN ('email', 'tweet', 'alert', 'server-status')),
                         title TEXT NOT NULL,
                         content TEXT NOT NULL,
@@ -32,7 +32,6 @@ CREATE TABLE events (
 CREATE TABLE logs (
                       id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                       team_id INT,  -- null = visible to all teams
-                      division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),  -- null = visible to all divisions
                       timestamp TIMESTAMPTZ DEFAULT NOW(),
                       level TEXT NOT NULL CHECK (level IN ('info', 'warning', 'error', 'critical')),
                       source TEXT NOT NULL,  -- server id reference
@@ -58,7 +57,6 @@ CREATE TABLE emails (
 CREATE TABLE email_logs (
                             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                             team_id INT,
-                            division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
                             timestamp TIMESTAMPTZ DEFAULT NOW(),
                             sender TEXT NOT NULL,
                             recipient TEXT NOT NULL,
@@ -73,7 +71,6 @@ CREATE TABLE email_logs (
 CREATE TABLE user_activity (
                                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                                team_id INT,
-                               division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
                                user_id TEXT NOT NULL,
                                name TEXT NOT NULL,
                                role TEXT NOT NULL,
@@ -87,7 +84,6 @@ CREATE TABLE user_activity (
 CREATE TABLE network_connections (
                                      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                                      team_id INT,
-                                     division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
                                      timestamp TIMESTAMPTZ DEFAULT NOW(),
                                      source TEXT NOT NULL,
                                      destination TEXT NOT NULL,
@@ -112,7 +108,6 @@ CREATE TABLE game_sessions (
 CREATE TABLE scheduled_events (
                                   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
                                   trigger_at_minutes INT NOT NULL,  -- Minutes after game start
-                                  division TEXT CHECK (division IN ('tech', 'non-tech', 'management')),
                                   type TEXT NOT NULL CHECK (type IN ('email', 'tweet', 'alert', 'server-status')),
                                   title TEXT NOT NULL,
                                   content TEXT NOT NULL,
@@ -127,12 +122,10 @@ CREATE INDEX idx_servers_status ON servers(status);
 
 -- Events
 CREATE INDEX idx_events_team ON events(team_id);
-CREATE INDEX idx_events_division ON events(division);
 CREATE INDEX idx_events_created ON events(created_at DESC);
 
 -- Logs
 CREATE INDEX idx_logs_team ON logs(team_id);
-CREATE INDEX idx_logs_division ON logs(division);
 CREATE INDEX idx_logs_source ON logs(source);
 CREATE INDEX idx_logs_timestamp ON logs(timestamp DESC);
 
@@ -145,15 +138,12 @@ CREATE INDEX idx_emails_type ON emails(type);
 
 -- Email Logs
 CREATE INDEX idx_email_logs_team ON email_logs(team_id);
-CREATE INDEX idx_email_logs_division ON email_logs(division);
 
 -- User Activity
 CREATE INDEX idx_user_activity_team ON user_activity(team_id);
-CREATE INDEX idx_user_activity_division ON user_activity(division);
 
 -- Network Connections
 CREATE INDEX idx_network_connections_team ON network_connections(team_id);
-CREATE INDEX idx_network_connections_division ON network_connections(division);
 
 -- Game Sessions
 CREATE INDEX idx_game_sessions_status ON game_sessions(status);
