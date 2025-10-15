@@ -9,6 +9,7 @@ import {
     Mail,
     Phone,
     Shield,
+    MessageSquare,
     LucideIcon
 } from 'lucide-react';
 
@@ -16,13 +17,14 @@ export interface NavItem {
     icon: LucideIcon;
     label: string;
     href: string;
-    hidden?: boolean; // Add hidden flag
+    hidden?: boolean;
 }
 
 // Unified navigation for all users
 export const NAVIGATION: NavItem[] = [
     { icon: Home, label: 'Oversikt', href: '/game' },
     { icon: Inbox, label: 'Innboks', href: '/game/inbox' },
+    { icon: MessageSquare, label: 'Chat', href: '/game/chat' },
     { icon: Server, label: 'Servere', href: '/game/servers', hidden: true },
     { icon: FileText, label: 'Logger', href: '/game/logs' },
     { icon: Network, label: 'Nettverk', href: '/game/network', hidden: true },

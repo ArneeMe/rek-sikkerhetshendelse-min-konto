@@ -50,3 +50,10 @@ export {
     getBlockedConnections,
     updateConnectionStatus,
 } from './db/db-network';
+
+// Chat/Discord
+export {
+    getChannels,
+    getMessages,
+    getAllMessages,
+} from './db/db-chat';
