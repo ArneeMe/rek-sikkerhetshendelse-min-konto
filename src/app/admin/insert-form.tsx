@@ -1,7 +1,7 @@
 // src/app/admin/insert-form.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -17,6 +17,17 @@ export function InsertForm() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState<Record<string, unknown> | null>(null);
     const [error, setError] = useState<string>('');
+    const [channels, setChannels] = useState<Array<{ id: string; name: string }>>([]);
+
+    // Fetch channels when messages table is selected
+    useEffect(() => {
+        if (table === 'messages') {
+            fetch('/api/admin/channels')
+                .then(res => res.json())
+                .then(data => setChannels(data.channels || []))
+                .catch(() => setChannels([]));
+        }
+    }, [table]);
 
     const currentSchema = TABLE_SCHEMAS[table as keyof typeof TABLE_SCHEMAS];
     const availableTables = getAvailableTables();
@@ -28,27 +39,27 @@ export function InsertForm() {
         setSuccess(null);
 
         try {
-            // Only include fields that are defined in the current schema
             const schemaFieldNames = currentSchema.fields.map(f => f.name);
             const processedData: Record<string, string | number | null> = {};
 
-            // Only process fields that belong to this table
+            // Only process fields that are defined in the current schema
             for (const fieldName of schemaFieldNames) {
                 if (formData[fieldName] !== undefined && formData[fieldName] !== '') {
                     processedData[fieldName] = formData[fieldName];
                 }
             }
 
-            // Convert team_id to number or null
-            if (processedData.team_id === 'broadcast' || processedData.team_id === undefined) {
-                processedData.team_id = null;
-            } else if (processedData.team_id) {
-                processedData.team_id = parseInt(processedData.team_id as string);
+            // Only convert team_id if it exists in this table's schema
+            if (schemaFieldNames.includes('team_id')) {
+                if (processedData.team_id === 'broadcast' || processedData.team_id === undefined) {
+                    processedData.team_id = null;
+                } else if (processedData.team_id) {
+                    processedData.team_id = parseInt(processedData.team_id as string);
+                }
             }
 
-            // Convert datetime-local to ISO format for timestamp fields
-            if ('timestamp' in processedData && processedData.timestamp) {
-                // Convert from datetime-local format to ISO string
+            // Convert datetime-local to ISO format for timestamp fields (if this table has timestamp)
+            if (schemaFieldNames.includes('timestamp') && processedData.timestamp) {
                 const dateValue = new Date(processedData.timestamp as string);
                 processedData.timestamp = dateValue.toISOString();
             }
@@ -64,6 +75,11 @@ export function InsertForm() {
 
             const result = await response.json();
 
+            if (!response.ok) {
+                setError(result.error || 'Insert failed');
+                setLoading(false);
+                return;
+            }
 
             setSuccess(result.data);
             setFormData({});
@@ -73,10 +89,30 @@ export function InsertForm() {
             setLoading(false);
         }
     };
-
     const renderField = (field: FieldConfig) => {
         const value = formData[field.name] ?? '';
         const stringValue = typeof value === 'number' ? value.toString() : value;
+
+        // Special handling for channel_id select
+        if (field.name === 'channel_id' && table === 'messages') {
+            return (
+                <Select
+                    value={stringValue}
+                    onValueChange={(val) => setFormData({ ...formData, [field.name]: val })}
+                >
+                    <SelectTrigger className="bg-slate-800 border-slate-700">
+                        <SelectValue placeholder="Select channel" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-slate-800 border-slate-700">
+                        {channels.map((channel) => (
+                            <SelectItem key={channel.id} value={channel.id}>
+                                #{channel.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            );
+        }
 
         switch (field.type) {
             case 'team-select':

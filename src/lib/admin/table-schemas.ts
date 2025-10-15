@@ -153,6 +153,46 @@ export const TABLE_SCHEMAS: Record<string, TableSchema> = {
             },
         ]
     },
+    messages: {
+        label: 'Chat Messages',
+        fields: [
+            {
+                name: 'channel_id',
+                label: 'Channel',
+                type: 'select',
+                required: true,
+                options: [] // Will be populated dynamically
+            },
+            {
+                name: 'sender_name',
+                label: 'Sender Name',
+                type: 'text',
+                required: true,
+                placeholder: 'e.g., kari.nordmann, security@company.no'
+            },
+            {
+                name: 'role',
+                label: 'Role',
+                type: 'select',
+                required: true,
+                options: ['user', 'system', 'admin']
+            },
+            {
+                name: 'content',
+                label: 'Message Content',
+                type: 'textarea',
+                required: true,
+                placeholder: 'Message text...'
+            },
+            {
+                name: 'timestamp',
+                label: 'Timestamp',
+                type: 'datetime-local',
+                required: false,
+                placeholder: 'Leave empty for current time'
+            },
+        ]
+    },
 };
 
 // Helper to get schema for a table
@@ -172,3 +212,4 @@ export function getAvailableTables(): Array<{ key: string; label: string }> {
 export function isValidTable(table: string): table is keyof typeof TABLE_SCHEMAS {
     return table in TABLE_SCHEMAS;
 }
+

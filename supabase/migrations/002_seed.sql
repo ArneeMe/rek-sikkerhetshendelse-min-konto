@@ -189,3 +189,24 @@ Dette er riktig for miljøet og riktig for fremtiden.
 Med vennlig hilsen,
 Direktøren',
      '2024-09-15 12:00:00', 'internal');
+
+-- Indexes
+CREATE INDEX idx_messages_channel ON messages(channel_id);
+CREATE INDEX idx_messages_timestamp ON messages(timestamp DESC);
+
+-- Seed channels
+INSERT INTO channels (name, description) VALUES
+                                             ('general', 'General company discussion'),
+                                             ('security', 'Security team and incident response'),
+                                             ('ferie', 'Vacation calendar and time off');
+
+-- Seed example messages with roles
+INSERT INTO messages (channel_id, sender_name, role, content, timestamp) VALUES
+                                                                             ((SELECT id FROM channels WHERE name = 'general'), 'kari.nordmann', 'user', 'God morgen alle! ☀️', '2024-10-03 08:15:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'general'), 'per.jensen', 'user', 'Morgen! Noen som vet om Ola er tilbake i dag?', '2024-10-03 08:22:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'general'), 'kari.nordmann', 'user', 'Han er på ferie denne uken tror jeg', '2024-10-03 08:25:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'ferie'), 'hr@company.no', 'system', 'Ola Hansen er på ferie 3. oktober - 10. oktober', '2024-10-01 10:00:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'ferie'), 'hr@company.no', 'system', 'Kari Nordmann tar ferie 15. oktober - 22. oktober', '2024-10-01 10:01:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'security'), 'security@company.no', 'system', 'Reminder: Monthly phishing training er på fredag kl 14:00', '2024-10-02 09:00:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'security'), 'per.jensen', 'user', 'Jeg har sett noen rare login-forsøk i natt...', '2024-10-04 08:30:00'),
+                                                                             ((SELECT id FROM channels WHERE name = 'security'), 'security@company.no', 'system', 'Vi undersøker. Hold dere oppdatert.', '2024-10-04 08:45:00');

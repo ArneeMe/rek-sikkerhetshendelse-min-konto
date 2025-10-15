@@ -173,6 +173,29 @@ CREATE TABLE azure_signin_logs (
                                    created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+- Channels table
+CREATE TABLE channels (
+                          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                          name TEXT NOT NULL UNIQUE,
+                          description TEXT,
+                          created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Messages table
+CREATE TABLE messages (
+                          id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                          channel_id UUID NOT NULL REFERENCES channels(id) ON DELETE CASCADE,
+                          sender_name TEXT NOT NULL,
+                          role TEXT NOT NULL DEFAULT 'user' CHECK (role IN ('user', 'system', 'admin')),
+                          content TEXT NOT NULL,
+                          timestamp TIMESTAMPTZ DEFAULT NOW(),
+                          created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes
+CREATE INDEX idx_messages_channel ON messages(channel_id);
+CREATE INDEX idx_messages_timestamp ON messages(timestamp DESC);
+
 -- Indexes
 CREATE INDEX idx_app_logs_timestamp ON app_logs(timestamp DESC);
 CREATE INDEX idx_db_logs_timestamp ON db_logs(timestamp DESC);
