@@ -127,6 +127,32 @@ export async function markEventAsRead(eventId: string): Promise<boolean> {
     return true;
 }
 
+export async function markAllEventsAsRead(teamId: number): Promise<boolean> {
+    try {
+        let query = supabase
+            .from('events')
+            .update({ read: true })
+            .eq('read', false);
+
+        // Apply team filter
+        if (teamId !== 0) {
+            query = query.or(`team_id.eq.${teamId},team_id.is.null`);
+        }
+
+        const { error } = await query;
+
+        if (error) {
+            console.error('Error marking all events as read:', error);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error in markAllEventsAsRead:', error);
+        return false;
+    }
+}
+
 export async function createEvent(event: {
     teamId: number | null;
     type: string;

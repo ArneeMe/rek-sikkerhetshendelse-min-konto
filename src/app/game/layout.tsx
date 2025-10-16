@@ -4,9 +4,11 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
 import { NAVIGATION } from '@/lib/navigation-config';
 import { COMPANY_NAME } from '@/lib/constants';
+import { getEvents } from '@/lib/db';
 
 export default async function GameLayout({
                                              children,
@@ -18,6 +20,10 @@ export default async function GameLayout({
     if (!session) {
         redirect('/login');
     }
+
+    // Get unread count for badge
+    const events = await getEvents(session.teamId);
+    const unreadCount = events.filter((e) => !e.read).length;
 
     // Filter out hidden navigation items
     const visibleNavigation = NAVIGATION.filter(item => !item.hidden);
@@ -43,11 +49,18 @@ export default async function GameLayout({
                             <nav className="flex items-center gap-1 md:gap-2">
                                 {visibleNavigation.map((item) => {
                                     const Icon = item.icon;
+                                    const isInbox = item.href === '/game/inbox';
+
                                     return (
                                         <Link key={item.href} href={item.href}>
-                                            <Button variant="ghost" size="sm" className="text-slate-300 hover:text-slate-100">
+                                            <Button variant="ghost" size="sm" className="text-slate-300 hover:text-slate-100 relative">
                                                 <Icon className="w-4 h-4 md:mr-2" />
                                                 <span className="hidden md:inline">{item.label}</span>
+                                                {isInbox && unreadCount > 0 && (
+                                                    <Badge className="absolute -top-1 -right-1 md:relative md:top-0 md:right-0 md:ml-2 bg-blue-600 text-white min-w-5 h-5 flex items-center justify-center p-1 text-xs">
+                                                        {unreadCount}
+                                                    </Badge>
+                                                )}
                                             </Button>
                                         </Link>
                                     );

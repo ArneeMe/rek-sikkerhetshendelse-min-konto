@@ -2,13 +2,17 @@
 import { InboxItem } from '@/components/game/InboxItem';
 import { PageHeader } from '@/components/game/PageHeader';
 import { EmptyState } from '@/components/game/EmptyState';
-import { getEvents } from '@/lib/db';
+import { getEvents, markAllEventsAsRead } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import { Badge } from '@/components/ui/badge';
 import { Inbox } from 'lucide-react';
 
 export default async function InboxPage() {
     const session = await getSession();
+
+    // Mark all events as read when page is visited
+    await markAllEventsAsRead(session!.teamId);
+
     const events = await getEvents(session!.teamId);
     const unreadCount = events.filter((e) => !e.read).length;
 

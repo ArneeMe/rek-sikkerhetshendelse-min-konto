@@ -21,6 +21,7 @@ export {
     getEvents,
     getEventById,
     markEventAsRead,
+    markAllEventsAsRead,
     createEvent,
     createScheduledEvent,
 } from './db/db-events';
