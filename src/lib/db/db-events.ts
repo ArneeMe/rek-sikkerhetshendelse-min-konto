@@ -1,9 +1,9 @@
-// src/lib/db-events.ts
+// src/lib/db/db-events.ts
 // Events management - inbox items, alerts, emails, tweets
 
 import { supabase } from '../supabase';
 import { Event } from '@/types';
-import type { DatabaseEvent, DatabaseScheduledEvent } from '@/types/database';
+import type { DatabaseScheduledEvent, DatabaseEventRead } from '@/types/database';
 import { getActiveGameSession } from './db-game-sessions';
 
 // Helper to apply team filter
@@ -17,90 +17,102 @@ function applyTeamFilter<T>(query: T, teamId: number): T {
 }
 
 export async function getEvents(teamId: number): Promise<Event[]> {
-    // Get static events
-    const staticQuery = supabase
-        .from('events')
-        .select('*')
-        .order('created_at', { ascending: false });
+    // Get scheduled events based on game time
+    const session = await getActiveGameSession();
 
-    const { data: staticEvents, error: staticError } = await applyTeamFilter(
-        staticQuery,
-        teamId
-    );
-
-    if (staticError) {
-        console.error('Error fetching events:', staticError);
+    if (!session) {
         return [];
     }
 
-    // Get scheduled events based on game time
-    const session = await getActiveGameSession();
-    let scheduledEvents: Event[] = [];
+    const minutesElapsed = Math.floor(
+        (Date.now() - new Date(session.started_at).getTime()) / 60000
+    );
 
-    if (session) {
-        const minutesElapsed = Math.floor(
-            (Date.now() - new Date(session.started_at).getTime()) / 60000
-        );
+    // Get all scheduled events that should be visible at this time
+    const scheduledQuery = supabase
+        .from('scheduled_events')
+        .select('*')
+        .lte('trigger_at_minutes', minutesElapsed);
 
-        const scheduledQuery = supabase
-            .from('scheduled_events')
-            .select('*')
-            .lte('trigger_at_minutes', minutesElapsed);
+    const { data: scheduled, error: scheduledError } = await applyTeamFilter(
+        scheduledQuery,
+        teamId
+    );
 
-        const { data: scheduled, error: scheduledError } = await applyTeamFilter(
-            scheduledQuery,
-            teamId
-        );
+    if (scheduledError || !scheduled) {
+        console.error('Error fetching scheduled events:', scheduledError);
+        return [];
+    }
 
-        if (!scheduledError && scheduled) {
-            const typedScheduled = scheduled as DatabaseScheduledEvent[];
-            scheduledEvents = typedScheduled.map((event) => ({
-                id: `scheduled-${event.id}`,
-                type: event.type,
-                title: event.title,
-                content: event.content,
-                severity: event.severity,
-                from: event.from_sender || undefined,
-                read: false,
-                timestamp: new Date(
-                    new Date(session.started_at).getTime() +
-                    event.trigger_at_minutes * 60000
-                ),
-            }));
+    // Get read status for this team (skip for admin)
+    let readEventIds = new Set<string>();
+    if (teamId !== 0) {
+        const { data: reads, error: readsError } = await supabase
+            .from('event_reads')
+            .select('scheduled_event_id')
+            .eq('team_id', teamId);
+
+        if (!readsError && reads) {
+            readEventIds = new Set(reads.map(r => r.scheduled_event_id));
         }
     }
 
-    // Map static events to Event type
-    const typedStaticEvents = (staticEvents || []) as DatabaseEvent[];
-    const mappedStaticEvents: Event[] = typedStaticEvents.map((event) => ({
+    // Map scheduled events to Event type
+    const typedScheduled = scheduled as DatabaseScheduledEvent[];
+    const events: Event[] = typedScheduled.map((event) => ({
         id: event.id,
         type: event.type,
         title: event.title,
         content: event.content,
         severity: event.severity,
         from: event.from_sender || undefined,
-        read: event.read,
-        timestamp: new Date(event.created_at),
+        read: readEventIds.has(event.id),
+        timestamp: new Date(
+            new Date(session.started_at).getTime() +
+            event.trigger_at_minutes * 60000
+        ),
     }));
 
-    // Merge and sort by timestamp
-    return [...mappedStaticEvents, ...scheduledEvents].sort(
-        (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-    );
+    // Sort by timestamp descending
+    return events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 }
 
 export async function getEventById(eventId: string, teamId: number): Promise<Event | null> {
-    const { data, error } = await applyTeamFilter(
-        supabase.from('events').select('*').eq('id', eventId),
-        teamId
-    );
+    const { data, error } = await supabase
+        .from('scheduled_events')
+        .select('*')
+        .eq('id', eventId)
+        .single();
 
-    if (error || !data || data.length === 0) {
+    if (error || !data) {
         console.error('Error fetching event:', error);
         return null;
     }
 
-    const event = data[0] as DatabaseEvent;
+    const event = data as DatabaseScheduledEvent;
+
+    // Check if this team has read it
+    let isRead = false;
+    if (teamId !== 0) {
+        const { data: readData } = await supabase
+            .from('event_reads')
+            .select('id')
+            .eq('team_id', teamId)
+            .eq('scheduled_event_id', eventId)
+            .single();
+
+        isRead = !!readData;
+    }
+
+    // Get game session to calculate timestamp
+    const session = await getActiveGameSession();
+    const timestamp = session
+        ? new Date(
+            new Date(session.started_at).getTime() +
+            event.trigger_at_minutes * 60000
+        )
+        : new Date();
+
     return {
         id: event.id,
         type: event.type,
@@ -108,41 +120,67 @@ export async function getEventById(eventId: string, teamId: number): Promise<Eve
         content: event.content,
         severity: event.severity,
         from: event.from_sender || undefined,
-        read: event.read,
-        timestamp: new Date(event.created_at),
+        read: isRead,
+        timestamp,
     };
 }
 
-export async function markEventAsRead(eventId: string): Promise<boolean> {
-    const { error } = await supabase
-        .from('events')
-        .update({ read: true })
-        .eq('id', eventId);
-
-    if (error) {
-        console.error('Error marking event as read:', error);
-        return false;
+export async function markEventAsRead(eventId: string, teamId: number): Promise<boolean> {
+    // Admin doesn't mark events as read
+    if (teamId === 0) {
+        return true;
     }
 
-    return true;
+    try {
+        const { error } = await supabase
+            .from('event_reads')
+            .upsert({
+                team_id: teamId,
+                scheduled_event_id: eventId,
+            }, {
+                onConflict: 'team_id,scheduled_event_id'
+            });
+
+        if (error) {
+            console.error('Error marking event as read:', error);
+            return false;
+        }
+
+        return true;
+    } catch (error) {
+        console.error('Error in markEventAsRead:', error);
+        return false;
+    }
 }
 
 export async function markAllEventsAsRead(teamId: number): Promise<boolean> {
+    // Admin doesn't mark events as read
+    if (teamId === 0) {
+        return true;
+    }
+
     try {
-        let query = supabase
-            .from('events')
-            .update({ read: true })
-            .eq('read', false);
+        // Get all currently visible events
+        const events = await getEvents(teamId);
 
-        // Apply team filter
-        if (teamId !== 0) {
-            query = query.or(`team_id.eq.${teamId},team_id.is.null`);
-        }
+        // Mark each one as read
+        const readPromises = events.map(event =>
+            supabase
+                .from('event_reads')
+                .upsert({
+                    team_id: teamId,
+                    scheduled_event_id: event.id,
+                }, {
+                    onConflict: 'team_id,scheduled_event_id'
+                })
+        );
 
-        const { error } = await query;
+        const results = await Promise.all(readPromises);
 
-        if (error) {
-            console.error('Error marking all events as read:', error);
+        // Check if any failed
+        const anyErrors = results.some(result => result.error);
+        if (anyErrors) {
+            console.error('Some events failed to mark as read');
             return false;
         }
 
@@ -153,33 +191,8 @@ export async function markAllEventsAsRead(teamId: number): Promise<boolean> {
     }
 }
 
-export async function createEvent(event: {
-    teamId: number | null;
-    type: string;
-    title: string;
-    content: string;
-    severity: string;
-    from?: string;
-}) {
-    const { data, error } = await supabase.from('events').insert({
-        team_id: event.teamId,
-        division: null,
-        type: event.type,
-        title: event.title,
-        content: event.content,
-        severity: event.severity,
-        from_sender: event.from,
-    }).select();
-
-    if (error) {
-        console.error('Error creating event:', error);
-        return null;
-    }
-
-    return data?.[0] as DatabaseEvent | undefined;
-}
-
 export async function createScheduledEvent(event: {
+    teamId?: number | null;
     triggerAtMinutes: number;
     type: string;
     title: string;
@@ -188,6 +201,7 @@ export async function createScheduledEvent(event: {
     from?: string;
 }) {
     const { data, error } = await supabase.from('scheduled_events').insert({
+        team_id: event.teamId ?? null,
         trigger_at_minutes: event.triggerAtMinutes,
         division: null,
         type: event.type,
@@ -203,4 +217,25 @@ export async function createScheduledEvent(event: {
     }
 
     return data?.[0] as DatabaseScheduledEvent | undefined;
+}
+
+// Deprecated - keeping for backwards compatibility but redirects to createScheduledEvent
+export async function createEvent(event: {
+    teamId: number | null;
+    type: string;
+    title: string;
+    content: string;
+    severity: string;
+    from?: string;
+}) {
+    console.warn('createEvent is deprecated. Use createScheduledEvent instead.');
+    return createScheduledEvent({
+        teamId: event.teamId,
+        triggerAtMinutes: 0, // Immediate
+        type: event.type,
+        title: event.title,
+        content: event.content,
+        severity: event.severity,
+        from: event.from,
+    });
 }

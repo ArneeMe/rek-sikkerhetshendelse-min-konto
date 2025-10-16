@@ -192,6 +192,29 @@ CREATE TABLE messages (
                           created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- supabase/migrations/003_fix_read_tracking.sql
+-- Fix read tracking to be per-team instead of global
+
+-- Create event_reads junction table for tracking which teams have read which scheduled events
+CREATE TABLE event_reads (
+                             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                             team_id INT NOT NULL,
+                             scheduled_event_id UUID NOT NULL REFERENCES scheduled_events(id) ON DELETE CASCADE,
+                             read_at TIMESTAMPTZ DEFAULT NOW(),
+                             created_at TIMESTAMPTZ DEFAULT NOW(),
+                             UNIQUE(team_id, scheduled_event_id)
+);
+
+CREATE INDEX idx_event_reads_team ON event_reads(team_id);
+CREATE INDEX idx_event_reads_event ON event_reads(scheduled_event_id);
+
+-- Drop the old events table since we're only using scheduled_events now
+DROP TABLE IF EXISTS events CASCADE;
+
+-- Add team_id to scheduled_events for team-specific events (null = broadcast to all)
+ALTER TABLE scheduled_events ADD COLUMN IF NOT EXISTS team_id INT;
+CREATE INDEX idx_scheduled_events_team ON scheduled_events(team_id);
+
 -- Indexes
 CREATE INDEX idx_messages_channel ON messages(channel_id);
 CREATE INDEX idx_messages_timestamp ON messages(timestamp DESC);

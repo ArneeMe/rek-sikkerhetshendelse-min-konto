@@ -109,7 +109,7 @@ export const TABLE_SCHEMAS: Record<string, TableSchema> = {
             },
         ]
     },
-    events: {
+    scheduled_events: {
         label: 'Events (Inbox)',
         fields: [
             {
@@ -117,6 +117,13 @@ export const TABLE_SCHEMAS: Record<string, TableSchema> = {
                 label: 'Team',
                 type: 'team-select',
                 required: false
+            },
+            {
+                name: 'trigger_at_minutes',
+                label: 'Trigger at (minutes)',
+                type: 'number',
+                required: true,
+                placeholder: 'Minutes after game start (0 = immediate)'
             },
             {
                 name: 'type',
@@ -212,4 +219,3 @@ export function getAvailableTables(): Array<{ key: string; label: string }> {
 export function isValidTable(table: string): table is keyof typeof TABLE_SCHEMAS {
     return table in TABLE_SCHEMAS;
 }
-

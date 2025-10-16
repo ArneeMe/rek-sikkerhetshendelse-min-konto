@@ -16,7 +16,11 @@ export default async function GameDashboard() {
     const servers = await getServers();
     const criticalLogsCount = await getCriticalLogsCount();
 
-    const unreadCount = events.filter((e) => !e.read).length;
+    // Count unread events (all events if admin, otherwise check read status)
+    const unreadCount = session?.teamId === 0
+        ? events.length
+        : events.filter((e) => !e.read).length;
+
     const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
 
     return (

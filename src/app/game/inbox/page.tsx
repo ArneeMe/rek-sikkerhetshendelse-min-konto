@@ -10,8 +10,10 @@ import { Inbox } from 'lucide-react';
 export default async function InboxPage() {
     const session = await getSession();
 
-    // Mark all events as read when page is visited
-    await markAllEventsAsRead(session!.teamId);
+    // Mark all events as read when page is visited (except for admin)
+    if (session && session.teamId !== 0) {
+        await markAllEventsAsRead(session.teamId);
+    }
 
     const events = await getEvents(session!.teamId);
     const unreadCount = events.filter((e) => !e.read).length;
@@ -41,7 +43,7 @@ export default async function InboxPage() {
                 <EmptyState
                     icon={Inbox}
                     message="Ingen hendelser ennå"
-                    submessage="Nye varsler vil vises her"
+                    submessage="Nye varsler vil vises her etter hvert som spillet utvikler seg"
                 />
             )}
         </div>

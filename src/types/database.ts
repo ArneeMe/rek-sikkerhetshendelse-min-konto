@@ -8,16 +8,15 @@ export interface DatabaseServer {
     updated_at: string;
 }
 
-export interface DatabaseEvent {
+export interface DatabaseEmail {
     id: string;
     team_id: number | null;
-    division: 'tech' | 'non-tech' | 'management' | null;
-    type: 'email' | 'tweet' | 'alert' | 'server-status';
-    title: string;
-    content: string;
-    severity: 'low' | 'medium' | 'high' | 'critical';
-    from_sender: string | null;
-    read: boolean;
+    sender: string;
+    recipient: string;
+    subject: string;
+    body: string;
+    timestamp: string;
+    type: 'internal' | 'external' | 'system';
     created_at: string;
 }
 
@@ -29,18 +28,6 @@ export interface DatabaseLog {
     level: 'info' | 'warning' | 'error' | 'critical';
     source: string;
     message: string;
-}
-
-export interface DatabaseEmail {
-    id: string;
-    team_id: number | null;
-    sender: string;
-    recipient: string;
-    subject: string;
-    body: string;
-    timestamp: string;
-    type: 'internal' | 'external' | 'system';
-    created_at: string;
 }
 
 export interface DatabaseUserActivity {
@@ -70,6 +57,7 @@ export interface DatabaseNetworkConnection {
 
 export interface DatabaseScheduledEvent {
     id: string;
+    team_id: number | null;
     trigger_at_minutes: number;
     division: 'tech' | 'non-tech' | 'management' | null;
     type: 'email' | 'tweet' | 'alert' | 'server-status';
@@ -77,6 +65,14 @@ export interface DatabaseScheduledEvent {
     content: string;
     severity: 'low' | 'medium' | 'high' | 'critical';
     from_sender: string | null;
+    created_at: string;
+}
+
+export interface DatabaseEventRead {
+    id: string;
+    team_id: number;
+    scheduled_event_id: string;
+    read_at: string;
     created_at: string;
 }
 

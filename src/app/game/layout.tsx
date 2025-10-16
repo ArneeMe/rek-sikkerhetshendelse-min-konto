@@ -4,8 +4,8 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
+import { UnreadBadge } from '@/components/game/UnreadBadge';
 import { NAVIGATION } from '@/lib/navigation-config';
 import { COMPANY_NAME } from '@/lib/constants';
 import { getEvents } from '@/lib/db';
@@ -21,9 +21,11 @@ export default async function GameLayout({
         redirect('/login');
     }
 
-    // Get unread count for badge
+    // Get initial unread count for SSR
     const events = await getEvents(session.teamId);
-    const unreadCount = events.filter((e) => !e.read).length;
+    const initialUnreadCount = session.teamId === 0
+        ? events.length
+        : events.filter((e) => !e.read).length;
 
     // Filter out hidden navigation items
     const visibleNavigation = NAVIGATION.filter(item => !item.hidden);
@@ -56,10 +58,8 @@ export default async function GameLayout({
                                             <Button variant="ghost" size="sm" className="text-slate-300 hover:text-slate-100 relative">
                                                 <Icon className="w-4 h-4 md:mr-2" />
                                                 <span className="hidden md:inline">{item.label}</span>
-                                                {isInbox && unreadCount > 0 && (
-                                                    <Badge className="absolute -top-1 -right-1 md:relative md:top-0 md:right-0 md:ml-2 bg-blue-600 text-white min-w-5 h-5 flex items-center justify-center p-1 text-xs">
-                                                        {unreadCount}
-                                                    </Badge>
+                                                {isInbox && (
+                                                    <UnreadBadge initialCount={initialUnreadCount} />
                                                 )}
                                             </Button>
                                         </Link>
