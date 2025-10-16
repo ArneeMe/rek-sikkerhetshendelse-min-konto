@@ -5,10 +5,8 @@ import Link from 'next/link';
 import { Shield, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AutoRefresh } from '@/components/game/AutoRefresh';
-import { UnreadBadge } from '@/components/game/UnreadBadge';
 import { NAVIGATION } from '@/lib/navigation-config';
 import { COMPANY_NAME } from '@/lib/constants';
-import { getEvents } from '@/lib/db';
 
 export default async function GameLayout({
                                              children,
@@ -20,12 +18,6 @@ export default async function GameLayout({
     if (!session) {
         redirect('/login');
     }
-
-    // Get initial unread count for SSR
-    const events = await getEvents(session.teamId);
-    const initialUnreadCount = session.teamId === 0
-        ? events.length
-        : events.filter((e) => !e.read).length;
 
     // Filter out hidden navigation items
     const visibleNavigation = NAVIGATION.filter(item => !item.hidden);
@@ -51,16 +43,12 @@ export default async function GameLayout({
                             <nav className="flex items-center gap-1 md:gap-2">
                                 {visibleNavigation.map((item) => {
                                     const Icon = item.icon;
-                                    const isInbox = item.href === '/game/inbox';
 
                                     return (
                                         <Link key={item.href} href={item.href}>
-                                            <Button variant="ghost" size="sm" className="text-slate-300 hover:text-slate-100 relative">
+                                            <Button variant="ghost" size="sm" className="text-slate-300 hover:text-slate-100">
                                                 <Icon className="w-4 h-4 md:mr-2" />
                                                 <span className="hidden md:inline">{item.label}</span>
-                                                {isInbox && (
-                                                    <UnreadBadge initialCount={initialUnreadCount} />
-                                                )}
                                             </Button>
                                         </Link>
                                     );

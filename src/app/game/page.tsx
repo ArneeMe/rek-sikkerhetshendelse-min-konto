@@ -16,11 +16,6 @@ export default async function GameDashboard() {
     const servers = await getServers();
     const criticalLogsCount = await getCriticalLogsCount();
 
-    // Count unread events (all events if admin, otherwise check read status)
-    const unreadCount = session?.teamId === 0
-        ? events.length
-        : events.filter((e) => !e.read).length;
-
     const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
 
     return (
@@ -38,18 +33,14 @@ export default async function GameDashboard() {
                 </div>
             </div>
 
-            {/* Stats Grid - All users see all stats */}
+            {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <StatCard
-                    title="Uleste hendelser"
-                    value={unreadCount}
+                    title="Hendelser"
+                    value={events.length}
                     description="Klikk for å se innboks"
                     icon={Inbox}
                     iconColor="text-blue-400"
-                    badge={unreadCount > 0 ? {
-                        text: 'Handling Påkrevd',
-                        className: 'bg-blue-600'
-                    } : undefined}
                     href="/game/inbox"
                     borderColor="hover:border-blue-500"
                 />
@@ -140,7 +131,6 @@ export default async function GameDashboard() {
                                 iconColor={getSeverityColor(event.severity)}
                                 title={event.title}
                                 subtitle={event.type}
-                                badge={!event.read ? { text: 'Ny', variant: 'outline' } : undefined}
                             />
                         ))}
                     </div>

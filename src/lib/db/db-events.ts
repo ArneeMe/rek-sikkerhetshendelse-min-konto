@@ -8,10 +8,7 @@ import { getActiveGameSession } from './db-game-sessions';
 
 // Helper to apply team filter
 function applyTeamFilter<T>(query: T, teamId: number): T {
-    if (teamId === 0) {
-        // Admin sees everything
-        return query;
-    }
+
     // Regular team sees their own data + broadcasts (null team_id)
     return (query as unknown as { or: (filter: string) => T }).or(`team_id.eq.${teamId},team_id.is.null`);
 }
@@ -154,15 +151,14 @@ export async function markEventAsRead(eventId: string, teamId: number): Promise<
     }
 }
 
+// src/lib/db/db-events.ts - add logging to markAllEventsAsRead
 export async function markAllEventsAsRead(teamId: number): Promise<boolean> {
-    // Admin doesn't mark events as read
-    if (teamId === 0) {
-        return true;
-    }
-
     try {
         // Get all currently visible events
         const events = await getEvents(teamId);
+
+        console.log(`[markAllEventsAsRead] Team ${teamId} has ${events.length} total events`);
+        console.log(`[markAllEventsAsRead] Unread events:`, events.filter(e => !e.read).length);
 
         // Mark each one as read
         const readPromises = events.map(event =>
@@ -182,9 +178,15 @@ export async function markAllEventsAsRead(teamId: number): Promise<boolean> {
         const anyErrors = results.some(result => result.error);
         if (anyErrors) {
             console.error('Some events failed to mark as read');
+            results.forEach((result, idx) => {
+                if (result.error) {
+                    console.error(`Failed to mark event ${events[idx].id}:`, result.error);
+                }
+            });
             return false;
         }
 
+        console.log(`[markAllEventsAsRead] Successfully marked ${events.length} events as read`);
         return true;
     } catch (error) {
         console.error('Error in markAllEventsAsRead:', error);
