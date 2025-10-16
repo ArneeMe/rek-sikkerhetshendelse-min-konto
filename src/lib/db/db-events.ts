@@ -53,7 +53,8 @@ export async function getEvents(teamId: number): Promise<Event[]> {
             .eq('team_id', teamId);
 
         if (!readsError && reads) {
-            readEventIds = new Set(reads.map(r => r.scheduled_event_id));
+            const typedReads = reads as Pick<DatabaseEventRead, 'scheduled_event_id'>[];
+            readEventIds = new Set(typedReads.map(r => r.scheduled_event_id));
         }
     }
 
@@ -101,7 +102,7 @@ export async function getEventById(eventId: string, teamId: number): Promise<Eve
             .eq('scheduled_event_id', eventId)
             .single();
 
-        isRead = !!readData;
+        isRead = !!(readData as Pick<DatabaseEventRead, 'id'> | null);
     }
 
     // Get game session to calculate timestamp

@@ -1,4 +1,4 @@
-// src/app/api/events/mark-read/route.ts
+// src/app/api/mark-read/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '@/lib/session';
 import { markEventAsRead } from '@/lib/db';
@@ -18,12 +18,13 @@ export async function POST(request: NextRequest) {
 
         if (!eventId) {
             return NextResponse.json(
-                { error: 'Event ID is required' },
+                { error: 'Missing eventId' },
                 { status: 400 }
             );
         }
 
-        const success = await markEventAsRead(eventId);
+        // Pass both eventId and teamId from session
+        const success = await markEventAsRead(eventId, session.teamId);
 
         if (!success) {
             return NextResponse.json(
@@ -34,7 +35,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ success: true });
     } catch (error) {
-        console.error('Error marking event as read:', error);
+        console.error('Error in mark-read API:', error);
         return NextResponse.json(
             { error: 'Internal server error' },
             { status: 500 }
