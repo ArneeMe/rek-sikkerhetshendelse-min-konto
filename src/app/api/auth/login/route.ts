@@ -1,6 +1,6 @@
 // src/app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-import { validateCompanyCode } from '@/lib/constants';
+import { validateTeamCode } from '@/lib/constants';
 import { setSession } from '@/lib/session';
 
 export async function POST(request: NextRequest) {
@@ -9,28 +9,28 @@ export async function POST(request: NextRequest) {
 
         if (!code) {
             return NextResponse.json(
-                { error: 'Company code is required' },
+                { error: 'Team code is required' },
                 { status: 400 }
             );
         }
 
-        const company = validateCompanyCode(code);
+        const team = validateTeamCode(code);
 
-        if (!company) {
+        if (!team) {
             return NextResponse.json(
-                { error: 'Invalid company code' },
+                { error: 'Invalid team code' },
                 { status: 401 }
             );
         }
 
         // Set session cookie
         await setSession({
-            companyId: company.id,
-            companyName: company.name,
-            isAdmin: company.isAdmin || false,
+            teamId: team.id,
+            teamName: team.name,
+            isAdmin: team.isAdmin || false,
         });
 
-        return NextResponse.json({ success: true, company });
+        return NextResponse.json({ success: true, team });
     } catch {
         return NextResponse.json(
             { error: 'Internal server error' },

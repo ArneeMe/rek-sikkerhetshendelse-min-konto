@@ -4,8 +4,8 @@ import { cookies } from 'next/headers';
 const SESSION_COOKIE_NAME = 'cyber-game-session';
 
 export interface Session {
-    companyId: number;
-    companyName: string;
+    teamId: number;
+    teamName: string;
     isAdmin: boolean;
 }
 

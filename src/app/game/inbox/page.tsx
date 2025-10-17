@@ -4,13 +4,11 @@ import { PageHeader } from '@/components/game/PageHeader';
 import { EmptyState } from '@/components/game/EmptyState';
 import { getEvents } from '@/lib/db';
 import { getSession } from '@/lib/session';
-import { Badge } from '@/components/ui/badge';
 import { Inbox } from 'lucide-react';
 
 export default async function InboxPage() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId);
-    const unreadCount = events.filter((e) => !e.read).length;
+    const events = await getEvents(session!.teamId);
 
     return (
         <div className="space-y-6">
@@ -18,13 +16,6 @@ export default async function InboxPage() {
                 icon={Inbox}
                 title="Innboks"
                 description="Sikkerhetshendelser, varsler og kommunikasjon"
-                actions={
-                    unreadCount > 0 ? (
-                        <Badge className="bg-blue-600 text-base px-4 py-2">
-                            {unreadCount} ulest
-                        </Badge>
-                    ) : undefined
-                }
             />
 
             {events.length > 0 ? (
@@ -37,7 +28,7 @@ export default async function InboxPage() {
                 <EmptyState
                     icon={Inbox}
                     message="Ingen hendelser ennå"
-                    submessage="Nye varsler vil vises her"
+                    submessage="Nye varsler vil vises her etter hvert som spillet utvikler seg"
                 />
             )}
         </div>

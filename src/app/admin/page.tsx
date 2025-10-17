@@ -4,6 +4,8 @@ import { getSession } from '@/lib/session';
 import { redirect } from 'next/navigation';
 import { AdminControls } from './admin-controls';
 import { AdminAutoRefresh } from './admin-auto-refresh';
+import { InsertForm } from './insert-form';
+import { CsvUpload } from './csv-upload';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Play, AlertCircle } from 'lucide-react';
@@ -23,7 +25,6 @@ export default async function AdminPage() {
         id: string;
         trigger_at_minutes: number;
         title: string;
-        division: string | null;
     }> = [];
 
     if (gameSession) {
@@ -127,19 +128,6 @@ export default async function AdminPage() {
                                     >
                                         <div className="flex-1">
                                             <div className="font-medium text-slate-100">{event.title}</div>
-                                            <div className="text-sm text-slate-400">
-                                                {event.division ? (
-                                                    <Badge variant="outline" className="text-xs mt-1 capitalize">
-                                                        {event.division === 'tech' ? 'Teknisk' :
-                                                            event.division === 'non-tech' ? 'Ikke-teknisk' :
-                                                                'Ledelse'}
-                                                    </Badge>
-                                                ) : (
-                                                    <Badge variant="outline" className="text-xs mt-1">
-                                                        Alle avdelinger
-                                                    </Badge>
-                                                )}
-                                            </div>
                                         </div>
                                         <div className="text-right">
                                             <div className="font-mono text-blue-400">
@@ -155,6 +143,12 @@ export default async function AdminPage() {
                         </CardContent>
                     </Card>
                 )}
+
+                {/* CSV Upload */}
+                <CsvUpload />
+
+                {/* Insert Form */}
+                <InsertForm />
             </div>
         </div>
     );

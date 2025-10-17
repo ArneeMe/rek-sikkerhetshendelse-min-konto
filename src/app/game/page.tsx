@@ -4,20 +4,19 @@ import { Badge } from '@/components/ui/badge';
 import { StatCard } from '@/components/ui/stat-card';
 import { ListItem } from '@/components/ui/list-item';
 import { AlertTriangle, Inbox, FileText, Server, Users, Mail, Phone} from 'lucide-react';
-import { getEvents, getServers, getLogs } from '@/lib/db';
+import { getEvents, getServers, getCriticalLogsCount } from '@/lib/db';
 import { getSession } from '@/lib/session';
 import { getSeverityColor } from '@/lib/ui-helpers';
+import { COMPANY_NAME } from '@/lib/constants';
 import Link from 'next/link';
 
 export default async function GameDashboard() {
     const session = await getSession();
-    const events = await getEvents(session!.companyId);
+    const events = await getEvents(session!.teamId);
     const servers = await getServers();
-    const logs = await getLogs(session!.companyId);
+    const criticalLogsCount = await getCriticalLogsCount();
 
-    const unreadCount = events.filter((e) => !e.read).length;
     const criticalServers = servers.filter((s) => s.status === 'critical' || s.status === 'offline').length;
-    const criticalLogs = logs.filter((l) => l.level === 'critical' || l.level === 'error').length;
 
     return (
         <div className="space-y-6">
@@ -26,23 +25,22 @@ export default async function GameDashboard() {
                 <p className="text-slate-400">Overvåk systemene dine og håndter hendelser</p>
                 <div className="flex gap-2 mt-3">
                     <Badge variant="outline" className="text-slate-300">
-                        {session?.companyName}
+                        {COMPANY_NAME}
+                    </Badge>
+                    <Badge variant="outline" className="text-slate-300">
+                        {session?.teamName}
                     </Badge>
                 </div>
             </div>
 
-            {/* Stats Grid - All users see all stats */}
+            {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <StatCard
-                    title="Uleste hendelser"
-                    value={unreadCount}
+                    title="Hendelser"
+                    value={events.length}
                     description="Klikk for å se innboks"
                     icon={Inbox}
                     iconColor="text-blue-400"
-                    badge={unreadCount > 0 ? {
-                        text: 'Handling Påkrevd',
-                        className: 'bg-blue-600'
-                    } : undefined}
                     href="/game/inbox"
                     borderColor="hover:border-blue-500"
                 />
@@ -62,12 +60,12 @@ export default async function GameDashboard() {
                 />
 
                 <StatCard
-                    title="Kritiske logger"
-                    value={criticalLogs}
+                    title="Feilede logger"
+                    value={criticalLogsCount}
                     description="Klikk for å se logger"
                     icon={FileText}
                     iconColor="text-red-400"
-                    badge={criticalLogs > 0 ? {
+                    badge={criticalLogsCount > 0 ? {
                         text: 'Gjennomgang Påkrevd',
                         className: 'bg-red-600'
                     } : undefined}
@@ -133,7 +131,6 @@ export default async function GameDashboard() {
                                 iconColor={getSeverityColor(event.severity)}
                                 title={event.title}
                                 subtitle={event.type}
-                                badge={!event.read ? { text: 'Ny', variant: 'outline' } : undefined}
                             />
                         ))}
                     </div>

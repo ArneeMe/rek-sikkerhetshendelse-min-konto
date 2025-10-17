@@ -1,3 +1,4 @@
+// src/components/game/InboxItem.tsx
 import { Event } from '@/types';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -37,17 +38,23 @@ export function InboxItem({ event }: InboxItemProps) {
 
     return (
         <Card
-            className={`bg-slate-800 border-slate-700 hover:border-slate-600 transition-colors cursor-pointer ${
-                !event.read ? 'border-l-4 border-l-blue-500' : ''
+            className={`transition-colors ${
+                !event.read
+                    ? 'bg-slate-800 border-slate-700 hover:border-slate-600 border-l-4 border-l-blue-500'
+                    : 'bg-slate-900/50 border-slate-800 hover:border-slate-700'
             }`}
         >
             <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-3">
                     <div className="flex items-start gap-3 flex-1">
-                        <div className="mt-1 text-slate-400">{getIcon()}</div>
+                        <div className={`mt-1 ${!event.read ? 'text-slate-300' : 'text-slate-500'}`}>
+                            {getIcon()}
+                        </div>
                         <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                                <h3 className="font-semibold text-slate-100">{event.title}</h3>
+                                <h3 className={`font-semibold ${!event.read ? 'text-slate-100' : 'text-slate-400'}`}>
+                                    {event.title}
+                                </h3>
                                 {!event.read && (
                                     <Badge variant="outline" className="text-xs">
                                         New
@@ -55,9 +62,13 @@ export function InboxItem({ event }: InboxItemProps) {
                                 )}
                             </div>
                             {event.from && (
-                                <div className="text-xs text-slate-400 mb-2">From: {event.from}</div>
+                                <div className={`text-xs mb-2 ${!event.read ? 'text-slate-400' : 'text-slate-500'}`}>
+                                    From: {event.from}
+                                </div>
                             )}
-                            <p className="text-sm text-slate-300 mb-2">{event.content}</p>
+                            <p className={`text-sm mb-2 ${!event.read ? 'text-slate-300' : 'text-slate-500'}`}>
+                                {event.content}
+                            </p>
                             <div className="flex items-center gap-2 text-xs text-slate-500">
                                 <span>{format(event.timestamp, 'MMM d, HH:mm:ss')}</span>
                                 <span>•</span>
