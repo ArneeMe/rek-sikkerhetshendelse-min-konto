@@ -23,7 +23,7 @@ Timestamp,User,SourceIP,Location,Application,Status,FailureReason,DeviceInfo
 2024-10-10 11:23:45,ola.hansen@nordavind.no,10.0.1.142,Oslo NO,Microsoft 365,Success,,Windows 11 / Edge 128
 2024-10-10 12:34:22,christian.hein@nordavind.no,10.0.1.101,Oslo NO,SharePoint Online,Success,,Windows 11 / Chrome 129
 2024-10-10 13:12:56,ingrid.volden@nordavind.no,10.0.1.102,Oslo NO,Microsoft Teams,Success,,Windows 11 / Edge 128
-2024-10-10 13:45:18,kjetil.berg@nordavind.no,10.0.1.142,Oslo NO,Azure Portal,Success,,macOS 14 / Safari 17
+2024-10-10 13:45:18,kjetil.berg@nordavind.no,10.0.1.087,Oslo NO,Azure Portal,Success,,macOS 14 / Safari 17
 2024-10-10 14:04:38,ola.hansen@nordavind.no,10.0.1.142,Oslo NO,Microsoft 365,Success,,Windows 11 / Edge 128
 2024-10-10 14:22:15,ola.hansen@nordavind.no,185.23.187.142,Oslo NO,Azure Portal,Success,,Windows 10 / Chrome 118
 2024-10-10 14:23:08,ola.hansen@nordavind.no,185.23.187.142,Oslo NO,Microsoft 365,Success,,Windows 10 / Chrome 118
