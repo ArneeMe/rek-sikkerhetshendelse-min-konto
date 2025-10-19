@@ -10,7 +10,7 @@ Timestamp,EventType,SourceIP,SourceUser,DestIP,DestDomain,DestPort,Protocol,Acti
 2024-10-10 08:24:56,HTTPS,10.0.1.121,hauk.storjord,13.107.42.14,sharepoint.com,443,HTTPS,ALLOW,67234,SharePoint access
 2024-10-10 08:28:33,DNS_QUERY,10.0.1.112,maria.larsen,8.8.8.8,-,53,DNS,ALLOW,-,Query: office.com
 2024-10-10 08:32:12,VPN_TRAFFIC,10.10.0.15,ola.hansen,10.20.1.10,prod-app-server-01.norwayeast,443,HTTPS,ALLOW,45231,Azure resource access via VPN
-2024-10-10 08:28:33,DNS_QUERY,10.0.1.112,maria.larsen,8.8.8.8,-,53,DNS,ALLOW,-,Query: office.com
+2024-10-10 08:28:33,DNS_QUERY,10.0.1.112,didrik.saether,8.8.8.8,-,53,DNS,ALLOW,-,Query: office.com
 2024-10-10 08:39:15,HTTPS,10.0.1.100,kristian.rosland,52.113.194.132,teams.microsoft.com,443,HTTPS,ALLOW,89234,Teams access
 2024-10-10 08:42:44,DNS_QUERY,10.0.1.142,kjetil.berg,8.8.8.8,-,53,DNS,ALLOW,-,Query: office365.com
 2024-10-10 08:46:09,VPN_TRAFFIC,10.10.0.15,ola.hansen,10.20.2.10,prod-db-server-01.norwayeast,5432,PostgreSQL,ALLOW,12847,Database access via VPN
@@ -29,7 +29,7 @@ Timestamp,EventType,SourceIP,SourceUser,DestIP,DestDomain,DestPort,Protocol,Acti
 2024-10-10 14:04:52,HTTPS,10.0.1.142,ola.hansen,185.142.67.23,microsoft-login-secure.com,443,HTTPS,ALLOW,3421,SUSPICIOUS: POST request to phishing domain (credentials submission)
 2024-10-10 14:28:45,DNS_QUERY,10.0.1.130,synne.berg,8.8.8.8,-,53,DNS,ALLOW,-,Query: outlook.office365.com
 2024-10-10 14:45:18,HTTPS,10.0.1.142,ola.hansen,20.190.145.23,portal.azure.com,443,HTTPS,ALLOW,145678,Azure Portal access
-2024-10-10 15:12:33,DNS_QUERY,10.0.1.112,maria.larsen,8.8.8.8,-,53,DNS,ALLOW,-,Query: teams.microsoft.com
+2024-10-10 15:12:33,DNS_QUERY,10.0.1.112,didrik.saether,8.8.8.8,-,53,DNS,ALLOW,-,Query: teams.microsoft.com
 2024-10-10 15:34:08,HTTPS,10.0.1.120,marius.arder,13.107.42.14,sharepoint.com,443,HTTPS,ALLOW,234567,SharePoint access
 2024-10-10 16:08:09,DNS_QUERY,10.0.1.160,sandra.lekve,8.8.8.8,-,53,DNS,ALLOW,-,Query: office365.com
 2024-10-10 16:23:38,HTTPS,10.0.1.112,didrik.saether,20.190.145.23,portal.azure.com,443,HTTPS,ALLOW,98234,Azure Portal access
@@ -61,7 +61,7 @@ Timestamp,EventType,SourceIP,SourceUser,DestIP,DestDomain,DestPort,Protocol,Acti
 2024-10-11 16:12:38,DNS_QUERY,10.0.1.120,marius.arder,8.8.8.8,-,53,DNS,ALLOW,-,Query: office365.com
 2024-10-11 16:34:22,HTTPS,10.0.1.160,sandra.lekve,52.113.194.132,teams.microsoft.com,443,HTTPS,ALLOW,67234,Teams access
 2024-10-11 17:08:09,DNS_QUERY,10.0.1.112,didrik.saether,8.8.8.8,-,53,DNS,ALLOW,-,Query: portal.azure.com
-2024-10-11 17:45:26,HTTPS,10.0.1.112,maria.larsen,52.96.148.162,outlook.office365.com,443,HTTPS,ALLOW,56789,Office 365 access
+2024-10-11 17:45:26,HTTPS,10.0.1.112,didrik.saether,52.96.148.162,outlook.office365.com,443,HTTPS,ALLOW,56789,Office 365 access
 2024-10-12 08:11:17,DNS_QUERY,10.0.1.101,christian.hein,8.8.8.8,-,53,DNS,ALLOW,-,Query: outlook.office365.com
 2024-10-12 08:16:38,HTTPS,10.0.1.121,hauk.storjord,20.190.145.23,portal.azure.com,443,HTTPS,ALLOW,145678,Azure Portal access
 2024-10-12 08:22:29,VPN_AUTH,10.0.1.142,ola.hansen,VPN_GATEWAY,-,1194,VPN,SUCCESS,0,VPN connection successful - assigned IP 10.10.0.15
