@@ -1,53 +1,64 @@
 // src/types/logs.ts
-export interface AppLog {
-    id: string;
-    timestamp: string;
-    event_type: string;
-    user_name: string;
-    source_ip: string;
-    target_resource: string;
-    action: string;
-    details: string;
-    result: string;
-    created_at: string;
+export interface AppServerLog {
+    id: number;
+    Timestamp: string;
+    EventType: string;
+    User: string;
+    SourceIP: string;
+    TargetResource: string;
+    Action: string;
+    Details: string;
+    Result: string;
 }
 
-export interface DbLog {
-    id: string;
-    timestamp: string;
-    event_type: string;
-    user_name: string;
-    source_ip: string;
-    database_name: string;
-    query: string;
-    rows_affected: string;
-    details: string;
-    result: string;
-    created_at: string;
+export interface DbServerLog {
+    id: number;
+    Timestamp: string;
+    EventType: string;
+    User: string;
+    SourceIP: string;
+    Database: string;
+    Query: string;
+    RowsAffected: string;
+    Details: string;
+    Result: string;
 }
 
 export interface AzureAuditLog {
-    id: string;
-    timestamp: string;
-    actor: string;
-    action: string;
-    target: string;
-    target_type: string;
-    details: string;
-    source_ip: string;
-    result: string;
-    created_at: string;
+    id: number;
+    Timestamp: string;
+    Actor: string;
+    Action: string;
+    Target: string;
+    TargetType: string;
+    Details: string;
+    SourceIP: string;
+    Result: string;
 }
 
 export interface AzureSigninLog {
-    id: string;
-    timestamp: string;
-    user_name: string;
-    source_ip: string;
-    location: string;
-    application: string;
-    status: string;
-    failure_reason: string | null;
-    device_info: string;
-    created_at: string;
+    id: number;
+    Timestamp: string;
+    User: string;
+    SourceIP: string;
+    Location: string;
+    Application: string;
+    Status: string;
+    FailureReason: string | null;
+    DeviceInfo: string;
+}
+
+export interface OfficeFirewallLog {
+    id: number;
+    Timestamp: string;
+    EventType: string;
+    SourceIP: string;
+    SourceUser: string | null;
+    DestIP: string | null;
+    DestDomain: string | null;
+    DestPort: number | null;
+    Protocol: string;
+    Action: string;
+    BytesTransferred: number | null;
+    Details: string | null;
 }

@@ -4,27 +4,40 @@
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import type { AppLog, DbLog, AzureAuditLog, AzureSigninLog } from '@/types/logs';
+import type { AppServerLog, DbServerLog, AzureAuditLog, AzureSigninLog, OfficeFirewallLog } from '@/types/logs';
 import { format } from 'date-fns';
 
 interface LogsClientProps {
-    appLogs: AppLog[];
-    dbLogs: DbLog[];
+    appServer1Logs: AppServerLog[];
+    appServer2Logs: AppServerLog[];
+    appServer3Logs: AppServerLog[];
+    dbServer1Logs: DbServerLog[];
+    dbServer2Logs: DbServerLog[];
+    dbServer3Logs: DbServerLog[];
     azureAuditLogs: AzureAuditLog[];
     azureSigninLogs: AzureSigninLog[];
+    officeFirewallLogs: OfficeFirewallLog[];
 }
 
-export function LogsClient({ appLogs, dbLogs, azureAuditLogs, azureSigninLogs }: LogsClientProps) {
-    const [selectedTab, setSelectedTab] = useState<string>('app');
+export function LogsClient({
+                               officeFirewallLogs,
+                               azureAuditLogs,
+                               azureSigninLogs,
+                               appServer1Logs,
+                               appServer2Logs,
+                               appServer3Logs,
+                               dbServer1Logs,
+                               dbServer2Logs,
+                               dbServer3Logs,
+
+                           }: LogsClientProps) {
+    const [selectedTab, setSelectedTab] = useState<string>('app1');
 
     return (
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-            <TabsList className="bg-slate-800 border border-slate-700">
-                <TabsTrigger value="app" className="data-[state=active]:bg-slate-700">
-                    App Server
-                </TabsTrigger>
-                <TabsTrigger value="db" className="data-[state=active]:bg-slate-700">
-                    Database
+            <TabsList className="bg-slate-800 border border-slate-700 flex-wrap h-auto">
+                <TabsTrigger value="firewall" className="data-[state=active]:bg-slate-700">
+                    Office Firewall
                 </TabsTrigger>
                 <TabsTrigger value="azure-audit" className="data-[state=active]:bg-slate-700">
                     Azure Audit
@@ -32,14 +45,48 @@ export function LogsClient({ appLogs, dbLogs, azureAuditLogs, azureSigninLogs }:
                 <TabsTrigger value="azure-signin" className="data-[state=active]:bg-slate-700">
                     Azure Sign-in
                 </TabsTrigger>
+                <TabsTrigger value="app1" className="data-[state=active]:bg-slate-700">
+                    App Server 1
+                </TabsTrigger>
+                <TabsTrigger value="app2" className="data-[state=active]:bg-slate-700">
+                    App Server 2
+                </TabsTrigger>
+                <TabsTrigger value="app3" className="data-[state=active]:bg-slate-700">
+                    App Server 3
+                </TabsTrigger>
+                <TabsTrigger value="db1" className="data-[state=active]:bg-slate-700">
+                    DB Server 1
+                </TabsTrigger>
+                <TabsTrigger value="db2" className="data-[state=active]:bg-slate-700">
+                    DB Server 2
+                </TabsTrigger>
+                <TabsTrigger value="db3" className="data-[state=active]:bg-slate-700">
+                    DB Server 3
+                </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="app" className="mt-4">
-                <AppLogsTable logs={appLogs} />
+            <TabsContent value="app1" className="mt-4">
+                <AppServerLogsTable logs={appServer1Logs} serverName="App Server 1" />
             </TabsContent>
 
-            <TabsContent value="db" className="mt-4">
-                <DbLogsTable logs={dbLogs} />
+            <TabsContent value="app2" className="mt-4">
+                <AppServerLogsTable logs={appServer2Logs} serverName="App Server 2" />
+            </TabsContent>
+
+            <TabsContent value="app3" className="mt-4">
+                <AppServerLogsTable logs={appServer3Logs} serverName="App Server 3" />
+            </TabsContent>
+
+            <TabsContent value="db1" className="mt-4">
+                <DbServerLogsTable logs={dbServer1Logs} serverName="DB Server 1" />
+            </TabsContent>
+
+            <TabsContent value="db2" className="mt-4">
+                <DbServerLogsTable logs={dbServer2Logs} serverName="DB Server 2" />
+            </TabsContent>
+
+            <TabsContent value="db3" className="mt-4">
+                <DbServerLogsTable logs={dbServer3Logs} serverName="DB Server 3" />
             </TabsContent>
 
             <TabsContent value="azure-audit" className="mt-4">
@@ -49,16 +96,20 @@ export function LogsClient({ appLogs, dbLogs, azureAuditLogs, azureSigninLogs }:
             <TabsContent value="azure-signin" className="mt-4">
                 <AzureSigninLogsTable logs={azureSigninLogs} />
             </TabsContent>
+
+            <TabsContent value="firewall" className="mt-4">
+                <OfficeFirewallLogsTable logs={officeFirewallLogs} />
+            </TabsContent>
         </Tabs>
     );
 }
 
-function AppLogsTable({ logs }: { logs: AppLog[] }) {
+function AppServerLogsTable({ logs, serverName }: { logs: AppServerLog[]; serverName: string }) {
     if (logs.length === 0) {
         return (
             <Card className="bg-slate-900 border-slate-700">
                 <CardContent className="p-8 text-center text-slate-400">
-                    No app server logs found
+                    No {serverName} logs found
                 </CardContent>
             </Card>
         );
@@ -84,15 +135,15 @@ function AppLogsTable({ logs }: { logs: AppLog[] }) {
                     {logs.map((log) => (
                         <tr key={log.id} className="hover:bg-slate-800/50 transition-colors">
                             <td className="px-4 py-3 text-sm text-slate-300 font-mono">
-                                {format(new Date(log.timestamp), 'yyyy-MM-dd HH:mm:ss')}
+                                {format(new Date(log.Timestamp), 'yyyy-MM-dd HH:mm:ss')}
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.event_type}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.user_name}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.source_ip}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.target_resource}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.action}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.details}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.result}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.EventType}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.User}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.SourceIP}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.TargetResource}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Action}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Details}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Result}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -102,12 +153,12 @@ function AppLogsTable({ logs }: { logs: AppLog[] }) {
     );
 }
 
-function DbLogsTable({ logs }: { logs: DbLog[] }) {
+function DbServerLogsTable({ logs, serverName }: { logs: DbServerLog[]; serverName: string }) {
     if (logs.length === 0) {
         return (
             <Card className="bg-slate-900 border-slate-700">
                 <CardContent className="p-8 text-center text-slate-400">
-                    No database logs found
+                    No {serverName} logs found
                 </CardContent>
             </Card>
         );
@@ -134,16 +185,18 @@ function DbLogsTable({ logs }: { logs: DbLog[] }) {
                     {logs.map((log) => (
                         <tr key={log.id} className="hover:bg-slate-800/50 transition-colors">
                             <td className="px-4 py-3 text-sm text-slate-300 font-mono">
-                                {format(new Date(log.timestamp), 'yyyy-MM-dd HH:mm:ss')}
+                                {format(new Date(log.Timestamp), 'yyyy-MM-dd HH:mm:ss')}
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.event_type}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.user_name}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.source_ip}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.database_name}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.query}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.rows_affected}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.details}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.result}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.EventType}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.User}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.SourceIP}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Database}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono max-w-xs truncate" title={log.Query}>
+                                {log.Query}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.RowsAffected}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Details}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Result}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -184,15 +237,15 @@ function AzureAuditLogsTable({ logs }: { logs: AzureAuditLog[] }) {
                     {logs.map((log) => (
                         <tr key={log.id} className="hover:bg-slate-800/50 transition-colors">
                             <td className="px-4 py-3 text-sm text-slate-300 font-mono">
-                                {format(new Date(log.timestamp), 'yyyy-MM-dd HH:mm:ss')}
+                                {format(new Date(log.Timestamp), 'yyyy-MM-dd HH:mm:ss')}
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.actor}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.action}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.target}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.target_type}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.details}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.source_ip}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.result}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Actor}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Action}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Target}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.TargetType}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Details}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.SourceIP}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Result}</td>
                         </tr>
                     ))}
                     </tbody>
@@ -233,15 +286,72 @@ function AzureSigninLogsTable({ logs }: { logs: AzureSigninLog[] }) {
                     {logs.map((log) => (
                         <tr key={log.id} className="hover:bg-slate-800/50 transition-colors">
                             <td className="px-4 py-3 text-sm text-slate-300 font-mono">
-                                {format(new Date(log.timestamp), 'yyyy-MM-dd HH:mm:ss')}
+                                {format(new Date(log.Timestamp), 'yyyy-MM-dd HH:mm:ss')}
                             </td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.user_name}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.source_ip}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.location}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.application}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.status}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.failure_reason || '-'}</td>
-                            <td className="px-4 py-3 text-sm text-slate-300">{log.device_info}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.User}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.SourceIP}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Location}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Application}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Status}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.FailureReason || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.DeviceInfo}</td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            </div>
+        </Card>
+    );
+}
+
+function OfficeFirewallLogsTable({ logs }: { logs: OfficeFirewallLog[] }) {
+    if (logs.length === 0) {
+        return (
+            <Card className="bg-slate-900 border-slate-700">
+                <CardContent className="p-8 text-center text-slate-400">
+                    No office firewall logs found
+                </CardContent>
+            </Card>
+        );
+    }
+
+    return (
+        <Card className="bg-slate-900 border-slate-700 overflow-hidden">
+            <div className="overflow-x-auto">
+                <table className="w-full">
+                    <thead className="bg-slate-800">
+                    <tr>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Timestamp</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Event Type</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Source IP</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Source User</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Dest IP</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Dest Domain</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Port</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Protocol</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Action</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Bytes</th>
+                        <th className="px-4 py-3 text-left text-xs font-medium text-slate-300 uppercase">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-800">
+                    {logs.map((log) => (
+                        <tr key={log.id} className="hover:bg-slate-800/50 transition-colors">
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">
+                                {format(new Date(log.Timestamp), 'yyyy-MM-dd HH:mm:ss')}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.EventType}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.SourceIP}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.SourceUser || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300 font-mono">{log.DestIP || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.DestDomain || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.DestPort || '-'}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Protocol}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Action}</td>
+                            <td className="px-4 py-3 text-sm text-slate-300">
+                                {log.BytesTransferred ? log.BytesTransferred.toLocaleString() : '-'}
+                            </td>
+                            <td className="px-4 py-3 text-sm text-slate-300">{log.Details || '-'}</td>
                         </tr>
                     ))}
                     </tbody>

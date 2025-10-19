@@ -28,10 +28,15 @@ export {
 
 // Logs management
 export {
-    getAppLogs,
-    getDbLogs,
+    getAppServer1Logs,
+    getAppServer2Logs,
+    getAppServer3Logs,
+    getDbServer1Logs,
+    getDbServer2Logs,
+    getDbServer3Logs,
     getAzureAuditLogs,
     getAzureSigninLogs,
+    getOfficeFirewallLogs,
     getCriticalLogsCount,
 } from './db/db-logs';
 
