@@ -73,4 +73,3 @@ Timestamp,EventType,User,SourceIP,TargetResource,Action,Details,Result
 2024-10-19 06:42:25,PROCESS_STARTED,SYSTEM,localhost,/usr/local/bin/WindowsUpdateService.exe,EXECUTE,Malicious process started at system boot,Success
 2024-10-19 06:42:28,FILE_ENCRYPTION,SYSTEM,localhost,/opt/safevault/data/,ENCRYPT,Mass file encryption detected: 12891 files,InProgress
 2024-10-19 06:42:34,FILE_ENCRYPTION,SYSTEM,localhost,/home/,ENCRYPT,User directory encryption: 3456 files,InProgress
-2024-10-19 06:42:40,

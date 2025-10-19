@@ -23,7 +23,7 @@
 
 ### **Kjetil Berg** - Lead DevOps Engineer
 - **Epost:** kjetil.berg@nordavind.no
-- **Kontor-PC:** `10.0.1.110`
+- **Kontor-PC:** `10.0.1.142`
 - **Traits:** Ansvarlig for CI/CD, Kubernetes og Azure-infrastruktur. Strukturert og metodisk. Pedantisk med logging. **Oppdaget noe rart i logs i forrige uke, men ble avfeid som "false positive".**
 
 ### **Arne Natskår** - DevOps Engineer (Nettverk & Sikkerhet)
