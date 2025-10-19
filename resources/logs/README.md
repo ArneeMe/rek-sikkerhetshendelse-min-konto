@@ -54,6 +54,7 @@ logs/
 - **Ola Hansen kontor-PC:** `10.0.1.142`
 - **Ola VPN IP (når koblet til Azure):** `10.10.0.15`
 - **Kjetil Berg kontor-PC:** `10.0.1.087`
+- **Kjetil Berg VPN:** `10.10.0.22`
 - **Mari Hansen kontor-PC:** `10.0.1.156`
 - **Angriper - Norsk VPN:** `185.23.187.142`
 - **Angriper - Romania 1:** `89.34.237.89`
