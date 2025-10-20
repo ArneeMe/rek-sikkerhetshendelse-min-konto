@@ -89,13 +89,6 @@ export default function LoginPage() {
                         >
                             {loading ? 'Autentiserer...' : 'Logg inn'}
                         </Button>
-
-                        <div className="text-xs text-slate-500 text-center mt-4">
-                            <p>Tilgjengelige teamkoder:</p>
-                            <p>ALFA, BRAVO, CHARLIE, DELTA,</p>
-                            <p>ECHO, FOXTROT, GOLF, HOTEL</p>
-                            <p className="mt-1">Administrator: ADMIN-2025</p>
-                        </div>
                     </form>
                 </CardContent>
             </Card>
