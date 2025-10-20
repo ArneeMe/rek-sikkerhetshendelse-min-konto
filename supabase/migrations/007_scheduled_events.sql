@@ -32,7 +32,7 @@ Ingrid Volden
 CISO | Nordavind Solutions AS
 ingrid.volden@nordavind.no
 🏖️ *På ferie 19-26. oktober - kontakt Christian ved akutte saker*',
-  'info',
+  'low',
   'Ingrid Volden <ingrid.volden@nordavind.no>'
 );
 
