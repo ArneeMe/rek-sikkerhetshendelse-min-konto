@@ -24,7 +24,7 @@ VALUES (
 
        ---
        This email was sent to: ola.hansen@nordavind.no, mari.hansen@nordavind.no',
-           '2024-10-10 13:58:00+02',
+           '2025-10-10 13:58:00+02',
            'external'
        );
 
@@ -42,7 +42,7 @@ VALUES (
        Ola fikk samme mailen. Tror ikke jeg skal klikke på den?
 
        Mari',
-           '2024-10-10 14:02:00+02',
+           '2025-10-10 14:02:00+02',
            'internal'
        );
 
@@ -61,7 +61,7 @@ VALUES (
 
        Best regards,
        Microsoft Security Team',
-           '2024-10-10 16:30:00+02',
+           '2025-10-10 16:30:00+02',
            'external'
        );
 
@@ -83,7 +83,7 @@ VALUES (
        Best regards,
        Johan Berg
        TechCorp GmbH',
-           '2024-10-11 09:45:00+02',
+           '2025-10-11 09:45:00+02',
            'external'
        );
 
@@ -104,7 +104,7 @@ VALUES (
 
        Lisa Andersen
        Digital Agency UK',
-           '2024-10-12 08:30:00+02',
+           '2025-10-12 08:30:00+02',
            'external'
        );
 
@@ -126,7 +126,7 @@ VALUES (
        Best regards,
        Petter Johnsen
        IT Manager, StorPartner AS',
-           '2024-10-13 11:15:00+02',
+           '2025-10-13 11:15:00+02',
            'external'
        );
 
@@ -136,9 +136,9 @@ VALUES (
            NULL,
            'azure-reports@microsoft.com',
            'kjetil.berg@nordavind.no; christian.hein@nordavind.no',
-           'Azure Daily Summary - October 10, 2024',
+           'Azure Daily Summary - October 10, 2025',
            'Azure Resource Health Summary
-       Date: October 10, 2024
+       Date: October 10, 2025
 
        Your Azure resources:
        - Virtual Machines: 6 running, 0 issues
@@ -154,7 +154,7 @@ VALUES (
        No critical alerts in the last 24 hours.
 
        View full report: https://portal.azure.com/reports',
-           '2024-10-10 08:00:00+02',
+           '2025-10-10 08:00:00+02',
            'system'
        );
 
@@ -164,9 +164,9 @@ VALUES (
            NULL,
            'azure-reports@microsoft.com',
            'kjetil.berg@nordavind.no; christian.hein@nordavind.no',
-           'Azure Daily Summary - October 11, 2024',
+           'Azure Daily Summary - October 11, 2025',
            'Azure Resource Health Summary
-       Date: October 11, 2024
+       Date: October 11, 2025
 
        Your Azure resources:
        - Virtual Machines: 6 running, 0 issues
@@ -182,7 +182,7 @@ VALUES (
        1 informational alert in the last 24 hours.
 
        View full report: https://portal.azure.com/reports',
-           '2024-10-11 08:00:00+02',
+           '2025-10-11 08:00:00+02',
            'system'
        );
 
@@ -201,11 +201,9 @@ VALUES (
        - 1 pull request merged
        - Repository settings updated
 
-       View repository: https://github.com/nordavind/safevault-backend
-
        ---
        You are receiving this because you are watching this repository.',
-           '2024-10-13 14:22:00+02',
+           '2025-10-13 14:22:00+02',
            'external'
        );
 
@@ -226,14 +224,14 @@ VALUES (
        - Suspicious links and attachments
        - Reporting security incidents
 
-       Deadline: October 31, 2024
+       Deadline: October 31, 2025
 
        Access training: https://training.securityawareness.no
 
        Stay safe!
 
        Security Awareness Team',
-           '2024-10-09 16:30:00+02',
+           '2025-10-09 16:30:00+02',
            'external'
        );
 
@@ -247,16 +245,16 @@ VALUES (
            NULL,
            'frithjof.fredriksen@nordavind.no',
            'all@nordavind.no',
-           '📅 Ferieoversikt uke 42',
+           '📅 Ferieoversikt',
            'Hei alle!
 
-       OLA HANSEN: 15-25. oktober (Syden! 🌴)
-
+       OLA HANSEN: 15-25. oktober (Syden!)
+       INGRID VOLDEN: 16-30. oktober (Hytta)
        God tur!
 
        Frithjof
        HR Manager',
-           '2024-10-10 08:00:00+02',
+           '2025-10-10 08:00:00+02',
            'internal'
        );
 
@@ -273,7 +271,7 @@ VALUES (
        Mvh,
        Ingrid Volden
        CISO',
-           '2024-10-10 14:30:00+02',
+           '2025-10-10 14:30:00+02',
            'internal'
        );
 
@@ -289,7 +287,7 @@ VALUES (
        Kan du sende ham en melding?
 
        Mari',
-           '2024-10-10 14:45:00+02',
+           '2025-10-10 14:45:00+02',
            'internal'
        );
 
@@ -306,7 +304,7 @@ VALUES (
 
        Mvh,
        Kjetil',
-           '2024-10-11 09:30:00+02',
+           '2025-10-11 09:30:00+02',
            'internal'
        );
 
@@ -322,7 +320,7 @@ VALUES (
        Sjekket firewall - autentisering ser legit ut. Kanskje han bruker VPN fra ferien? Folk gjør rare ting 😅
 
        - Arne',
-           '2024-10-11 10:15:00+02',
+           '2025-10-11 10:15:00+02',
            'internal'
        );
 
@@ -335,11 +333,11 @@ VALUES (
            'Noen kunder får ikke logget inn',
            'Hei Synne,
 
-       Har fått 3 tickets om at folk får "Access Denied". Ser du noe feil i prod? De sier credentials er riktige.
+       Har fått 3 tickets om at folk får "Access Denied". Ser du noe feil? De sier credentials er riktige.
 
        Mvh,
        Sandra',
-           '2024-10-11 11:00:00+02',
+           '2025-10-11 11:00:00+02',
            'internal'
        );
 
@@ -355,7 +353,7 @@ VALUES (
        Hvis det fortsetter, send meg bruker-IDer så sjekker jeg.
 
        - Synne',
-           '2024-10-11 11:45:00+02',
+           '2025-10-11 11:45:00+02',
            'internal'
        );
 
@@ -371,7 +369,7 @@ VALUES (
        Så at noen Azure AD queries ble kjørt midt på natten. Står som Ola sin konto. Bør jeg grave mer i dette?
 
        Kjetil',
-           '2024-10-11 14:45:00+02',
+           '2025-10-11 14:45:00+02',
            'internal'
        );
 
@@ -387,7 +385,7 @@ VALUES (
        Vi kan ikke bruke hele dagen på false positives. Sjekk med Ingrid hvis du er bekymret, men jeg tipper det er VPN-greier. Vi har release på fredag.
 
        Christian',
-           '2024-10-11 15:20:00+02',
+           '2025-10-11 15:20:00+02',
            'internal'
        );
 
@@ -403,7 +401,7 @@ VALUES (
        Har dere sett noe rart? Eller kanskje browser cache issues?
 
        - Synne',
-           '2024-10-11 16:00:00+02',
+           '2025-10-11 16:00:00+02',
            'internal'
        );
 
@@ -421,7 +419,7 @@ Fikk akkurat en epost som ser veldig sketchy ut. Står at Microsoft-kontoen min 
 Tror ikke jeg skal klikke på den?
 
 Mari',
-           '2024-10-11 16:30:00+02',
+           '2025-10-11 16:30:00+02',
            'internal'
        );
 
@@ -437,7 +435,7 @@ VALUES (
        Nå 8 tickets. Ser ut som det mest er folk fra utlandet som får problemer. Noen som har sjekket Azure-innstillinger?
 
        Sandra',
-           '2024-10-12 09:15:00+02',
+           '2025-10-12 09:15:00+02',
            'internal'
        );
 
@@ -453,7 +451,7 @@ VALUES (
        Probably cache.
 
        Mari',
-           '2024-10-12 11:30:00+02',
+           '2025-10-12 11:30:00+02',
            'internal'
        );
 
@@ -469,7 +467,7 @@ VALUES (
        Men vi har ikke gjort endringer på et par uker, så rart at det plutselig skjer nå.
 
        Eirik',
-           '2024-10-13 10:00:00+02',
+           '2025-10-13 10:00:00+02',
            'internal'
        );
 
@@ -487,7 +485,7 @@ VALUES (
        Kan du terminere den?
 
        Hauk',
-           '2024-10-13 14:00:00+02',
+           '2025-10-13 14:00:00+02',
            'internal'
        );
 
@@ -503,7 +501,7 @@ VALUES (
        Noen som kjørte manual backup i natt? Så litt høy disk I/O rundt kl 02:30.
 
        Didrik',
-           '2024-10-14 08:30:00+02',
+           '2025-10-14 08:30:00+02',
            'internal'
        );
 
@@ -517,7 +515,7 @@ VALUES (
            'Ikke meg. Kanskje automatisk job? Eller Kjetil testet noe?
 
        Arne',
-           '2024-10-14 09:15:00+02',
+           '2025-10-14 09:15:00+02',
            'internal'
        );
 
@@ -533,7 +531,7 @@ VALUES (
        Fant en gammel .env fil jeg hadde postet for testing. Slettet nå.
 
        Marius',
-           '2024-10-14 11:00:00+02',
+           '2025-10-14 11:00:00+02',
            'internal'
        );
 
@@ -544,12 +542,12 @@ VALUES (
            'arne.natskar@nordavind.no',
            'kjetil.berg@nordavind.no',
            'Jobbet noen sent i natt?',
-           'Så litt SSH-trafikk til prod-servere kl. 02:00.
+           'Så litt SSH-trafikk til servere kl. 02:00.
 
        Automatiske jobber eller noen som debugger?
 
        - Arne',
-           '2024-10-15 09:00:00+02',
+           '2025-10-15 09:00:00+02',
            'internal'
        );
 
@@ -565,7 +563,7 @@ VALUES (
        Bare for å dobbeltsjekke at alt er ok.
 
        Kjetil',
-           '2024-10-15 13:30:00+02',
+           '2025-10-15 13:30:00+02',
            'internal'
        );
 
@@ -581,7 +579,7 @@ VALUES (
        Kl 10:00 i morgen?
 
        Christian',
-           '2024-10-16 10:00:00+02',
+           '2025-10-16 10:00:00+02',
            'internal'
        );
 
@@ -610,7 +608,7 @@ VALUES (
        Gi beskjed hvis noen ser potensielle issues.
 
        Christian',
-           '2024-10-08 09:00:00+02',
+           '2025-10-08 09:00:00+02',
            'internal'
        );
 
@@ -628,7 +626,7 @@ VALUES (
        Back to normal nå!
 
        Marius',
-           '2024-10-08 14:30:00+02',
+           '2025-10-08 14:30:00+02',
            'internal'
        );
 
@@ -646,7 +644,7 @@ VALUES (
        Vi må være bedre på dette.
 
        Hauk',
-           '2024-10-09 08:45:00+02',
+           '2025-10-09 08:45:00+02',
            'internal'
        );
 
@@ -666,7 +664,7 @@ VALUES (
        Sees!
 
        Ola',
-           '2024-10-09 11:00:00+02',
+           '2025-10-09 11:00:00+02',
            'internal'
        );
 
@@ -688,7 +686,7 @@ VALUES (
 
        Mvh,
        Ingrid Volden, CISO',
-           '2024-10-09 13:00:00+02',
+           '2025-10-09 13:00:00+02',
            'internal'
        );
 
@@ -706,7 +704,7 @@ VALUES (
        Good job everyone!
 
        Synne',
-           '2024-10-09 15:30:00+02',
+           '2025-10-09 15:30:00+02',
            'internal'
        );
 
@@ -724,7 +722,7 @@ VALUES (
        FYI hvis dere ser noe i logs.
 
        Kjetil',
-           '2024-10-09 16:00:00+02',
+           '2025-10-09 16:00:00+02',
            'internal'
        );
 
@@ -745,7 +743,7 @@ VALUES (
        Team is doing great!
 
        Sandra',
-           '2024-10-10 07:30:00+02',
+           '2025-10-10 07:30:00+02',
            'internal'
        );
 
@@ -768,7 +766,7 @@ VALUES (
 
        Takk!
        Kristian',
-           '2024-10-11 10:30:00+02',
+           '2025-10-11 10:30:00+02',
            'internal'
        );
 
@@ -787,7 +785,7 @@ VALUES (
 
        Frithjof
        HR Manager',
-           '2024-10-11 13:00:00+02',
+           '2025-10-11 13:00:00+02',
            'internal'
        );
 
@@ -805,7 +803,7 @@ VALUES (
        Trenger feedback innen i morgen for å rekke fredags-release.
 
        Synne',
-           '2024-10-11 14:15:00+02',
+           '2025-10-11 14:15:00+02',
            'internal'
        );
 
@@ -815,18 +813,18 @@ VALUES (
            NULL,
            'invoices@azure.microsoft.com',
            'kristian.rosland@nordavind.no; christian.hein@nordavind.no',
-           'Microsoft Azure Invoice - October 2024',
+           'Microsoft Azure Invoice - October 2025',
            'Your Microsoft Azure invoice is ready.
 
        Account: NordeVind AS
-       Invoice period: October 1-31, 2024
+       Invoice period: October 1-31, 2025
        Amount due: NOK 48,327.00
-       Due date: October 25, 2024
+       Due date: October 25, 2025
 
        View invoice: https://portal.azure.com/billing
 
        Thank you for using Microsoft Azure.',
-           '2024-10-12 06:00:00+02',
+           '2025-10-12 06:00:00+02',
            'external'
        );
 
@@ -844,7 +842,7 @@ VALUES (
        Can you review PR #847?
 
        Hauk',
-           '2024-10-12 10:45:00+02',
+           '2025-10-12 10:45:00+02',
            'internal'
        );
 
@@ -864,7 +862,7 @@ VALUES (
        Påmelding: slack
 
        Sandra',
-           '2024-10-12 11:30:00+02',
+           '2025-10-12 11:30:00+02',
            'internal'
        );
 
@@ -882,7 +880,7 @@ VALUES (
        PR #851 - please review ASAP
 
        Marius',
-           '2024-10-13 09:00:00+02',
+           '2025-10-13 09:00:00+02',
            'internal'
        );
 
@@ -900,7 +898,7 @@ VALUES (
        Kan gi kortvarige avbrudd i VPN-tilgang. Planlegg deretter hvis dere jobber helg.
 
        Arne',
-           '2024-10-13 13:30:00+02',
+           '2025-10-13 13:30:00+02',
            'internal'
        );
 
@@ -913,12 +911,12 @@ VALUES (
            'Hvor finner jeg API documentation?',
            'Hei Synne,
 
-       Kan ikke finne API docs for customer endpoints. Er de i Confluence eller GitHub wiki?
+       Kan ikke finne API docs for customer endpoints. Hvilken wiki er de i?
 
        Trenger det for testing.
 
        Mari',
-           '2024-10-13 15:00:00+02',
+           '2025-10-13 15:00:00+02',
            'internal'
        );
 
@@ -938,7 +936,7 @@ VALUES (
        Mvh,
        Lisa Berg
        TechTalent Rekruttering',
-           '2024-10-14 09:30:00+02',
+           '2025-10-14 09:30:00+02',
            'external'
        );
 
@@ -956,7 +954,7 @@ VALUES (
        Detailed metrics i attached report.
 
        Didrik',
-           '2024-10-14 10:00:00+02',
+           '2025-10-14 10:00:00+02',
            'internal'
        );
 
@@ -973,10 +971,8 @@ VALUES (
        Package: lodash
        Severity: Moderate
 
-       Update to lodash@4.17.21 or later to fix this vulnerability.
-
-       View alert: https://github.com/nordavind/safevault-backend/security',
-           '2024-10-14 14:45:00+02',
+       Update to lodash@4.17.21 or later to fix this vulnerability.',
+           '2025-10-14 14:45:00+02',
            'external'
        );
 
@@ -994,7 +990,7 @@ VALUES (
        Signup sheet i Slack. Please join minst én session!
 
        Synne',
-           '2024-10-15 11:00:00+02',
+           '2025-10-15 11:00:00+02',
            'internal'
        );
 
@@ -1012,7 +1008,7 @@ VALUES (
        Focus: Performance, security, documentation
 
        Christian',
-           '2024-10-15 14:00:00+02',
+           '2025-10-15 14:00:00+02',
            'internal'
        );
 
@@ -1032,7 +1028,7 @@ VALUES (
        Best regards,
        Thomas Andersen
        CEO, HappyCustomer AS',
-           '2024-10-15 16:00:00+02',
+           '2025-10-15 16:00:00+02',
            'external'
        );
 
@@ -1050,7 +1046,7 @@ VALUES (
        Good work everyone!
 
        Eirik',
-           '2024-10-16 09:30:00+02',
+           '2025-10-16 09:30:00+02',
            'internal'
        );
 
@@ -1073,7 +1069,7 @@ VALUES (
        Sign up i Slack!
 
        Frithjof',
-           '2024-10-16 13:00:00+02',
+           '2025-10-16 13:00:00+02',
            'internal'
        );
 
@@ -1089,7 +1085,7 @@ VALUES (
            'Noen som vet hvor nøkkelen til Nespresso-maskinen er?
 
        H',
-           '2024-10-11 08:15:00+02',
+           '2025-10-11 08:15:00+02',
            'internal'
        );
 
@@ -1122,7 +1118,7 @@ VALUES (
        Tanker?
 
        Didrik',
-           '2024-10-11 11:30:00+02',
+           '2025-10-11 11:30:00+02',
            'internal'
        );
 
@@ -1134,10 +1130,10 @@ VALUES (
            'arne.natskar@nordavind.no',
            'Your Cloudflare SSL certificate will expire soon',
            'Certificate: *.nordavind.no
-       Expires: November 15, 2024
+       Expires: November 15, 2025
 
        Renew now: https://dash.cloudflare.com/ssl',
-           '2024-10-11 12:00:00+02',
+           '2025-10-11 12:00:00+02',
            'external'
        );
 
@@ -1160,7 +1156,7 @@ VALUES (
        Sorry for alle spørsmålene! Prøver å lære best practices 😊
 
        Mari',
-           '2024-10-11 15:45:00+02',
+           '2025-10-11 15:45:00+02',
            'internal'
        );
 
@@ -1179,7 +1175,7 @@ VALUES (
        4. useReducer når complex state logic
 
        // Synne',
-           '2024-10-11 16:10:00+02',
+           '2025-10-11 16:10:00+02',
            'internal'
        );
 
@@ -1216,7 +1212,7 @@ VALUES (
 
        Mvh,
        Marius',
-           '2024-10-12 14:00:00+02',
+           '2025-10-12 14:00:00+02',
            'internal'
        );
 
@@ -1236,7 +1232,7 @@ VALUES (
        Mvh,
        Kristine Oslo
        Byggfirma Oslo AS',
-           '2024-10-12 15:30:00+02',
+           '2025-10-12 15:30:00+02',
            'external'
        );
 
@@ -1252,7 +1248,7 @@ VALUES (
        Kan jeg upgraade k8s nodes i staging i morgen kl 14? Tar ca 30 min.
 
        K',
-           '2024-10-12 16:00:00+02',
+           '2025-10-12 16:00:00+02',
            'internal'
        );
 
@@ -1264,7 +1260,7 @@ VALUES (
            'kjetil.berg@nordavind.no',
            'RE: Kubernetes nodes upgrade - OK?',
            'Go ahead 👍',
-           '2024-10-12 16:05:00+02',
+           '2025-10-12 16:05:00+02',
            'internal'
        );
 
@@ -1311,7 +1307,7 @@ VALUES (
        Mvh,
        Ingrid Volden
        Chief Information Security Officer (CISO)',
-           '2024-10-13 08:00:00+02',
+           '2025-10-13 08:00:00+02',
            'internal'
        );
 
@@ -1327,7 +1323,7 @@ VALUES (
        Må lage nytt passord management system for hjernen min...
 
        H',
-           '2024-10-13 08:30:00+02',
+           '2025-10-13 08:30:00+02',
            'internal'
        );
 
@@ -1355,7 +1351,7 @@ VALUES (
        Best,
        Emma Larsen
        Nordic DevCon Program Committee',
-           '2024-10-13 10:00:00+02',
+           '2025-10-13 10:00:00+02',
            'external'
        );
 
@@ -1374,7 +1370,7 @@ VALUES (
 
        ---
        [Forwarded email from kristine.oslo@byggfirma.no]',
-           '2024-10-13 11:00:00+02',
+           '2025-10-13 11:00:00+02',
            'internal'
        );
 
@@ -1397,15 +1393,15 @@ VALUES (
        - Largest backup: 127 GB
 
        Failed backups:
-       - 2024-09-15: customer_id 1847 (re-run successful)
-       - 2024-09-23: customer_id 2103 (re-run successful)
+       - 2025-09-15: customer_id 1847 (re-run successful)
+       - 2025-09-23: customer_id 2103 (re-run successful)
 
        Recommendation: Øk timeout fra 15 til 20 min for large customers (>100GB).
 
        Full report: [link]
 
        Didrik',
-           '2024-10-14 07:30:00+02',
+           '2025-10-14 07:30:00+02',
            'internal'
        );
 
@@ -1419,7 +1415,7 @@ VALUES (
            'Fredagspils kl 16:00 i kantina!
 
        K',
-           '2024-10-11 14:00:00+02',
+           '2025-10-11 14:00:00+02',
            'internal'
        );
 
@@ -1437,7 +1433,7 @@ VALUES (
        Bare lurer 😊
 
        Mari',
-           '2024-10-14 13:00:00+02',
+           '2025-10-14 13:00:00+02',
            'internal'
        );
 
@@ -1453,7 +1449,7 @@ VALUES (
        Takk for at du holder øye! 👍
 
        Ingrid',
-           '2024-10-14 13:30:00+02',
+           '2025-10-14 13:30:00+02',
            'internal'
        );
 
@@ -1465,7 +1461,7 @@ VALUES (
            'kristian.rosland@nordavind.no',
            'Your Slack workspace: NordeVind - Monthly usage report',
            'Workspace: NordeVind
-       Period: September 2024
+       Period: September 2025
 
        Active members: 24
        Messages sent: 8,429
@@ -1473,10 +1469,10 @@ VALUES (
        Most active channel: #general (1,847 messages)
 
        Current plan: Business+ ($12.50/user/month)
-       Next billing date: November 1, 2024
+       Next billing date: November 1, 2025
 
        View full report: https://nordavind.slack.com/stats',
-           '2024-10-14 09:00:00+02',
+           '2025-10-14 09:00:00+02',
            'external'
        );
 
@@ -1515,7 +1511,7 @@ VALUES (
        Spør gjerne mer!
 
        Eirik',
-           '2024-10-14 15:00:00+02',
+           '2025-10-14 15:00:00+02',
            'internal'
        );
 
@@ -1529,7 +1525,7 @@ VALUES (
            'Hauk - fix merge conflict i din PR. Blokkerer releasen.
 
        M',
-           '2024-10-15 10:00:00+02',
+           '2025-10-15 10:00:00+02',
            'internal'
        );
 
@@ -1545,7 +1541,7 @@ VALUES (
        Next time: pull before push
 
        H',
-           '2024-10-15 10:15:00+02',
+           '2025-10-15 10:15:00+02',
            'internal'
        );
 
@@ -1571,7 +1567,7 @@ VALUES (
 
        Frithjof Fredriksen
        HR Manager',
-           '2024-10-15 12:00:00+02',
+           '2025-10-15 12:00:00+02',
            'internal'
        );
 
@@ -1596,7 +1592,7 @@ VALUES (
        Fredagspils på meg 🍺
 
        Christian',
-           '2024-10-11 16:30:00+02',
+           '2025-10-11 16:30:00+02',
            'internal'
        );
 
