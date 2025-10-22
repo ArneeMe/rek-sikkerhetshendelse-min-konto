@@ -58,7 +58,7 @@ export default function LoginPage() {
                     </div>
                     <CardTitle className="text-2xl text-slate-100">Nordavind Sikkerhetssenter</CardTitle>
                     <CardDescription className="text-slate-400">
-                        Skriv inn teamkode
+                        Skriv inn teamkode du får fra teamlead"
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -66,7 +66,7 @@ export default function LoginPage() {
                         <div>
                             <Input
                                 type="text"
-                                placeholder="Skriv inn teamkode (f.eks. ALFA)"
+                                placeholder="Teamkode"
                                 value={code}
                                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                                 className="bg-slate-800 border-slate-700 text-slate-100 placeholder:text-slate-500"
