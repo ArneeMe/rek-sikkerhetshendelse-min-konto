@@ -1,20 +1,19 @@
 // src/app/game/page.tsx
-import { getEvents, getActiveGameSession } from '@/lib/db';
-import { getEmails } from '@/lib/db/db-emails';
-import { getChannels, getAllMessages } from '@/lib/db';
+import {getActiveGameSession, getAllMessages, getChannels, getEvents} from '@/lib/db';
+import {getEmails} from '@/lib/db/db-emails';
 import {
     getAppServer1Logs,
     getAppServer2Logs,
     getAppServer3Logs,
+    getAzureAuditLogs,
+    getAzureSigninLogs,
     getDbServer1Logs,
     getDbServer2Logs,
     getDbServer3Logs,
-    getAzureAuditLogs,
-    getAzureSigninLogs,
     getOfficeFirewallLogs
 } from '@/lib/db/db-logs';
-import { getSession } from '@/lib/session';
-import { COMPANY_NAME } from '@/lib/constants';
+import {getSession} from '@/lib/session';
+import {COMPANY_NAME} from '@/lib/constants';
 import DashboardClient from './dashboard-client';
 
 export default async function GameDashboard() {
