@@ -58,7 +58,7 @@ export default function LoginPage() {
                     </div>
                     <CardTitle className="text-2xl text-slate-100">Nordavind Sikkerhetssenter</CardTitle>
                     <CardDescription className="text-slate-400">
-                        Skriv inn teamkode du får fra teamlead"
+                        Skriv inn teamkode du får fra teamlead
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
