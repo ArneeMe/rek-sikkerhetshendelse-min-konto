@@ -62,17 +62,19 @@ export function InboxItem({ event }: InboxItemProps) {
   };
 
   return (
-    <Card
-      className={`transition-colors cursor-pointer ${
-        !event.read
-          ? "bg-slate-800 border-slate-700 hover:border-slate-600 border-l-4 border-l-blue-500"
-          : "bg-slate-900/50 border-slate-800 hover:border-slate-700"
-      }`}
-      onClick={() => setIsExpanded(!isExpanded)}
-    >
-      <CardContent className="p-4">
-        {/* Collapsed View - Always visible */}
-        <div className="flex items-center justify-between gap-3">
+      <Card
+          className={`transition-colors ${
+              !event.read
+                  ? "bg-slate-800 border-slate-700 hover:border-slate-600 border-l-4 border-l-blue-500"
+                  : "bg-slate-900/50 border-slate-800 hover:border-slate-700"
+          }`}
+      >
+          <CardContent className="p-4">
+              {/* Collapsed View - Always visible - Clickable header */}
+              <div
+                  className="flex items-center justify-between gap-3 cursor-pointer"
+                  onClick={() => setIsExpanded(!isExpanded)}
+              >
           <div className="flex items-center gap-3 flex-1 min-w-0">
             <div
               className={`flex-shrink-0 ${
